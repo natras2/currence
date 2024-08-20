@@ -11,7 +11,7 @@ import { PasswordForgotten, default as Login } from './app/Login';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-       <Router>
+        <Router>
             <Routes>
                 {/* Customer routes */}
                 <Route index element={<App />} />

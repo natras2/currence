@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@200..800&display=swap');
 
 html,
 body {
@@ -14,10 +14,78 @@ body {
 
 html {
     background-color: #FEFEFE;
+    overflow-x: hidden;
 }
 
 body {
     background-color: #F5F5F5;
     max-width: 414px;
     margin: 0 auto;
+    overflow-x: hidden;
+}
+
+#root {
+    height:100%;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    height:100%;
+}
+
+.page.justify-space-between {
+    justify-content: space-between;
+}
+
+.divider {
+    position: relative;
+    margin: 1rem 0;
+    height: 1px;
+}
+
+.divider:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 5%;
+    right: 5%;
+    width: 90%;
+    height: 1px;
+    background-image: linear-gradient(to right, transparent, rgb(48, 49, 51), transparent);
+}
+
+
+/*************+ HOME PAGE *****************/
+
+
+#home.page {
+    padding: 3rem 1rem;
+}
+
+#home.page .header-title {
+    font-size: 55px;
+    font-weight: 100;
+    width:290px;
+    margin: 0px auto;
+    margin-top: 50px;
+}
+
+#home.page .typewriter-wrapper {
+    font-family: 'Baloo Da 2';
+    color: #0052ff;
+    font-weight: 800;
+}
+
+#home.page .illustration-wrapper,
+#home.page .logo-wrapper {
+    text-align:center;
+}
+
+#home.page .illustration {
+    width: 85%;
+}
+
+#home.page .logo {
+    width: 60%;
 }
