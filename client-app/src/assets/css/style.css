@@ -62,17 +62,18 @@ body {
 }
 
 #home.page .header-title {
-    font-size: 55px;
+    font-size: 50px;
     font-weight: 100;
     width:290px;
-    margin: 0px auto;
     margin-top: 50px;
+    margin-left: 60px;
 }
 
 #home.page .typewriter-wrapper {
     font-family: 'Baloo Da 2';
     color: #0052ff;
     font-weight: 800;
+    font-size: 55px;
 }
 
 #home.page .illustration-wrapper,
