@@ -1,22 +1,39 @@
-import logo from './assets/images/logo/logo-b-ng.svg'
+import { useEffect, useRef, useState } from 'react';import logo from './assets/images/logo/logo-b-ng.svg'
 import illustration from './assets/images/illustrations/home.svg'
 import { Typewriter } from 'react-simple-typewriter'
 import { Link } from 'react-router-dom';
-import { BsFacebook } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
+import { BsAt } from "react-icons/bs";
 
 function App() {
+    const refTitle = useRef(null);
+    const refDevice = useRef(null);
+
+    const [titleWidth, setTitleWidth] = useState(0);
+    const [deviceWidth, setDeviceWidth] = useState(0);
+
+    useEffect(() => {
+        setTitleWidth(refTitle.current.offsetWidth);
+        setDeviceWidth(refDevice.current.offsetWidth);
+    }, []);
+
+    const width = (deviceWidth - titleWidth) / 2;
+
+    console.log('device width', deviceWidth);
+    console.log('title width', titleWidth);
+
     return (
-        <div id="home" className="page justify-space-between">
+        <div id="home" className="page justify-content-between">
             <div className='top-content'>
-                <div className="logo-wrapper">
+                <div ref={refDevice} className="logo-wrapper">
                     <img 
                         src={logo} 
+                        alt='currence logo'
                         className='logo'
                     />
                 </div>
-                <h1 className='header-title'>
-                    Your finance, <br/>
+                <h1 className='header-title' style={{ marginLeft: width }}>
+                    <span ref={refTitle}>Your finance,<br/></span>
                     made&nbsp;
                     <span className='typewriter-wrapper'>
                         <Typewriter
@@ -35,24 +52,25 @@ function App() {
                 <img 
                     src={illustration} 
                     className='illustration'
+                    alt='home illustration'
                 />
             </div>
             <div className='bottom-content buttons d-flex flex-column'>
                 <div className='google-button mb-2'>
                     <Link to='.' type="button" className="btn border btn-light rounded-2 shadow-sm btn-lg btn-block d-flex gap-3 align-items-center px-3 py-3">
-                        <FcGoogle />
+                        <FcGoogle style={{fontSize: 'larger'}}/>
                         <div className='text small'>Sign in with Google</div>
                     </Link>
                 </div>
-                <div className='facebook-button'>
-                    <Link to='.'  type="button" className="btn btn-primary rounded-2 shadow-sm btn-lg btn-block d-flex gap-3 align-items-center px-3 py-3">
-                        <BsFacebook />
-                        <div className='text small'>Sign in with Facebook</div>
+                <div className='login-button'>
+                    <Link to='login' type="button" className="btn border btn-primary rounded-2 shadow-sm btn-lg btn-block d-flex gap-3 align-items-center px-3 py-3">
+                        <BsAt style={{fontSize: 'larger'}} />
+                        <div className='text small'>Sign in with your email</div>
                     </Link>
                 </div>
                 <div className="divider my-3"></div>
-                <Link to="login" className='signin-link mx-auto '>
-                    Sign-in with your email
+                <Link to="signup" className='signin-link mx-auto '>
+                    You don't have an account? Sign up!
                 </Link>   
             </div>
         </div>
