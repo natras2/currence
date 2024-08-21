@@ -1,14 +1,13 @@
 import { sha256 } from 'js-sha256';
 import axios from 'axios';
 
-export function checkPassword(password) {
+export const checkPassword = (password) => {
     // Regular expression to enforce password criteria
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
-
     return passwordRegex.test(password);
 }
 
-export function capitalize(inputString) {
+export const capitalize = (inputString) => {
     return inputString.replace(/\b\w/g, char => char.toUpperCase());
 }
 

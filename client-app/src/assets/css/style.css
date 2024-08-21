@@ -97,14 +97,22 @@ form .input-guide {
     backdrop-filter: blur(2px);
 }
 
+.password-strength-bar > * > div {
+    height:4px !important;
+    border-radius: 20px;
+}
+.password-strength-bar > p {
+    margin-top: 3px !important;
+}
+
 /************* HOME PAGE **************/
 
 #home.page {
-    padding: 3rem 1rem 2.5rem;
+    padding: 3rem 1.2rem 2.5rem;
 }
 
 #home.page .header-title {
-    font-size: 53px;
+    font-size: 48px;
     font-weight: 100;
     margin-top: 50px;
     width: 310px;
@@ -114,7 +122,7 @@ form .input-guide {
     font-family: 'Baloo Da 2';
     color: #0052ff;
     font-weight: 800;
-    font-size: 58px;
+    font-size: 55px;
 }
 
 #home.page .illustration-wrapper,
@@ -123,7 +131,7 @@ form .input-guide {
 }
 
 #home.page .illustration {
-    width: 85%;
+    width: 80%;
 }
 
 #home.page .logo {

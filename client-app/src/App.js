@@ -4,6 +4,7 @@ import { Typewriter } from 'react-simple-typewriter'
 import { Link } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 import { BsAt } from "react-icons/bs";
+import { signInWithGoogleAuth } from './assets/components/Auth';
 
 function App() {
     const refTitle = useRef(null);
@@ -18,9 +19,6 @@ function App() {
     }, []);
 
     const width = (deviceWidth - titleWidth) / 2;
-
-    console.log('device width', deviceWidth);
-    console.log('title width', titleWidth);
 
     return (
         <div id="home" className="page justify-content-between">
@@ -57,13 +55,13 @@ function App() {
             </div>
             <div className='bottom-content buttons d-flex flex-column'>
                 <div className='google-button mb-2'>
-                    <Link to='.' type="button" className="btn border btn-light rounded-2 shadow-sm btn-lg btn-block d-flex gap-3 align-items-center px-3 py-3">
+                    <button className="btn border w-100 btn-light rounded-2 shadow-sm btn-lg d-flex gap-3 align-items-center px-3 py-3" onClick={signInWithGoogleAuth}>
                         <FcGoogle style={{fontSize: 'larger'}}/>
                         <div className='text small'>Sign in with Google</div>
-                    </Link>
+                    </button>
                 </div>
                 <div className='login-button'>
-                    <Link to='login' type="button" className="btn border btn-primary rounded-2 shadow-sm btn-lg btn-block d-flex gap-3 align-items-center px-3 py-3">
+                    <Link to='login' type="button" className="btn border btn-primary rounded-2 shadow-sm btn-lg d-flex gap-3 align-items-center px-3 py-3">
                         <BsAt style={{fontSize: 'larger'}} />
                         <div className='text small'>Sign in with your email</div>
                     </Link>
