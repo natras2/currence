@@ -1,4 +1,4 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import { getAuth, signInWithRedirect, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
 import { app } from "../../firebase/firebaseConfig";
 
 const provider = new GoogleAuthProvider();
@@ -11,7 +11,7 @@ const signIn = (userCredentials) => {
 }
 
 export const signInWithGoogleAuth = () => {
-    signInWithPopup(auth, provider)
+    signInWithRedirect(auth, provider)
         .then(signIn)
         .catch((error) => {
             console.log(error)
