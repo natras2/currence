@@ -4,7 +4,7 @@ import { Typewriter } from 'react-simple-typewriter'
 import { Link } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 import { BsAt } from "react-icons/bs";
-import { signInWithGoogleAuth } from './assets/components/Auth';
+import { checkSignIn, signInWithGoogleAuth } from './assets/components/Auth';
 
 function App() {
     const refTitle = useRef(null);
@@ -16,6 +16,7 @@ function App() {
     useEffect(() => {
         setTitleWidth(refTitle.current.offsetWidth);
         setDeviceWidth(refDevice.current.offsetWidth);
+        checkSignIn();
     }, []);
 
     const width = (deviceWidth - titleWidth) / 2;

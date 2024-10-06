@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { makeAPIRequest, encryptPassword } from "../assets/components/Utils";
 import Loader from "../assets/components/Loader";
 import InputField from "../assets/components/InputField";
-import { signInWithEmail } from "../assets/components/Auth";
+import { signInWithEmail, signOut } from "../assets/components/Auth";
 
 export function PasswordForgotten() {
     
@@ -17,6 +17,7 @@ export default function Login() {
     const [processing, setProcessing] = useState(false);
     
     useEffect(() => {
+        signOut();
     }, []);
 
     const navigate = useNavigate();
