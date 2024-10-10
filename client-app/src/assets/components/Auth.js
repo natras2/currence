@@ -8,7 +8,7 @@ const auth = getAuth(app);
 
 const signIn = (userCredentials) => {
     console.log("Here we are");
-    console.log(userCredentials);
+    console.log("Welcome, " + userCredentials.user.displayName);
 }
 
 // Function to trigger Google sign-in with redirect
