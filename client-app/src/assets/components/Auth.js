@@ -42,7 +42,7 @@ export const checkSignIn = () => {
     // Check if the user is already signed in when the page loads
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            signIn(result);
+            signIn(user);
         }
     });
 };
