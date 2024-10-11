@@ -6,9 +6,9 @@ const provider = new GoogleAuthProvider();
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(app);
 
-const signIn = (userCredentials) => {
+const signIn = (user) => {
     console.log("Here we are");
-    console.log("Welcome, " + userCredentials.user.displayName);
+    console.log("Welcome, " + user.displayName);
 }
 
 // Function to trigger Google sign-in with redirect
@@ -20,69 +20,63 @@ export const signInWithGoogleAuth = () => {
 export const checkSignIn = () => {
     console.log("Auth listener initialized");
 
+    getRedirectResult(auth)
+        .then((result) => {
+            if (result) {
+                const user = result.user;
+                if (user) {
+                    // Successfully signed in after redirect
+                    console.log("User signed in via redirect");
+                    signIn(user);
+                }
+            }
+        })
+        .catch((error) => {
+            // Handle any errors that occurred during the redirect flow
+            console.error("Error during redirect result", error.code, error.message);
+        });
+
     // Check if the user is already signed in when the page loads
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            // User is already signed in
-            console.log("User is already signed in", user);
-        } else {
-            // Check for a redirect result after the user is redirected back
-            console.log("Checking redirect result...");
-            getRedirectResult(auth)
-            .then((result) => {
-                if (result) {
-                    console.log("Redirect result found");
-                    const user = result.user;
-                    if (user) {
-                        // Successfully signed in after redirect
-                        console.log("User signed in via redirect", user);
-                        signIn(result);
-                    }
-                } else {
-                    console.log("No redirect result available");
-                }
-            })
-            .catch((error) => {
-                // Handle any errors that occurred during the redirect flow
-                console.error("Error during redirect result", error.code, error.message);
-            });
+            signIn(result);
         }
     });
 };
 
 export const createUserWithEmail = (name, surname, email, password) => {
     createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-        updateProfile(auth.currentUser, {
-            displayName: name + " " + surname
-        }).then(() => {
-            console.log("Profile updated");
-            auth.currentUser.providerData.forEach((profile) => {
-                console.log("Sign-in provider: " + profile.providerId);
-                console.log("  Provider-specific UID: " + profile.uid);
-                console.log("  Name: " + profile.displayName);
-                console.log("  Email: " + profile.email);
+        .then(() => {
+            updateProfile(auth.currentUser, {
+                displayName: name + " " + surname
+            }).then(() => {
+                console.log("Profile updated");
+                auth.currentUser.providerData.forEach((profile) => {
+                    console.log("Sign-in provider: " + profile.providerId);
+                    console.log("  Provider-specific UID: " + profile.uid);
+                    console.log("  Name: " + profile.displayName);
+                    console.log("  Email: " + profile.email);
+                });
+            }).catch((error) => {
+                console.log(error);
             });
         }).catch((error) => {
-            console.log(error);
+            console.log(error)
         });
-    }).catch((error) => {
-        console.log(error)
-    });
 }
 
 export const signInWithEmail = (email, password) => {
     signInWithEmailAndPassword(auth, email, password)
-        .then(signIn)
+        .then((result) => signIn(result.user))
         .catch((error) => {
             console.log(error)
         });
 }
 
 export const signOut = () => {
-    auth.signOut().then(function() {
+    auth.signOut().then(function () {
         console.log('Signed Out');
-      }, function(error) {
+    }, function (error) {
         console.error('Sign Out Error', error);
-      });      
+    });
 }
