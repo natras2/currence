@@ -2,6 +2,9 @@ import { getAuth, signInWithRedirect, GoogleAuthProvider, signInWithEmailAndPass
 import { app } from "../../firebase/firebaseConfig";
 
 const provider = new GoogleAuthProvider();
+provider.setCustomParameters({
+    prompt: 'select_account',
+});
 
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(app);
