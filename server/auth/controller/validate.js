@@ -14,7 +14,7 @@ async function validateToken(req, res, next) {
         .verifyIdToken(token)
         .then((decodedToken) => {
             console.log("Token decoded successfully");
-            req.user = decodedToken; // Aggiunge i dati utente alla richiesta
+            req.user = decodedToken; // adds user data to the request
             next();
         })
         .catch((err) => {
