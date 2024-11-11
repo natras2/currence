@@ -74,7 +74,7 @@ export default function Signup() {
     const [step, setStep] = useState(1);
     const [processing, setProcessing] = useState(false);
 
-    const navigator = useNavigate();
+    const navigate = useNavigate();
     
     useEffect(() => {
         sessionStorage.clear();
@@ -100,7 +100,15 @@ export default function Signup() {
             return;
         }
 
-        CreateUserWithEmail(form.name, form.surname, form.email, form.password);
+        var result = await CreateUserWithEmail(form.name, form.surname, form.email, form.password);
+        if (result) {
+            navigate("../")
+        }
+        else {
+            setProcessing(false);
+            return;
+            //error handling
+        }
         
         //const response = await makeAPIRequest('Signup', form, null, false);
     }

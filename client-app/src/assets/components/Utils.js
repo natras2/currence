@@ -16,7 +16,7 @@ export const encryptPassword = (password) => {
     return sha256(password);
 }
 
-const baseUrl = (!!process.env.REACT_APP_IS_LOCALE) ? 'http://localhost:8080/v1' : 'https://currence-server.web.app/v1';
+const baseUrl = (!!process.env.REACT_APP_IS_LOCALE) ? 'http://localhost:8080/v1' : 'https://currence-dzfvg2chhch0h3hd.northeurope-01.azurewebsites.net/v1';
 
 const API_ENDPOINTS = {
     Authenticate: {

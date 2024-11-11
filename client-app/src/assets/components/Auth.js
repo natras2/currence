@@ -13,7 +13,7 @@ const auth = getAuth(app);
 const authenticate = async (user) => {
     console.log("You are authenticating as " + user.displayName + "");
     console.log("Authenticating you to the Currence API web service....");
-    console.log("Check more at " + ((!!process.env.REACT_APP_IS_LOCALE) ? "http://localhost:8080/" : "https://currence-server.web.app/"));
+    console.log("Check more at " + ((!!process.env.REACT_APP_IS_LOCALE) ? "http://localhost:8080/" : "https://currence-dzfvg2chhch0h3hd.northeurope-01.azurewebsites.net/"));
 
     sessionStorage.setItem("fullName", user.displayName);
     sessionStorage.setItem("email", user.email);
@@ -68,7 +68,7 @@ export const CreateUserWithEmail = async (name, surname, email, password) => {
             displayName: `${name} ${surname}`,
         });
         console.log("Profile updated");
-        return await authenticate(auth.currentUser);
+        return true;
     } catch (error) {
         console.error("User creation error:", error);
         return false;
