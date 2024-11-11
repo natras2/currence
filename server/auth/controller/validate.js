@@ -7,7 +7,7 @@ async function validateToken(req, res, next) {
         return res.sendStatus(401); // Unauthorized
 
     const token = req.header('Authorization').split(' ')[1];
-    if (!token) return res.sendStatus(401); // Unauthorized
+    if (!token) return res.sendStatus(401);
 
     console.log("Decoding token...");
     getAuth()
