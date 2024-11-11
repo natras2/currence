@@ -1,5 +1,6 @@
 import { getAuth, signInWithRedirect, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, getRedirectResult, onAuthStateChanged } from "firebase/auth"
 import { app } from "../../firebase/firebaseConfig";
+import { makeAPIRequest } from "./Utils";
 
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({
@@ -9,75 +10,86 @@ provider.setCustomParameters({
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(app);
 
-const signIn = (user) => {
-    console.log("Here we are");
-    console.log("Welcome, " + user.displayName);
+const authenticate = async (user) => {
+    console.log("You are authenticating as " + user.displayName + "");
+    console.log("Authenticating you to the Currence API web service....");
+    console.log("Check more at " + ((!!process.env.REACT_APP_IS_LOCALE) ? "http://localhost:8080/" : "https://currence-server.web.app/"));
+
+    sessionStorage.setItem("fullName", user.displayName);
+    sessionStorage.setItem("email", user.email);
+    sessionStorage.setItem("token", await user.getIdToken());
+
+    const response = await makeAPIRequest('Authenticate', null, null, true);
+
+    if (response.code === 200) {
+        console.log('The user got authenticated successfully');
+        return true;
+    }
+    else {
+        sessionStorage.clear();
+        console.error(`API request failed with code ${response.code}:`, response.body);
+        return false;
+    }
 }
 
 // Function to trigger Google sign-in with redirect
-export const signInWithGoogleAuth = () => {
+export const SignInWithGoogleAuth = () => {
     signInWithRedirect(auth, provider);
 };
 
-// Function to check for the redirect result (on app load)
-export const checkSignIn = () => {
+export const CheckSignIn = async () => {
     console.log("Auth listener initialized");
-
-    getRedirectResult(auth)
-        .then((result) => {
-            if (result) {
-                const user = result.user;
-                if (user) {
-                    // Successfully signed in after redirect
-                    console.log("User signed in via redirect");
-                    signIn(user);
-                }
+    try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+            const user = result.user;
+            if (user) {
+                console.log("User signed in via redirect");
+                return await authenticate(user);
             }
-        })
-        .catch((error) => {
-            // Handle any errors that occurred during the redirect flow
-            console.error("Error during redirect result", error.code, error.message);
-        });
-
-    // Check if the user is already signed in when the page loads
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            signIn(user);
         }
+    } catch (error) {
+        console.error("Error during redirect result:", error.code, error.message);
+    }
+
+    // Set up onAuthStateChanged with cleanup
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        if (user) await authenticate(user);
     });
+    
+    // Return the unsubscribe function for cleanup
+    return unsubscribe;
 };
 
-export const createUserWithEmail = (name, surname, email, password) => {
-    createUserWithEmailAndPassword(auth, email, password)
-        .then(() => {
-            updateProfile(auth.currentUser, {
-                displayName: name + " " + surname
-            }).then(() => {
-                console.log("Profile updated");
-                auth.currentUser.providerData.forEach((profile) => {
-                    console.log("Sign-in provider: " + profile.providerId);
-                    console.log("  Provider-specific UID: " + profile.uid);
-                    console.log("  Name: " + profile.displayName);
-                    console.log("  Email: " + profile.email);
-                });
-            }).catch((error) => {
-                console.log(error);
-            });
-        }).catch((error) => {
-            console.log(error)
+export const CreateUserWithEmail = async (name, surname, email, password) => {
+    try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(auth.currentUser, {
+            displayName: `${name} ${surname}`,
         });
-}
+        console.log("Profile updated");
+        return await authenticate(auth.currentUser);
+    } catch (error) {
+        console.error("User creation error:", error);
+        return false;
+    }
+};
 
-export const signInWithEmail = (email, password) => {
-    signInWithEmailAndPassword(auth, email, password)
-        .then((result) => signIn(result.user))
-        .catch((error) => {
-            console.log(error)
-        });
-}
+export const SignInWithEmail = async (email, password) => {
+    try {
+        const result = await signInWithEmailAndPassword(auth, email, password);
+        return await authenticate(result.user);
+    } catch (error) {
+        console.error("Sign-in error:", error);
+        return false;
+    }
+};
 
-export const signOut = () => {
+export const SignOut = () => {
     auth.signOut().then(function () {
+        sessionStorage.removeItem("fullName");
+        sessionStorage.removeItem("email");
+        sessionStorage.removeItem("token");
         console.log('Signed Out');
     }, function (error) {
         console.error('Sign Out Error', error);

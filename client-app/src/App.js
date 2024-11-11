@@ -4,7 +4,7 @@ import { Typewriter } from 'react-simple-typewriter'
 import { Link } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 import { BsAt } from "react-icons/bs";
-import { checkSignIn, signInWithGoogleAuth } from './assets/components/Auth';
+import { CheckSignIn, SignInWithGoogleAuth } from './assets/components/Auth';
 
 function App() {
     const refTitle = useRef(null);
@@ -16,7 +16,7 @@ function App() {
     useEffect(() => {
         setTitleWidth(refTitle.current.offsetWidth);
         setDeviceWidth(refDevice.current.offsetWidth);
-        checkSignIn();
+        CheckSignIn();
     }, []);
 
     const width = (deviceWidth - titleWidth) / 2;
@@ -56,7 +56,7 @@ function App() {
             </div>
             <div className='bottom-content buttons d-flex flex-column'>
                 <div className='google-button mb-2'>
-                    <button className="btn border w-100 btn-light rounded-2 shadow-sm btn-lg d-flex gap-3 align-items-center px-3 py-3" onClick={signInWithGoogleAuth}>
+                    <button className="btn border w-100 btn-light rounded-2 shadow-sm btn-lg d-flex gap-3 align-items-center px-3 py-3" onClick={SignInWithGoogleAuth}>
                         <FcGoogle style={{fontSize: 'larger'}}/>
                         <div className='text small'>Sign in with Google</div>
                     </button>

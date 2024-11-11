@@ -1,11 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { makeAPIRequest, encryptPassword } from "../assets/components/Utils";
+import { encryptPassword } from "../assets/components/Utils";
 import Loader from "../assets/components/Loader";
 import InputField from "../assets/components/InputField";
-import { signInWithEmail, signOut } from "../assets/components/Auth";
+import { SignInWithEmail, SignOut } from "../assets/components/Auth";
 
 export function PasswordForgotten() {
+    
+}
+
+export function Logout() {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        SignOut();
+        navigate("../");
+    }, []);
     
 }
 
@@ -15,12 +25,12 @@ export default function Login() {
         password: '',
     });
     const [processing, setProcessing] = useState(false);
-    
-    useEffect(() => {
-        signOut();
-    }, []);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        sessionStorage.clear();
+    }, []);
 
     async function handleSubmit(e) {
         setProcessing(true);
@@ -39,9 +49,20 @@ export default function Login() {
             password: encryptPassword(data.password),
         };
 
-        signInWithEmail(form.email_address, form.password);
-
-        //const response = await makeAPIRequest('Login', form, { type: 'Customer' }, false);
+        try {
+            const result = await SignInWithEmail(form.email_address, form.password);
+            if (result) {
+                navigate("../home");
+            } 
+            else {
+                console.error("Login failed");
+                setProcessing(false);
+            }
+        } 
+        catch (error) {
+            console.error("Error during login:", error);
+            setProcessing(false);
+        }
 
     }
 

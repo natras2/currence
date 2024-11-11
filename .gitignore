@@ -26,3 +26,5 @@
 
 **/.firebase
 **.firebaserc
+
+**serviceAccountKey.json

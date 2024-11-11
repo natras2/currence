@@ -6,8 +6,9 @@ import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import App from './App';
 import Error from './Error';
 
-import { PasswordForgotten, default as Login } from './app/Login';
+import { PasswordForgotten, Logout, default as Login } from './app/Login';
 import Signup from './app/Signup';
+import Home from './app/Home';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -15,11 +16,16 @@ root.render(
         <Routes>
             {/* Customer routes */}
             <Route index element={<App />} />
-            <Route path='login'>
-                <Route index element={<Login />} />
-                <Route path='recover' element={<PasswordForgotten />} />
-            </Route>
-            <Route path='signup' element={<Signup />} />
+            <Route path='auth'/>
+                <Route index element={<Error />} />
+                <Route path='signup' element={<Signup />} />
+                <Route path='logout' element={<Logout />} />
+                <Route path='login'>
+                    <Route index element={<Login />} />
+                    <Route path='recover' element={<PasswordForgotten />} />
+                </Route>
+            
+            <Route path='home' element={<Home />} />
 
             {/* Fallback error route */}
             <Route path='*' element={<Error />} />

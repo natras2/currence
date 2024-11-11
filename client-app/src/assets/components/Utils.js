@@ -1,13 +1,14 @@
 import { sha256 } from 'js-sha256';
 import axios from 'axios';
 
-export const checkPassword = (password) => {
+export function checkPassword(password) {
     // Regular expression to enforce password criteria
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+
     return passwordRegex.test(password);
 }
 
-export const capitalize = (inputString) => {
+export function capitalize(inputString) {
     return inputString.replace(/\b\w/g, char => char.toUpperCase());
 }
 
@@ -15,12 +16,12 @@ export const encryptPassword = (password) => {
     return sha256(password);
 }
 
-const baseUrl = 'https://currence-server.web.app';
+const baseUrl = (!!process.env.REACT_APP_IS_LOCALE) ? 'http://localhost:8080/v1' : 'https://currence-server.web.app/v1';
 
 const API_ENDPOINTS = {
-    Login: {
-        method: '',
-        url: baseUrl + '',
+    Authenticate: {
+        method: 'POST',
+        url: baseUrl + '/auth/authenticate',
     }
 };
 

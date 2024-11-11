@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import InputField from '../assets/components/InputField';
 import { capitalize, checkPassword, encryptPassword, makeAPIRequest } from '../assets/components/Utils';
 import Loader from '../assets/components/Loader';
-import { createUserWithEmail } from '../assets/components/Auth';
+import { CreateUserWithEmail } from '../assets/components/Auth';
 
 function Header(props) {
     return (
@@ -100,7 +100,7 @@ export default function Signup() {
             return;
         }
 
-        createUserWithEmail(form.name, form.surname, form.email, form.password);
+        CreateUserWithEmail(form.name, form.surname, form.email, form.password);
         
         //const response = await makeAPIRequest('Signup', form, null, false);
     }
