@@ -4,7 +4,7 @@ const admin = require('../../config/firebase');
 // Middleware to check if a request is authenticated
 async function validateToken(req, res, next) {
     if (!req.header('Authorization') || !req.header('Authorization').startsWith('Bearer '))
-        return res.sendStatus(401); // Unauthorized
+        return res.sendStatus(401);
 
     const token = req.header('Authorization').split(' ')[1];
     if (!token) return res.sendStatus(401);
