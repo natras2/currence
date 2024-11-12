@@ -78,13 +78,13 @@ export const SignInWithEmail = async (email, password) => {
     }
 };
 
-export const SignOut = () => {
-    auth.signOut().then(function () {
-        sessionStorage.removeItem("fullName");
-        sessionStorage.removeItem("email");
-        sessionStorage.removeItem("token");
+export const SignOut = async () => {
+    try {
+        await auth.signOut();
+        sessionStorage.clear();
         console.log('Signed Out');
-    }, function (error) {
+    }
+    catch (error) {
         console.error('Sign Out Error', error);
-    });
+    };
 }

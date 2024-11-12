@@ -13,9 +13,14 @@ export function Logout() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        SignOut();
-        navigate("../");
-    }, []);
+        async function logoutUser() {
+            await SignOut();
+            navigate("/");
+        }
+        logoutUser();
+    }, [navigate]);
+
+    return <Loader selector='login'/>;
     
 }
 
@@ -89,7 +94,7 @@ export default function Login() {
                         </Link>
                     </div>
                     <div className='bottom-content buttons w-100 text-center'>
-                        <button role='submit' onClick={handleSubmit} type="button" className="btn w-100 border btn-primary rounded-2 shadow-sm btn-lg align-items-center px-3 py-3">
+                        <button type='submit' onClick={handleSubmit} className="btn w-100 border btn-primary rounded-2 shadow-sm btn-lg align-items-center px-3 py-3">
                             <div className='text small text-center'>Sign in to your account</div>
                         </button>
                         <div className="divider"></div>

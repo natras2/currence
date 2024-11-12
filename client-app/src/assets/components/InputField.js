@@ -34,7 +34,6 @@ function TextualField(props) {
 }
 function SelectField(props) {
     const [fieldValue, setFieldValue] = useState(props.value); // Initialize state with prop value
-    const [addressValue, setAddressValue] = useState(props.value); // Initialize state with prop value
 
     const handleFieldChange = (selectedOption) => {
         var e = {
@@ -46,16 +45,7 @@ function SelectField(props) {
         props.handleChange(e);
         setFieldValue(selectedOption.value); // Update state with input value
     };
-    const handleAddressChange = (selectedOption) => {
-        var e = {
-            target: {
-                name: props.name,
-                value: selectedOption.value.description
-            }
-        };
-        props.handleChange(e);
-        setAddressValue(selectedOption.value.description); // Update state with input value
-    };
+    
     const style = {
         control: base => ({
             ...base,

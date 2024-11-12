@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import InputField from '../assets/components/InputField';
-import { capitalize, checkPassword, encryptPassword, makeAPIRequest } from '../assets/components/Utils';
+import { capitalize, checkPassword, encryptPassword } from '../assets/components/Utils';
 import Loader from '../assets/components/Loader';
 import { CreateUserWithEmail } from '../assets/components/Auth';
 
@@ -16,13 +16,6 @@ function Header(props) {
 }
 
 function Step1(props) {
-    const options = [
-        { value: 'M', label: 'Male' },
-        { value: 'F', label: 'Female' },
-        { value: 'NB', label: 'Non binary' },
-        { value: 'O', label: 'Other' },
-        { value: 'NA', label: 'I prefer not to say' }
-    ]
     return (
         <div id='step1' className='h-100 d-flex flex-column justify-content-between'>
             <div className='top-content'>
