@@ -49,7 +49,7 @@ app.get('/', function (req, res) {
                         <img src="https://currence.web.app/static/media/logo-b-ng.3de968fc8c8ea92b5526ea414d31b73a.svg" style="height: 3.2rem;margin-right: -7px;position: relative;top: -8px;margin-right: 3px;" alt="Currence"> API
                     </h1>
                     <h3 style="color: #0052ff;font-weight: 600;">Welcome to Currence API</h3>
-                    <p style="font-weight: 300;">Your finance, made easy. Access the information about your credit: UbiShop has been created to help retail customers to be more independent and autonomous in their purchase experiences, by tracking all the relevant information about products, supporting the local shops with the goods provision and the customization of service.</p>                    
+                    <p style="font-weight: 300;">Your finance, made easy. Access the information about your transactions and forget about forgetting to get back the loan form THAT friend: Currence has been created to help retail customers to be more independent and autonomous in their purchase experiences, by tracking all the relevant information about products</p>                    
                     
                     
                     <a href="/specs" style="display: block;color: #ffffff;background-color: #000080;text-decoration: none;font-weight: 600;width: 254px;text-align: center;padding: 1.3rem;border: 1px solid #000080;border-radius: 41px;font-size: 14px;margin-top: 37px;">OPEN THE SWAGGER</a>
