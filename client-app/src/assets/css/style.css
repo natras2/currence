@@ -96,6 +96,13 @@ form .input-guide {
     -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);
 }
+.loader.app {
+    position: absolute;
+    left:0;
+    top: 0;
+    width: 100%;
+    background-color: #F5F5F5;
+}
 
 .password-strength-bar > * > div {
     height:4px !important;

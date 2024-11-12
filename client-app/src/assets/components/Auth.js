@@ -34,6 +34,7 @@ const authenticate = async (user) => {
 
 // Function to trigger Google sign-in with redirect
 export const SignInWithGoogleAuth = () => {
+    sessionStorage.setItem("signingInWithGoogle", true);
     signInWithRedirect(auth, provider);
 };
 
