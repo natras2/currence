@@ -40,7 +40,7 @@ jobs:
           echo "DB_NAME=$DB_NAME" >> ./server/.env
 
       - name: Zip artifact for deployment
-        run: zip -r release.zip ./* .[^.]* .??*
+        run: zip -r release.zip .
         working-directory: ./server
 
       - name: Check if release.zip exists
