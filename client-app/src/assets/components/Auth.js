@@ -49,7 +49,8 @@ export const CheckRedirectSignIn = async () => {
             }
         }
         return false;
-    } catch (error) {
+    } 
+    catch (error) {
         console.error("Error during redirect result:", error.code, error.message);
         return false;
     }

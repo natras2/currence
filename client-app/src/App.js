@@ -20,7 +20,10 @@ function App() {
 
     useEffect(() => {
         async function initialize() {
+            
+            //Check whether I'm getting redirected from a Sign In with Google request
             if (sessionStorage.getItem("signingInWithGoogle")) {
+                sessionStorage.removeItem("signingInWithGoogle");
                 setProcessing(true);
             }
 
@@ -36,7 +39,6 @@ function App() {
                 return await CheckRedirectSignIn();
             }
 
-            sessionStorage.removeItem("signingInWithGoogle");
             const result = await checkLoggedUser();
             
             if (result) {
