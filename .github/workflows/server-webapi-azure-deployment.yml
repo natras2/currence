@@ -38,6 +38,9 @@ jobs:
           echo "DB_PASSWORD=$DB_PASSWORD" >> ./server/.env
           echo "DB_NAME=$DB_NAME" >> ./server/.env
 
+      - name: Check if .env exists
+        run: ls -la ./server/.env
+
       - name: Zip artifact for deployment
         run: zip -r release.zip .
         working-directory: ./server
