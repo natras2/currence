@@ -1,4 +1,4 @@
-import { getAuth, signInWithRedirect, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, getRedirectResult, onAuthStateChanged } from "firebase/auth"
+import { getAuth, signInWithRedirect, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, getRedirectResult } from "firebase/auth"
 import { app } from "../../firebase/firebaseConfig";
 import { makeAPIRequest } from "./Utils";
 
@@ -37,8 +37,7 @@ export const SignInWithGoogleAuth = () => {
     signInWithRedirect(auth, provider);
 };
 
-export const CheckSignIn = async () => {
-    console.log("Auth listener initialized");
+export const CheckRedirectSignIn = async () => {
     try {
         const result = await getRedirectResult(auth);
         if (result) {
@@ -48,17 +47,11 @@ export const CheckSignIn = async () => {
                 return await authenticate(user);
             }
         }
+        return false;
     } catch (error) {
         console.error("Error during redirect result:", error.code, error.message);
+        return false;
     }
-
-    // Set up onAuthStateChanged with cleanup
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-        if (user) await authenticate(user);
-    });
-    
-    // Return the unsubscribe function for cleanup
-    return unsubscribe;
 };
 
 export const CreateUserWithEmail = async (name, surname, email, password) => {
