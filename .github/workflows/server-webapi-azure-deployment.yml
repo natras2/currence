@@ -38,12 +38,11 @@ jobs:
           echo "DB_USER=$DB_USER" >> ./server/.env
           echo "DB_PASSWORD=$DB_PASSWORD" >> ./server/.env
           echo "DB_NAME=$DB_NAME" >> ./server/.env
-
       - name: Check if .env exists
         run: ls -la ./server/.env
 
       - name: Zip artifact for deployment
-        run: zip -r release.zip ./*
+        run: zip -r release.zip .
         working-directory: ./server
 
       - name: Check if release.zip exists
@@ -54,9 +53,7 @@ jobs:
         with:
           include-hidden-files: true
           name: node-app
-          path: |
-            ./server/release.zip
-            ./server/.env
+          path: ./server/release.zip
           retention-days: 7
 
   deploy:
