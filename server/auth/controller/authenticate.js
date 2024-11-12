@@ -1,17 +1,23 @@
 const User = require('../../model/User');
 
 async function userAuthenticate(questioningUser) {
+    console.log(questioningUser);
     const firebaseUid = questioningUser.uid;
     const user = await User.findOne({ 
         where: { firebaseUid: firebaseUid } 
     });
-
-    if (!user) {
-        user = await User.create({
-            firebaseUid: questioningUser.uid,
-            fullName: questioningUser.name,
-            email: questioningUser.email
-        });
+    try {
+        if (!user) {
+            await User.create({
+                firebaseUid: questioningUser.uid,
+                fullName: questioningUser.name,
+                email: questioningUser.email
+            });
+        }
+    }
+    catch(error) {
+        console.error("An error occurred", error);
+        throw("An error occurred while inserting the new user in DB");
     }
 
     return ;

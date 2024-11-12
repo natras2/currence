@@ -95,7 +95,7 @@ export default function Signup() {
 
         var result = await CreateUserWithEmail(form.name, form.surname, form.email, form.password);
         if (result) {
-            navigate("../")
+            navigate("/")
         }
         else {
             setProcessing(false);
