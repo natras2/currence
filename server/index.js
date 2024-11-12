@@ -71,7 +71,7 @@ app.get('/secrets', function (req, res) {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
             </head>
             <body style="height: 100%;position: relative;margin: 0;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;display: flex;flex-direction: column;justify-content: center;align-items: center;font-size: 19px;padding: 0 15px;">
-                <div style="width: 100%;margin: 2rem 1rem;max-width: 569px;border-radius:15px;padding: 3.5rem 5rem;border: 1px solid #f1f1f1;box-shadow: 5px 5px 15px #e1e1e1;">
+                <div style="width: 100%;margin: 2rem 1rem;max-width: 569px;border-radius:15px;padding: 3.5rem 5rem;border: 1px solid #f2f2f2;box-shadow: 5px 5px 15px #e1e1e1;">
                     <p>${process.env.DB_HOST_NAME}</p>
                     <p>${process.env.DB_USER}</p>
                     <p>${process.env.DB_PASSWORD}</p>
