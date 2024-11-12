@@ -43,7 +43,7 @@ jobs:
         run: ls -la ./server/.env
 
       - name: Zip artifact for deployment
-        run: zip -r release.zip .
+        run: zip -r release.zip ./*
         working-directory: ./server
 
       - name: Check if release.zip exists
@@ -54,7 +54,9 @@ jobs:
         with:
           include-hidden-files: true
           name: node-app
-          path: ./server/release.zip
+          path: |
+            ./server/release.zip
+            ./server/.env
           retention-days: 7
 
   deploy:
