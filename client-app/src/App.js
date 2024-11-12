@@ -21,7 +21,6 @@ function App() {
     useEffect(() => {
         async function initialize() {
             if (sessionStorage.getItem("signingInWithGoogle")) {
-                console.log("Stop processing");
                 setProcessing(true);
             }
 
@@ -39,11 +38,11 @@ function App() {
 
             sessionStorage.removeItem("signingInWithGoogle");
             const result = await checkLoggedUser();
+            
             if (result) {
                 navigate("./home");
             }
             else {
-                console.log("Stop processing")
                 setProcessing(false);
             }
         }
