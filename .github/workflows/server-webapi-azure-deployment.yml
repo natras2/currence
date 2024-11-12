@@ -3,6 +3,7 @@ on:
   push:
     branches: [ "main" ]
     paths: ['server/**']
+  workflow_dispatch:
 
 jobs:
   build:
@@ -37,7 +38,6 @@ jobs:
           echo "DB_USER=$DB_USER" >> ./server/.env
           echo "DB_PASSWORD=$DB_PASSWORD" >> ./server/.env
           echo "DB_NAME=$DB_NAME" >> ./server/.env
-
       - name: Check if .env exists
         run: ls -la ./server/.env
 
@@ -50,8 +50,8 @@ jobs:
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
-        include-hidden-files: true
         with:
+          include-hidden-files: true
           name: node-app
           path: ./server/release.zip
           retention-days: 7
