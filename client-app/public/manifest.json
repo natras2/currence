@@ -23,7 +23,7 @@
   "background_color": "#FDFDFD",
   "display": "standalone",
   "scope": "/",
-  "theme_color": "#f5f5f5",
+  "theme_color": "#FDFDFD",
   "orientation": "portrait",
   "description": "Personal budget manager"
 }
