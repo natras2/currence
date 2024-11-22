@@ -1,5 +1,4 @@
 import { sha256 } from 'js-sha256';
-import axios from 'axios';
 
 export function checkPassword(password) {
     // Regular expression to enforce password criteria
@@ -77,17 +76,15 @@ export async function makeAPIRequest(operation, serializedData, parameters, isPr
         var response;
 
         if (serializedData != null) {
-            response = await axios({
+            response = await fetch(url, {
                 method: method,
-                url: url,
-                data: serializedData,
+                body: serializedData,
                 headers: (isProtected) ? { Authorization: `Bearer ${sessionStorage.getItem('token')}` } : undefined,
             });
         }
         else {
-            response = await axios({
+            response = await fetch(url, {
                 method: method,
-                url: url,
                 headers: (isProtected) ? { Authorization: `Bearer ${sessionStorage.getItem('token')}` } : undefined,
             });
         }
@@ -107,8 +104,8 @@ export async function makeAPIRequest(operation, serializedData, parameters, isPr
         else {
             console.error('No response to report', error);
             return {
-                code: 0,
-                body: 'No response to report',
+                code: 500,
+                body: 'Server error: No response to report',
             };
         }
     }

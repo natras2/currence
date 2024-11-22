@@ -16,15 +16,15 @@ root.render(
         <Routes>
             {/* Customer routes */}
             <Route index element={<App />} />
-            <Route path='auth'/>
-                <Route index element={<Error />} />
-                <Route path='signup' element={<Signup />} />
-                <Route path='logout' element={<Logout />} />
-                <Route path='login'>
-                    <Route index element={<Login />} />
-                    <Route path='recover' element={<PasswordForgotten />} />
-                </Route>
-            
+            <Route path='auth' />
+            <Route index element={<Error />} />
+            <Route path='signup' element={<Signup />} />
+            <Route path='logout' element={<Logout />} />
+            <Route path='login'>
+                <Route index element={<Login />} />
+                <Route path='recover' element={<PasswordForgotten />} />
+            </Route>
+
             <Route path='home' element={<Home />} />
 
             {/* Fallback error route */}

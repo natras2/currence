@@ -13,6 +13,19 @@
   <meta name="theme-color" content="#FDFDFD">
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <title>currence</title>
+  <script>
+    if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service_worker.js', { scope: '/'})
+            .then((registration) => {
+                console.log('Service Worker registered:', registration);
+            })
+            .catch((error) => {
+                console.error('Service Worker registration failed:', error);
+            });
+    });
+}
+  </script>
 </head>
 
 <body>
