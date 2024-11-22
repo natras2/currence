@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import InputField from '../assets/components/InputField';
 import { capitalize, checkPassword, encryptPassword } from '../assets/components/Utils';
 import Loader from '../assets/components/Loader';
-import { CreateUserWithEmail } from '../assets/components/Auth';
+import { CreateUserWithEmail } from '../assets/controllers/Auth';
 
-function Header(props) {
+function Header(props: any) {
     return (
         <>
             <h1 className='title'>New account</h1>
@@ -15,7 +15,7 @@ function Header(props) {
     )
 }
 
-function Step1(props) {
+function Step1(props: any) {
     return (
         <div id='step1' className='h-100 d-flex flex-column justify-content-between'>
             <div className='top-content'>
@@ -37,7 +37,7 @@ function Step1(props) {
     )
 }
 
-function Step2(props) {
+function Step2(props: any) {
     return (
         <div id='step2' className='h-100 d-flex flex-column justify-content-between'>
             <div className='top-content'>
@@ -69,11 +69,7 @@ export default function Signup() {
 
     const navigate = useNavigate();
     
-    useEffect(() => {
-        sessionStorage.clear();
-    }, []);
-
-    async function handleSubmit(e) {
+    async function handleSubmit(e: any) {
         setProcessing(true);
 
         // Prevent the browser from reloading the page
@@ -115,7 +111,7 @@ export default function Signup() {
         setStep(step - 1);
     }
 
-    function handleChange(e) {
+    function handleChange(e: any) {
         const { name, value } = e.target;
         if (data.hasOwnProperty(name)) {
             setData(prevState => ({

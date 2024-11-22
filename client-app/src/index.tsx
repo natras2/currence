@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './assets/css/style.css';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
@@ -10,7 +9,9 @@ import { PasswordForgotten, Logout, default as Login } from './app/Login';
 import Signup from './app/Signup';
 import Home from './app/Home';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(
+    document.getElementById('root') as HTMLElement
+);
 root.render(
     <Router>
         <Routes>

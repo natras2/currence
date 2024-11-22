@@ -1,3 +1,4 @@
+import { getAuth } from 'firebase/auth';
 import { sha256 } from 'js-sha256';
 
 export function checkPassword(password) {
@@ -51,6 +52,8 @@ function replaceParameters(url, parameters) {
 }
 
 export async function makeAPIRequest(operation, serializedData, parameters, isProtected) {
+    const auth = getAuth();
+
     if (!API_ENDPOINTS[operation]) {
         return {
             code: 0
@@ -77,15 +80,15 @@ export async function makeAPIRequest(operation, serializedData, parameters, isPr
 
         if (serializedData != null) {
             response = await fetch(url, {
-                method: method,
+                method: method, 
                 body: serializedData,
-                headers: (isProtected) ? { Authorization: `Bearer ${sessionStorage.getItem('token')}` } : undefined,
+                headers: (isProtected) ? { Authorization: `Bearer ${await auth.currentUser.getIdToken()}` } : undefined,
             });
         }
         else {
             response = await fetch(url, {
                 method: method,
-                headers: (isProtected) ? { Authorization: `Bearer ${sessionStorage.getItem('token')}` } : undefined,
+                headers: (isProtected) ? { Authorization: `Bearer ${await auth.currentUser.getIdToken()}` } : undefined,
             });
         }
 

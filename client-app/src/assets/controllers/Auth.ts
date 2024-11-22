@@ -1,6 +1,7 @@
-import { getAuth, signInWithRedirect, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, getRedirectResult } from "firebase/auth"
-import { app } from "../../firebase/firebaseConfig";
-import { makeAPIRequest } from "./Utils";
+import { getAuth, signInWithRedirect, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, getRedirectResult, User } from "firebase/auth"
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { app, db } from "../../firebase/firebaseConfig";
+// import { makeAPIRequest } from "./Utils";
 
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({
@@ -10,15 +11,25 @@ provider.setCustomParameters({
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(app);
 
-const authenticate = async (user) => {
+const authenticate = async (user: User) => {
     console.log("You are authenticating as " + user.displayName + "");
-    console.log("Authenticating you to the Currence API web service....");
-    console.log("Check more at " + ((!!process.env.REACT_APP_IS_LOCALE) ? "http://localhost:8080/" : "https://currence-dzfvg2chhch0h3hd.northeurope-01.azurewebsites.net/"));
 
-    sessionStorage.setItem("fullName", user.displayName);
-    sessionStorage.setItem("email", user.email);
-    sessionStorage.setItem("token", await user.getIdToken());
+    const userRef = doc(db, 'Users', user.uid);
+    const userInstance = await getDoc(userRef);
 
+    if (!userInstance.exists()) {
+        console.log("No such document! Creating it,");
+        await setDoc(userRef, {
+            uid: user.uid,
+            fullName: user.displayName,
+            email: user.email,
+            emailVerified: user.emailVerified
+        });
+    }
+
+    return true;
+
+    /*
     const response = await makeAPIRequest('Authenticate', null, null, true);
 
     if (response.code === 200) {
@@ -30,11 +41,12 @@ const authenticate = async (user) => {
         console.error(`API request failed with code ${response.code}:`, response.body);
         return false;
     }
+    */
 }
 
 // Function to trigger Google sign-in with redirect
 export const SignInWithGoogleAuth = () => {
-    sessionStorage.setItem("signingInWithGoogle", true);
+    sessionStorage.setItem("signingInWithGoogle", "true");
     signInWithRedirect(auth, provider);
 };
 
@@ -49,20 +61,26 @@ export const CheckRedirectSignIn = async () => {
             }
         }
         return false;
-    } 
-    catch (error) {
+    }
+    catch (error: any) {
         console.error("Error during redirect result:", error.code, error.message);
         return false;
     }
 };
 
-export const CreateUserWithEmail = async (name, surname, email, password) => {
+export const CreateUserWithEmail = async (name: string, surname: string, email: string, password: string) => {
     try {
         await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(auth.currentUser, {
-            displayName: `${name} ${surname}`,
-        });
-        console.log("Profile updated");
+        if (auth.currentUser) {
+            await updateProfile(auth.currentUser, {
+                displayName: `${name} ${surname}`,
+            });
+            console.log("Profile updated");
+        }
+        else {
+            throw(Error("No user to update. The name hasn't been saved"));
+        }
+        
         return true;
     } catch (error) {
         console.error("User creation error:", error);
@@ -70,7 +88,7 @@ export const CreateUserWithEmail = async (name, surname, email, password) => {
     }
 };
 
-export const SignInWithEmail = async (email, password) => {
+export const SignInWithEmail = async (email: string, password: string) => {
     try {
         const result = await signInWithEmailAndPassword(auth, email, password);
         return await authenticate(result.user);
@@ -83,7 +101,6 @@ export const SignInWithEmail = async (email, password) => {
 export const SignOut = async () => {
     try {
         await auth.signOut();
-        sessionStorage.clear();
         console.log('Signed Out');
     }
     catch (error) {

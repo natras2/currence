@@ -4,8 +4,10 @@ import { Typewriter } from 'react-simple-typewriter'
 import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 import { BsAt } from "react-icons/bs";
-import { CheckRedirectSignIn, SignInWithGoogleAuth } from './assets/components/Auth';
+import { CheckRedirectSignIn, SignInWithGoogleAuth } from './assets/controllers/Auth';
 import Loader from './assets/components/Loader';
+import { getAuth } from 'firebase/auth';
+import { app } from './firebase/firebaseConfig';
 
 function App() {
     const refTitle = useRef(null);
@@ -17,6 +19,7 @@ function App() {
     const [processing, setProcessing] = useState(false);
 
     const navigate = useNavigate();
+    const auth = getAuth(app);
 
     useEffect(() => {
         async function initialize() {
@@ -26,14 +29,12 @@ function App() {
                 sessionStorage.removeItem("signingInWithGoogle");
                 setProcessing(true);
             }
-
-            setTitleWidth(refTitle.current.offsetWidth);
-            setDeviceWidth(refDevice.current.offsetWidth);
+            
+            setTitleWidth((refTitle.current as any).offsetWidth);
+            setDeviceWidth((refDevice.current as any).offsetWidth);
 
             async function checkLoggedUser() {
-                if (sessionStorage.getItem("token")
-                    && sessionStorage.getItem("fullName")
-                    && sessionStorage.getItem("token")) 
+                if (auth.currentUser) 
                     return true;
                 
                 return await CheckRedirectSignIn();
@@ -50,7 +51,7 @@ function App() {
         }
 
         initialize();
-    }, [navigate]);
+    }, [navigate, auth.currentUser]);
 
 
 

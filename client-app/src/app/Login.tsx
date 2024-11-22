@@ -3,10 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { encryptPassword } from "../assets/components/Utils";
 import Loader from "../assets/components/Loader";
 import InputField from "../assets/components/InputField";
-import { SignInWithEmail, SignOut } from "../assets/components/Auth";
+import { SignInWithEmail, SignOut } from "../assets/controllers/Auth";
 
 export function PasswordForgotten() {
-    
+    return <></>;
 }
 
 export function Logout() {
@@ -33,11 +33,7 @@ export default function Login() {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        sessionStorage.clear();
-    }, []);
-
-    async function handleSubmit(e) {
+    async function handleSubmit(e: any) {
         setProcessing(true);
 
         // Prevent the browser from reloading the page
@@ -71,7 +67,7 @@ export default function Login() {
 
     }
 
-    function handleChange(e) {
+    function handleChange(e: any) {
         const { name, value } = e.target;
         if (data.hasOwnProperty(name)) {
             setData(prevState => ({

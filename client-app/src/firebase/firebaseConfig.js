@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -12,3 +13,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
+export const db = initializeFirestore(app, {
+    localCache: persistentLocalCache({
+        tabManager: persistentMultipleTabManager(),
+    }),
+});
