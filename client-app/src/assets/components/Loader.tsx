@@ -1,6 +1,6 @@
 import { MutatingDots } from  'react-loader-spinner'
 
-function Loader(props) {
+function Loader(props: any) {
     return (
         <MutatingDots
             height="100"

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import InputField from '../assets/components/InputField';
-import { capitalize, checkPassword, encryptPassword } from '../assets/components/Utils';
+import { capitalize, checkPassword, encryptPassword } from '../assets/libraries/Utils';
 import Loader from '../assets/components/Loader';
 import { CreateUserWithEmail } from '../assets/controllers/Auth';
 

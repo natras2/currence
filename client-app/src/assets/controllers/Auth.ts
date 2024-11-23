@@ -1,6 +1,7 @@
 import { getAuth, signInWithRedirect, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, getRedirectResult, User } from "firebase/auth"
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { app, db } from "../../firebase/firebaseConfig";
+import { userConverter } from "../model/User";
 // import { makeAPIRequest } from "./Utils";
 
 const provider = new GoogleAuthProvider();
@@ -14,16 +15,17 @@ const auth = getAuth(app);
 const authenticate = async (user: User) => {
     console.log("You are authenticating as " + user.displayName + "");
 
-    const userRef = doc(db, 'Users', user.uid);
+    const userRef = doc(db, 'Users', user.uid).withConverter(userConverter);
     const userInstance = await getDoc(userRef);
 
     if (!userInstance.exists()) {
-        console.log("No such document! Creating it,");
+        console.log("No such document! Creating it...");
         await setDoc(userRef, {
             uid: user.uid,
-            fullName: user.displayName,
-            email: user.email,
-            emailVerified: user.emailVerified
+            fullName: (user.displayName) ? user.displayName : "",
+            email: (user.email) ? user.email : "",
+            emailVerified: user.emailVerified,
+            photoUrl: (user.photoURL) ? user.photoURL : undefined
         });
     }
 

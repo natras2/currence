@@ -8,6 +8,9 @@ import Error from './Error';
 import { PasswordForgotten, Logout, default as Login } from './app/Login';
 import Signup from './app/Signup';
 import Home from './app/Home';
+import { setLogLevel } from 'firebase/firestore';
+
+setLogLevel('debug');
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement

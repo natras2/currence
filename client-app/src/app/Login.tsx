@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { encryptPassword } from "../assets/components/Utils";
+import { encryptPassword } from "../assets/libraries/Utils";
 import Loader from "../assets/components/Loader";
 import InputField from "../assets/components/InputField";
 import { SignInWithEmail, SignOut } from "../assets/controllers/Auth";

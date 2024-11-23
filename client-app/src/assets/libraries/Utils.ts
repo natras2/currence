@@ -1,18 +1,18 @@
 import { getAuth } from 'firebase/auth';
 import { sha256 } from 'js-sha256';
 
-export function checkPassword(password) {
+export function checkPassword(password: string) {
     // Regular expression to enforce password criteria
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
 
     return passwordRegex.test(password);
 }
 
-export function capitalize(inputString) {
+export function capitalize(inputString: string) {
     return inputString.replace(/\b\w/g, char => char.toUpperCase());
 }
 
-export const encryptPassword = (password) => {
+export const encryptPassword = (password: string) => {
     return sha256(password);
 }
 
@@ -25,12 +25,17 @@ const API_ENDPOINTS = {
     }
 };
 
-function replaceParameters(url, parameters) {
+export interface ApiResponse {
+    code: number;
+    body?: any;
+}
+
+function replaceParameters(url: string, parameters: any) {
     if (url.includes('{')) {
         const urlParameters = url.match(/\{(\w+)\}/g);
         if (urlParameters) {
             urlParameters.forEach((parameterToReplace) => {
-                const paramName = parameterToReplace.slice(1, -1);
+                const paramName: string= parameterToReplace.slice(1, -1);
                 if (parameters[paramName]) {
                     url = url.replace(parameterToReplace, parameters[paramName]);
                     delete parameters[paramName];
@@ -51,22 +56,31 @@ function replaceParameters(url, parameters) {
     }
 }
 
-export async function makeAPIRequest(operation, serializedData, parameters, isProtected) {
+export async function makeAPIRequest(operation: string, serializedData: any, parameters: any, isProtected: boolean) {
     const auth = getAuth();
 
-    if (!API_ENDPOINTS[operation]) {
+    if (!(operation in API_ENDPOINTS)) {
         return {
-            code: 0
-        };
+            code: 0,
+            body: 'The requested operation is not managed by this script'
+        } as ApiResponse;
     }
 
-    const method = API_ENDPOINTS[operation].method;
-    var url = API_ENDPOINTS[operation].url;
+    const operationTyped = operation as keyof typeof API_ENDPOINTS;
+
+    const method = API_ENDPOINTS[operationTyped].method;
+    var url = API_ENDPOINTS[operationTyped].url;
 
     if (parameters != null) {
-        url = replaceParameters(url, parameters);
-        if (url === null) {
-            return { code: 0 };
+        var replacementResult = replaceParameters(url, parameters);
+        if (replacementResult === null) {
+            return {
+                code: 0,
+                body: 'Missing parameters for the requested operation'
+            } as ApiResponse;
+        }
+        else {
+            url = replacementResult;
         }
 
         if (Object.keys(parameters).length > 0) {
@@ -77,39 +91,43 @@ export async function makeAPIRequest(operation, serializedData, parameters, isPr
 
     try {
         var response;
+        const user = auth.currentUser;
+
+        if (!user)
+            throw("No authenticated user");
 
         if (serializedData != null) {
             response = await fetch(url, {
                 method: method, 
                 body: serializedData,
-                headers: (isProtected) ? { Authorization: `Bearer ${await auth.currentUser.getIdToken()}` } : undefined,
+                headers: (isProtected) ? { Authorization: `Bearer ${await user.getIdToken()}` } : undefined,
             });
         }
         else {
             response = await fetch(url, {
                 method: method,
-                headers: (isProtected) ? { Authorization: `Bearer ${await auth.currentUser.getIdToken()}` } : undefined,
+                headers: (isProtected) ? { Authorization: `Bearer ${await user.getIdToken()}` } : undefined,
             });
         }
 
         return {
             code: response.status,
-            body: response.data
-        };
+            body: response.body
+        } as ApiResponse;
     }
-    catch (error) {
+    catch (error: any) {
         if (error.response) {
             return {
                 code: error.response.status,
                 body: error.response.data
-            };
+            } as ApiResponse;
         }
         else {
-            console.error('No response to report', error);
+            console.error('Error while fetching data. ', error);
             return {
                 code: 500,
-                body: 'Server error: No response to report',
-            };
+                body: 'Error while fetching data.',
+            } as ApiResponse;
         }
     }
 }

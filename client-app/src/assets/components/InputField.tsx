@@ -2,10 +2,10 @@ import Select from 'react-select'
 import PasswordStrengthBar from 'react-password-strength-bar';
 import { useState } from 'react';
 
-function TextualField(props) {
+function TextualField(props: any) {
     const [fieldValue, setFieldValue] = useState(props.value); // Initialize state with prop value
 
-    const handleFieldChange = (e) => {
+    const handleFieldChange = (e: any) => {
         setFieldValue(e.target.value); // Update state with input value
         props.handleChange(e);
     };
@@ -32,10 +32,10 @@ function TextualField(props) {
         </div>
     )
 }
-function SelectField(props) {
+function SelectField(props: any) {
     const [fieldValue, setFieldValue] = useState(props.value); // Initialize state with prop value
 
-    const handleFieldChange = (selectedOption) => {
+    const handleFieldChange = (selectedOption: any) => {
         var e = {
             target: {
                 name: props.name,
@@ -47,7 +47,7 @@ function SelectField(props) {
     };
     
     const style = {
-        control: base => ({
+        control: (base: any) => ({
             ...base,
             border: 0,
             // This line disable the blue border
@@ -59,7 +59,7 @@ function SelectField(props) {
             <Select 
                 className="form-control" 
                 name={props.name} 
-                value={props.options.find(option => option.value === fieldValue)} 
+                value={props.options.find((option: any) => option.value === fieldValue)} 
                 placeholder={props.placeholder} 
                 onChange={handleFieldChange} 
                 options={props.options} 
@@ -68,7 +68,7 @@ function SelectField(props) {
     )
 }
 
-export default function InputField(props) {
+export default function InputField(props: any) {
     let field;
     switch (props.type) {
         case 'text':
