@@ -40,7 +40,7 @@ self.addEventListener('fetch', (event) => {
                 console.log('[Service Worker] Serving from cache:', event.request.url);
                 return cachedResponse;
             }
-            console.log('[Service Worker] Fetching from network:', event.request.url);
+            // console.log('[Service Worker] Fetching from network:', event.request.url);
             return fetch(event.request);
         })
     );
