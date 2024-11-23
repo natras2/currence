@@ -1,15 +1,20 @@
 export default class User {
+    public id?: string;
     uid: string;
     fullName: string;
     email: string;
     emailVerified: boolean;
     photoUrl?: string;
+    incomeCategories: Object;
+    expenceCategories: Object;
 
-    constructor(uid: string, fullName: string, email: string, emailVerified: boolean, photoUrl?: string) {
+    constructor(uid: string, fullName: string, email: string, emailVerified: boolean, incomeCategories: Object, expenceCategories: Object, photoUrl?: string) {
         this.uid = uid;
         this.fullName = fullName;
         this.email = email;
         this.emailVerified = emailVerified;
+        this.incomeCategories = incomeCategories;
+        this.expenceCategories = expenceCategories;
         this.photoUrl = photoUrl;
     }
     toString() {
@@ -30,6 +35,8 @@ export const userConverter = {
     },
     fromFirestore: (snapshot: any, options: any) => {
         const data = snapshot.data(options);
-        return new User(data.uid, data.fullName, data.email, data.emailVerified, data.photoUrl);
+        const user = new User(data.uid, data.fullName, data.email, data.incomeCategories, data.expenceCategories, data.emailVerified, data.photoUrl);
+        user.id = snapshot.id; 
+        return user;
     }
 };

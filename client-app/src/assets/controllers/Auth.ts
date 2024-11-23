@@ -2,6 +2,7 @@ import { getAuth, signInWithRedirect, GoogleAuthProvider, signInWithEmailAndPass
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { app, db } from "../../firebase/firebaseConfig";
 import { userConverter } from "../model/User";
+import { defaultExpenseCategories, defaultIncomeCategories } from "../model/Transaction";
 // import { makeAPIRequest } from "./Utils";
 
 const provider = new GoogleAuthProvider();
@@ -25,7 +26,9 @@ const authenticate = async (user: User) => {
             fullName: (user.displayName) ? user.displayName : "",
             email: (user.email) ? user.email : "",
             emailVerified: user.emailVerified,
-            photoUrl: (user.photoURL) ? user.photoURL : undefined
+            photoUrl: (user.photoURL) ? user.photoURL : undefined,
+            incomeCategories: defaultIncomeCategories,
+            expenceCategories: defaultExpenseCategories
         });
     }
 
