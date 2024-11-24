@@ -1,24 +1,21 @@
+import { Category } from "./Transaction";
+
 export default class User {
-    public id?: string;
+    id?: string;
     uid: string;
     fullName: string;
     email: string;
     emailVerified: boolean;
-    photoUrl?: string;
-    incomeCategories: Object;
-    expenceCategories: Object;
+    incomeCategories: Category[];
+    expenceCategories: Category[];
 
-    constructor(uid: string, fullName: string, email: string, emailVerified: boolean, incomeCategories: Object, expenceCategories: Object, photoUrl?: string) {
+    constructor(uid: string, fullName: string, email: string, emailVerified: boolean, incomeCategories: Category[], expenceCategories: Category[]) {
         this.uid = uid;
         this.fullName = fullName;
         this.email = email;
         this.emailVerified = emailVerified;
         this.incomeCategories = incomeCategories;
         this.expenceCategories = expenceCategories;
-        this.photoUrl = photoUrl;
-    }
-    toString() {
-        return this.uid + ', ' + this.fullName + ', ' + this.email + ', ' + this.emailVerified;
     }
 }
 
@@ -30,13 +27,14 @@ export const userConverter = {
             fullName: user.fullName,
             email: user.email,
             emailVerified: user.emailVerified,
-            photoUrl: user.photoUrl
+            incomeCategories: user.incomeCategories,
+            expenceCategories: user.expenceCategories
         };
     },
-    fromFirestore: (snapshot: any, options: any) => {
+    fromFirestore: (snapshot: any, options: any): User => {
         const data = snapshot.data(options);
-        const user = new User(data.uid, data.fullName, data.email, data.incomeCategories, data.expenceCategories, data.emailVerified, data.photoUrl);
-        user.id = snapshot.id; 
+        const user = new User(data.uid, data.fullName, data.email, data.emailVerified, data.incomeCategories, data.expenceCategories);
+        user.id = snapshot.id;
         return user;
     }
 };

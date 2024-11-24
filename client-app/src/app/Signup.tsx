@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import InputField from '../assets/components/InputField';
 import { capitalize, checkPassword, encryptPassword } from '../assets/libraries/Utils';
 import Loader from '../assets/components/Loader';
-import { CreateUserWithEmail } from '../assets/controllers/Auth';
+import { CreateNewUser } from '../assets/controllers/Users';
 
 function Header(props: any) {
     return (
@@ -89,7 +89,7 @@ export default function Signup() {
             return;
         }
 
-        var result = await CreateUserWithEmail(form.name, form.surname, form.email, form.password);
+        var result = await CreateNewUser(form.name, form.surname, form.email, form.password);
         if (result) {
             navigate("/")
         }

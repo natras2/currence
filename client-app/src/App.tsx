@@ -43,7 +43,7 @@ function App() {
             const result = await checkLoggedUser();
             
             if (result) {
-                navigate("./home");
+                navigate("../dashboard");
             }
             else {
                 setProcessing(false);

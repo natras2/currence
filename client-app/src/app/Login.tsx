@@ -53,7 +53,7 @@ export default function Login() {
         try {
             const result = await SignInWithEmail(form.email_address, form.password);
             if (result) {
-                navigate("../home");
+                navigate("../dashboard");
             } 
             else {
                 console.error("Login failed");

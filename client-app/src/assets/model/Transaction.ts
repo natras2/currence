@@ -5,42 +5,137 @@ export enum TransactionType {
     MANAGEASSETS = "static.transactiontype.manageassets"
 }
 
-export const defaultIncomeCategories = {
-    "Salary": "default.incomecategory.salary",
-    "Business": "default.incomecategory.business",
-    "Investment": "default.incomecategory.investment",
-    "Freelance": "default.incomecategory.freelance",
-    "Rent": "default.incomecategory.rent",
-    "Dividend": "default.incomecategory.dividend",
-    "Interest": "default.incomecategory.interest",
-    "Bonus": "default.incomecategory.bonus",
-    "Scholarship": "default.incomecategory.scholarship",
-    "Refund": "default.incomecategory.refund",
-    "Gift": "default.incomecategory.gift",
-    "Benefit": "default.incomecategory.benefit",
-    "Credit management": "default.incomecategory.creditmanagement",
-    "Other": "default.incomecategory.other"
-};
+export type Category = {
+    name: string;
+    i18n_selector?: string;
+}
 
-export const defaultExpenseCategories = {
-    "Housing": "default.expensecategory.housing",
-    "Food & Drink": "default.expensecategory.foodanddrink",
-    "Transportation": "default.expensecategory.transportation",
-    "Insurance & Healthcare": "default.expensecategory.insuranceandhealthcare",
-    "Entertainment & Leisure": "default.expensecategory.entertainmentandleisure",
-    "Financial": "default.expensecategory.financial",
-    "Education": "default.expensecategory.education",
-    "Personal": "default.expensecategory.personal",
-    "Savings & Investments": "default.expensecategory.savingsandinvestments",
-    "Childcare & Family": "default.expensecategory.childcareandfamily",
-    "Professional": "default.expensecategory.professional",
-    "Travel & Vacations": "default.expensecategory.travelandvacations",
-    "Subscriptions & Memberships": "default.expensecategory.subscriptionsandmemberships",
-    "Gifts & Donations": "default.expensecategory.giftsanddonations",
-    "Debt Management": "default.expensecategory.debtmanagement",
-    "Other": "default.expensecategory.other"
-};
+export const defaultIncomeCategories: Category[] = [
+    {
+        name: "Salary",
+        i18n_selector: "default.incomecategory.salary"
+    },
+    {
+        name: "Business",
+        i18n_selector: "default.incomecategory.business"
+    },
+    {
+        name: "Investment",
+        i18n_selector: "default.incomecategory.investment"
+    },
+    {
+        name: "Freelance",
+        i18n_selector: "default.incomecategory.freelance"
+    },
+    {
+        name: "Rent",
+        i18n_selector: "default.incomecategory.rent"
+    },
+    {
+        name: "Dividend",
+        i18n_selector: "default.incomecategory.dividend"
+    },
+    {
+        name: "Interest",
+        i18n_selector: "default.incomecategory.interest"
+    },
+    {
+        name: "Bonus",
+        i18n_selector: "default.incomecategory.bonus"
+    },
+    {
+        name: "Scholarship",
+        i18n_selector: "default.incomecategory.scholarship"
+    },
+    {
+        name: "Refund",
+        i18n_selector: "default.incomecategory.refund"
+    },
+    {
+        name: "Gift",
+        i18n_selector: "default.incomecategory.gift"
+    },
+    {
+        name: "Benefit",
+        i18n_selector: "default.incomecategory.benefit"
+    },
+    {
+        name: "Credit management",
+        i18n_selector: "default.incomecategory.creditmanagement"
+    },
+    {
+        name: "Other",
+        i18n_selector: "default.incomecategory.other"
+    }
+];
 
+
+export const defaultExpenseCategories: Category[] = [
+    {
+        name: "Housing",
+        i18n_selector: "default.expensecategory.housing"
+    },
+    {
+        name: "Food & Drink",
+        i18n_selector: "default.expensecategory.foodanddrink"
+    },
+    {
+        name: "Transportation",
+        i18n_selector: "default.expensecategory.transportation"
+    },
+    {
+        name: "Insurance & Healthcare",
+        i18n_selector: "default.expensecategory.insuranceandhealthcare"
+    },
+    {
+        name: "Entertainment & Leisure",
+        i18n_selector: "default.expensecategory.entertainmentandleisure"
+    },
+    {
+        name: "Financial",
+        i18n_selector: "default.expensecategory.financial"
+    },
+    {
+        name: "Education",
+        i18n_selector: "default.expensecategory.education"
+    },
+    {
+        name: "Personal",
+        i18n_selector: "default.expensecategory.personal"
+    },
+    {
+        name: "Savings & Investments",
+        i18n_selector: "default.expensecategory.savingsandinvestments"
+    },
+    {
+        name: "Childcare & Family",
+        i18n_selector: "default.expensecategory.childcareandfamily"
+    },
+    {
+        name: "Professional",
+        i18n_selector: "default.expensecategory.professional"
+    },
+    {
+        name: "Travel & Vacations",
+        i18n_selector: "default.expensecategory.travelandvacations"
+    },
+    {
+        name: "Subscriptions & Memberships",
+        i18n_selector: "default.expensecategory.subscriptionsandmemberships"
+    },
+    {
+        name: "Gifts & Donations",
+        i18n_selector: "default.expensecategory.giftsanddonations"
+    },
+    {
+        name: "Debt Management",
+        i18n_selector: "default.expensecategory.debtmanagement"
+    },
+    {
+        name: "Other",
+        i18n_selector: "default.expensecategory.other"
+    }
+];
 
 export default class Transaction {
     id?: string;
@@ -48,15 +143,24 @@ export default class Transaction {
     date: Date;
     description: string;
     type: TransactionType;
-    category: string;
+    category: Category;
+    amount: number;
+    creationTime: number;
+    fromAssetId?: string[];
+    toAssetId?: string[];
+    associatedPendingsId?: string[];
 
-
-    constructor(uid: string, date = new Date(), description: string, type: TransactionType, category: string) {
+    constructor(uid: string, date = new Date(), description: string, type: TransactionType, category: Category, amount: number, creationTime: number = new Date().getTime(), fromAssetId?: string[], toAssetId?: string[], associatedPendingsId?: string[]) {
         this.uid = uid;
         this.date = date;
         this.description = description;
         this.type = type;
         this.category = category;
+        this.amount = amount;
+        this.creationTime = creationTime;
+        this.fromAssetId = fromAssetId;
+        this.toAssetId = toAssetId;
+        this.associatedPendingsId = associatedPendingsId
     }
 }
 
@@ -68,12 +172,17 @@ export const transactionConverter = {
             date: transaction.date,
             description: transaction.description,
             type: transaction.type,
-            category: transaction.category
+            category: transaction.category,
+            amount: transaction.amount,
+            creationTime: transaction.creationTime,
+            fromAssetId: transaction.fromAssetId,
+            toAssetId: transaction.toAssetId,
+            associatedPendingsId: transaction.associatedPendingsId
         };
     },
     fromFirestore: (snapshot: any, options: any) => {
         const data = snapshot.data(options);
-        const transaction = new Transaction(data.uid, data.date, data.description, data.type, data.category);
+        const transaction = new Transaction(data.uid, data.date, data.description, data.type, data.category, data.amount, data.creationTime, data.fromAssetId, data.toAssetId, data.associatedPendingsId);
         transaction.id = snapshot.id;
         return transaction;
     }

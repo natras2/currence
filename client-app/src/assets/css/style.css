@@ -76,6 +76,89 @@ form .input-guide {
     margin-top: -3px;
 }
 
+/********* NAVIGATION BAR **********/
+#navigation-bar {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    padding: .7rem 1.2rem 0;
+    width:100%;
+    height: 90px;
+    background-color: #F5F5F5;
+    left:0;
+    bottom:0;  
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0px 0px 11px rgba(0,0,0,.25);
+    color: #8a8a8a;
+}
+#navigation-bar .nav-btn {
+    width: calc((100% - 2.4rem) / 5);
+    text-align: center;
+    cursor:pointer;
+
+}
+#navigation-bar .nav-btn .icon {
+    font-size: 1.6rem;
+}
+#navigation-bar .nav-btn .name {
+    font-size: .7rem;
+}
+#navigation-bar .nav-btn.active .icon {
+    color: #0052ff;
+}
+#navigation-bar .nav-btn.active .name {
+    color: #212529;
+    font-weight: 500;
+}
+
+/********* PROFILE PICTURE *********/
+#profile-picture {
+    position: relative;
+}
+#profile-picture .letters {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+}
+
+/******** TOP RIGHT BUTTONS ********/
+#top-right-buttons {
+    position: absolute;
+    right:1.2rem;
+}
+
+/********** PERSONAL AREA **********/
+.personal-area.page {
+    overflow-x: auto;
+    padding-top:2rem;
+    position: relative;
+}
+
+.personal-area.page .page-title {
+    font-weight: 700;
+    margin: 3px 0;
+}
+
+/************ SETTINGS *************/
+#settings.page {
+    padding-top:2rem;
+}
+#settings.page .settings-header {
+    margin: 40px 0 20px;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/************* LOADER **************/
 
 .loader {
     display: flex;

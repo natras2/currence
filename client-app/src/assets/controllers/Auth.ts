@@ -1,7 +1,7 @@
-import { getAuth, signInWithRedirect, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, getRedirectResult, User } from "firebase/auth"
+import { getAuth, signInWithRedirect, GoogleAuthProvider, signInWithEmailAndPassword, getRedirectResult, User as FirebaseUser } from "firebase/auth"
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { app, db } from "../../firebase/firebaseConfig";
-import { userConverter } from "../model/User";
+import User, { userConverter } from "../model/User";
 import { defaultExpenseCategories, defaultIncomeCategories } from "../model/Transaction";
 // import { makeAPIRequest } from "./Utils";
 
@@ -13,23 +13,23 @@ provider.setCustomParameters({
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(app);
 
-const authenticate = async (user: User) => {
-    console.log("You are authenticating as " + user.displayName + "");
+const authenticate = async (submittedUser: FirebaseUser) => {
+    console.log("You are authenticating as " + submittedUser.displayName + "");
 
-    const userRef = doc(db, 'Users', user.uid).withConverter(userConverter);
+    const userRef = doc(db, 'Users', submittedUser.uid).withConverter(userConverter);
     const userInstance = await getDoc(userRef);
 
     if (!userInstance.exists()) {
-        console.log("No such document! Creating it...");
-        await setDoc(userRef, {
-            uid: user.uid,
-            fullName: (user.displayName) ? user.displayName : "",
-            email: (user.email) ? user.email : "",
-            emailVerified: user.emailVerified,
-            photoUrl: (user.photoURL) ? user.photoURL : undefined,
-            incomeCategories: defaultIncomeCategories,
-            expenceCategories: defaultExpenseCategories
-        });
+        console.log("It looks like this is the first time up here! I'm uploading your data...");
+        const user = new User (
+            submittedUser.uid, 
+            submittedUser.displayName as string, 
+            submittedUser.email as string, 
+            submittedUser.emailVerified, 
+            [...defaultIncomeCategories], 
+            [...defaultExpenseCategories]
+        );
+        await setDoc(userRef, user);
     }
 
     return true;
@@ -69,26 +69,6 @@ export const CheckRedirectSignIn = async () => {
     }
     catch (error: any) {
         console.error("Error during redirect result:", error.code, error.message);
-        return false;
-    }
-};
-
-export const CreateUserWithEmail = async (name: string, surname: string, email: string, password: string) => {
-    try {
-        await createUserWithEmailAndPassword(auth, email, password);
-        if (auth.currentUser) {
-            await updateProfile(auth.currentUser, {
-                displayName: `${name} ${surname}`,
-            });
-            console.log("Profile updated");
-        }
-        else {
-            throw(Error("No user to update. The name hasn't been saved"));
-        }
-        
-        return true;
-    } catch (error) {
-        console.error("User creation error:", error);
         return false;
     }
 };

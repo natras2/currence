@@ -5,6 +5,10 @@ import { getAuth } from "firebase/auth";
 
 const auth = getAuth(app);
 
+export function GetUserTransactions (uid: string) {
+
+}
+
 export function CreateNewTransaction (transaction: Transaction) {
 
 }

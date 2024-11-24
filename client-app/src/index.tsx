@@ -7,10 +7,8 @@ import Error from './Error';
 
 import { PasswordForgotten, Logout, default as Login } from './app/Login';
 import Signup from './app/Signup';
-import Home from './app/Home';
-import { setLogLevel } from 'firebase/firestore';
-
-setLogLevel('debug');
+import PersonalArea from './app/PersonalArea';
+import Settings from './app/Settings';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -29,7 +27,12 @@ root.render(
                 <Route path='recover' element={<PasswordForgotten />} />
             </Route>
 
-            <Route path='home' element={<Home />} />
+            <Route path='dashboard' element={<PersonalArea page="Dashboard" />} />
+            <Route path='transactions' element={<PersonalArea page="Transactions" />} />
+            <Route path='wallet' element={<PersonalArea page="Wallet" />} />
+            <Route path='evener' element={<PersonalArea page="Evener" />} />
+            <Route path='stats' element={<PersonalArea page="Stats" />} />
+            <Route path='settings' element={<Settings />} />
 
             {/* Fallback error route */}
             <Route path='*' element={<Error />} />
