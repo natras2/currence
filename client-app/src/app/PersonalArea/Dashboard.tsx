@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import User from "../../assets/model/User";
 import { GetUserAssets } from "../../assets/controllers/Assets";
-import ProfileImage from "../../assets/components/ProfileImage";
 
 function SplashFirstAccess() {
     return (
