@@ -1,5 +1,6 @@
 {
   "name": "currence",
+  "homepage": "https://currence.web.app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
