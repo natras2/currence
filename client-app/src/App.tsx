@@ -23,25 +23,39 @@ function App() {
 
     useEffect(() => {
         async function initialize() {
-            
+
             //Check whether I'm getting redirected from a Sign In with Google request
             if (sessionStorage.getItem("signingInWithGoogle")) {
                 sessionStorage.removeItem("signingInWithGoogle");
                 setProcessing(true);
             }
-            
+
             setTitleWidth((refTitle.current as any).offsetWidth);
             setDeviceWidth((refDevice.current as any).offsetWidth);
 
             async function checkLoggedUser() {
-                if (auth.currentUser) 
-                    return true;
-                
-                return await CheckRedirectSignIn();
+                // Wrap `onAuthStateChanged` in a Promise
+                const userLoggedIn = await new Promise<boolean>((resolve) => {
+                    auth.onAuthStateChanged((user) => {
+                        if (user) {
+                            resolve(true); // Resolve with `true` if the user is logged in
+                        } else {
+                            resolve(false); // Resolve with `false` if no user is logged in
+                        }
+                    });
+                });
+
+                // Additional check if needed (e.g., sign-in redirect)
+                if (!userLoggedIn) {
+                    return await CheckRedirectSignIn();
+                }
+
+                return userLoggedIn;
             }
 
+
             const result = await checkLoggedUser();
-            
+
             if (result) {
                 navigate("../dashboard");
             }
@@ -51,7 +65,7 @@ function App() {
         }
 
         initialize();
-    }, [navigate, auth.currentUser]);
+    }, [navigate, auth]);
 
 
 
@@ -110,8 +124,8 @@ function App() {
                     </Link>
                 </div>
             </div>
-            {processing && 
-            <Loader selector='app'/>
+            {processing &&
+                <Loader selector='app' />
             }
         </>
     );

@@ -79,26 +79,39 @@ export default function PersonalArea(props: any) {
 
     useEffect(() => {
         async function initialize() {
-            // check if the user is logged.
-            const loggedUser = auth.currentUser;
-            if (!loggedUser) {
-                console.error("The user is not logged. Redirecting to root...")
-                navigate("/");
-                return;
-            }
+            // Set up an auth state listener
+            const unsubscribe = auth.onAuthStateChanged(async (loggedUser) => {
+                if (!loggedUser) {
+                    console.error("The user is not logged. Redirecting to root...");
+                    navigate("/");
+                    return;
+                }
 
-            //returns the user from Firestore
-            const retrievedUser = await GetUser(loggedUser.uid);
-            if (!retrievedUser) {
-                console.error("The user is not registered on Firestore. Redirecting to root...")
-                navigate("/");
-                return;
-            }
-            else setUser(retrievedUser);
-            setProcessing(false);
+                try {
+                    // Fetch the user data from Firestore
+                    const retrievedUser = await GetUser(loggedUser.uid);
+                    if (!retrievedUser) {
+                        console.error("The user is not registered on Firestore. Redirecting to root...");
+                        navigate("/");
+                        return;
+                    }
+
+                    // Set the retrieved user to state
+                    setUser(retrievedUser);
+                } catch (error) {
+                    console.error("An error occurred while retrieving the user:", error);
+                    navigate("/"); // Redirect to root on error
+                } finally {
+                    setProcessing(false); // Stop processing after everything is done
+                }
+            });
+
+            // Cleanup the auth listener on component unmount
+            return () => unsubscribe();
         }
+
         initialize();
-    }, [auth.currentUser, navigate]);
+    }, [auth, navigate]);
 
     const changePageHandler = (target: string) => {
         setPage(target);
