@@ -1,4 +1,7 @@
 const CACHE_NAME = 'currence-cache-v1';
+const STATIC_ASSETS = [
+    "/"
+];
 
 // Installazione del Service Worker: cache delle risorse statiche
 self.addEventListener('install', (event) => {
