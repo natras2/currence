@@ -16,7 +16,7 @@ function App() {
     const [titleWidth, setTitleWidth] = useState(0);
     const [deviceWidth, setDeviceWidth] = useState(0);
 
-    const [processing, setProcessing] = useState(false);
+    const [processing, setProcessing] = useState(true);
 
     const navigate = useNavigate();
     const auth = getAuth(app);
@@ -25,10 +25,9 @@ function App() {
         async function initialize() {
 
             //Check whether I'm getting redirected from a Sign In with Google request
-            if (sessionStorage.getItem("signingInWithGoogle")) {
+            if (sessionStorage.getItem("signingInWithGoogle")) 
                 sessionStorage.removeItem("signingInWithGoogle");
-                setProcessing(true);
-            }
+                
 
             setTitleWidth((refTitle.current as any).offsetWidth);
             setDeviceWidth((refDevice.current as any).offsetWidth);
