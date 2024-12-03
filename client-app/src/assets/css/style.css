@@ -142,8 +142,8 @@ form .input-guide {
 
 .personal-area.page .page-title {
     font-weight: 700;
-    margin: 3px 0;
-    height: 27px;
+    margin: 0;
+    font-size: 27px;
 }
 
 /************ SETTINGS *************/
