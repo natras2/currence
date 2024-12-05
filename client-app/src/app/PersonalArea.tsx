@@ -14,6 +14,8 @@ import Transactions from "./PersonalArea/Transactions";
 import Evener from "./PersonalArea/Evener";
 import Stats from "./PersonalArea/Stats";
 import ProfileImage from "../assets/components/ProfileImage";
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css'
 
 function NavigationBar(props: any) {
     const navButtons = [
@@ -60,10 +62,16 @@ function NavigationBar(props: any) {
 }
 
 function TopRightButtons(props: any) {
+    const isSkeleton = (props.type && props.type === "skeleton");
+
+    const content = (isSkeleton)
+        ? <Skeleton circle={true} width={props.dimension} height={props.dimension}/>
+        : <Link to={"../settings"}><ProfileImage {...props} /></Link>;
+    
     return (
         <>
-            <div id="top-right-buttons">
-                <Link to={"../settings"}><ProfileImage {...props} /></Link>
+            <div id="top-right-buttons" style={(isSkeleton) ? {marginTop: -4} : {}}>
+                {content}
             </div>
         </>
     );
@@ -82,7 +90,7 @@ export default function PersonalArea(props: any) {
             // Set up an auth state listener
             const unsubscribe = auth.onAuthStateChanged(async (loggedUser) => {
                 if (!loggedUser) {
-                    console.error("The user is not logged. Redirecting to root...");
+                    console.log("The user is not logged. Redirecting to root...");
                     navigate("/");
                     return;
                 }
@@ -91,7 +99,7 @@ export default function PersonalArea(props: any) {
                     // Fetch the user data from Firestore
                     const retrievedUser = await GetUser(loggedUser.uid);
                     if (!retrievedUser) {
-                        console.error("The user is not registered on Firestore. Redirecting to root...");
+                        console.log("The user is not registered on Firestore. Redirecting to root...");
                         navigate("/");
                         return;
                     }
@@ -122,10 +130,10 @@ export default function PersonalArea(props: any) {
         <>
             <div className='personal-area page'>
                 {(processing)
-                    ? <></>
+                    ? <><Skeleton width={250} style={{marginTop: 3, height: 27}}/><TopRightButtons type="skeleton" dimension={35}/></>
                     : (
                         <>
-                            <TopRightButtons uid={user.uid} firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)} dimension="35" />
+                            <TopRightButtons uid={user.uid} firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)} dimension={35} />
                             {page === 'Dashboard' && <Dashboard user={user} />}
                             {page === 'Wallet' && <Wallet />}
                             {page === 'Transactions' && <Transactions />}

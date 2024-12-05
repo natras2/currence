@@ -1,11 +1,30 @@
 import { useEffect, useState } from "react";
 import User from "../../assets/model/User";
 import { GetUserAssets } from "../../assets/controllers/Assets";
+import illustration from '../../assets/images/illustrations/splash-first-access.svg'
 
-function SplashFirstAccess() {
+export function SplashFirstAccess() {
     return (
         <>
-            <h1>It seems this it your first time up here! Welcome :)</h1>
+            <div id="splash-first-access-illustration">
+                    <img
+                        src={illustration}
+                        className='illustration'
+                        alt='welcome on currence'
+                        width='100%'
+                    />
+            </div>
+            <div id="splash-first-access">
+                <div>
+                    <div className="title">Welcome aboard!</div>
+                    <div className="subtitle">It seems this it your first time up here! Welcome :)</div>
+                </div>
+                <div className="button">
+                    <button onClick={() => {}} className="btn border btn-primary rounded-4 shadow-sm btn-lg px-3 py-3 w-100">
+                        <div className='small text-center fw-bold'>Add your first Asset</div>
+                    </button>
+                </div>
+            </div>
         </>
     );
 }
@@ -30,7 +49,7 @@ export default function Dashboard(props: any) {
     return (
         <>
             <div id='dashboard'>
-                <h3>Hi, {user.fullName.split(" ")[0]}</h3>
+                <h3 className="page-title" style={{ fontWeight: 300 }}>Hi, {user.fullName.split(" ")[0]}</h3>
                 {(firstAccess)
                     ? <SplashFirstAccess />
                     : (

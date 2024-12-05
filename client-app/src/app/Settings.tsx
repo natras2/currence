@@ -17,7 +17,7 @@ export default function Settings() {
         async function initialize() {
             const unsubscribe = auth.onAuthStateChanged(async (loggedUser) => {
                 if (!loggedUser) {
-                    console.error("The user is not logged. Redirecting to root...");
+                    console.log("The user is not logged. Redirecting to root...");
                     navigate("/");
                     return;
                 }
@@ -26,7 +26,7 @@ export default function Settings() {
                     // Fetch the user data from Firestore
                     const retrievedUser = await GetUser(loggedUser.uid);
                     if (!retrievedUser) {
-                        console.error("The user is not registered on Firestore. Redirecting to root...");
+                        console.log("The user is not registered on Firestore. Redirecting to root...");
                         navigate("/");
                         return;
                     }
