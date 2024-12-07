@@ -91,6 +91,7 @@ form .input-guide {
     border-top-right-radius: 20px;
     box-shadow: 0px 0px 11px rgba(0, 0, 0, .25);
     color: #8a8a8a;
+    z-index: 999;
 }
 
 #navigation-bar .nav-btn {
@@ -137,7 +138,7 @@ form .input-guide {
 #top-right-buttons {
     position: absolute;
     right: 1.2rem;
-    z-index: 9999;
+    z-index: 10;
 }
 
 /********** PERSONAL AREA **********/
@@ -163,9 +164,9 @@ form .input-guide {
 }
 
 /*********** DASHBOARD ************/
-.personal-area.page #dashboard #splash-first-access {
+#splash-first-access {
     display: flex;
-    margin-top: 180px;
+    margin-top: 205px;
     padding: 90px 20px 20px;
     height: calc(100% - 310px);
     position: relative;
@@ -176,32 +177,48 @@ form .input-guide {
     --a: 25deg;
     width: 100%;
     aspect-ratio: 1;
-    background: linear-gradient(210deg, #b6f0ff, #00a1ff);
+    background: linear-gradient(50deg, #dfffed, #c9f0ff);
     border-radius: var(--r);
     --_m: 0 / calc(2* var(--r)) var(--r) no-repeat radial-gradient(50% 100% at bottom, #000 calc(100% - 1px), #0000);
     --_d: (var(--s) + var(--r))* cos(var(--a));
     mask: calc(50% + var(--_d)) var(--_m), calc(50% - var(--_d)) var(--_m), radial-gradient(var(--s) at 50% calc(-1* sin(var(--a))* var(--s)), #0000 100%, #000 calc(100% + 1px)) 0 calc(var(--r)*(1 - sin(var(--a)))) no-repeat, linear-gradient(90deg, #000 calc(50% - var(--_d)), #0000 0 calc(50% + var(--_d)), #000 0);
 }
 
-.personal-area.page #dashboard #splash-first-access-illustration {
+#splash-first-access-illustration {
     width: 100%;
     left: 0;
-    top: 70px;
+    top: 60px;
     position: absolute;
     text-align: center;
 }
 
-.personal-area.page #dashboard #splash-first-access-illustration img {
+#splash-first-access-illustration img {
     width: 160px;
     margin: 0 auto;
 }
 
-.personal-area.page #dashboard #splash-first-access .title {
+#splash-first-access .title {
     font-family: "Baloo Da 2", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
-    font-size: 32px;
-    font-weight: 800;
-    margin-bottom: 10px;
+    font-size: 27px;
+    font-weight: 600;
+    letter-spacing: -.8px;
+}
+#splash-first-access .subtitle {
+    font-size: 18px;
+    font-weight: 500;
+    margin: -5px 0 25px;
+}
+#splash-first-access .body {
+    font-size: 16px;
+}
+
+.callout.page {
+    position:absolute;
+    width:100%;
+    padding:0;
+    top:0;
+    z-index: 100;
 }
 
 /************ SETTINGS *************/

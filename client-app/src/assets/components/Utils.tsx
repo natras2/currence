@@ -1,12 +1,12 @@
-import { IoIosArrowBack } from "react-icons/io";
+import { TiArrowLeft } from "react-icons/ti";
 import { Link } from "react-router-dom";
 
 export function BackButton(props: any) {
     return (
-        <Link to={props.link} id="back-arrow" style={{textDecoration: "none"}}>
-            <span style={{fontSize: "23px", marginTop: "-4px"}}>
-                <IoIosArrowBack />
-            </span> Back
+        <Link to={props.link} id="back-arrow" onClick={(props.handler) ? props.handler : ""} style={{textDecoration: "none", color: "#000080", position: "relative", top: "-1rem"}}>
+            <span style={{fontSize: "40px"}}>
+                <TiArrowLeft />
+            </span>
         </Link>
     );
 }

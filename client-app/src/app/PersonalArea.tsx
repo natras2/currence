@@ -135,10 +135,10 @@ export default function PersonalArea(props: any) {
                         <>
                             <TopRightButtons uid={user.uid} firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)} dimension={35} />
                             {page === 'Dashboard' && <Dashboard user={user} />}
-                            {page === 'Wallet' && <Wallet />}
-                            {page === 'Transactions' && <Transactions />}
-                            {page === 'Evener' && <Evener />}
-                            {page === 'Stats' && <Stats />}</>
+                            {page === 'Wallet' && <Wallet user={user} />}
+                            {page === 'Transactions' && <Transactions user={user} />}
+                            {page === 'Evener' && <Evener user={user} />}
+                            {page === 'Stats' && <Stats user={user} />}</>
                     )}
                 <NavigationBar active={page} handler={changePageHandler} />
             </div>
