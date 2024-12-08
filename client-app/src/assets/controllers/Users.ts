@@ -18,7 +18,8 @@ export async function CreateNewUser (name: string, surname: string, email: strin
         else {
             throw(Error("No user to update. The name hasn't been saved"));
         }
-        
+        localStorage.clear();
+        await auth.signOut();
         return true;
     } 
     catch (error) {
