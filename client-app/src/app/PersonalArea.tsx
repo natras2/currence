@@ -130,7 +130,7 @@ export default function PersonalArea(props: any) {
         <>
             <div className='personal-area page'>
                 {(processing)
-                    ? <><Skeleton width={250} style={{marginTop: 3, height: 27}}/><TopRightButtons type="skeleton" dimension={35}/></>
+                    ? <>{/*<Skeleton width={250} style={{marginTop: 3, height: 27}}/> */}<TopRightButtons type="skeleton" dimension={35}/></>
                     : (
                         <>
                             <TopRightButtons uid={user.uid} firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)} dimension={35} />

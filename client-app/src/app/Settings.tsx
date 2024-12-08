@@ -49,10 +49,14 @@ export default function Settings() {
         initialize();
     }, [auth, navigate]);
 
+    const backHandler = () => {
+        navigate(-1);
+    }
+
     return (
         <>
             <div id="settings" className="page">
-                <BackButton link="../dashboard" />
+                <BackButton handler={backHandler}/>
                 {(processing)
                     ? <></>
                     : (
@@ -60,8 +64,9 @@ export default function Settings() {
                             <div className="settings-header">
                                 <ProfileImage uid={user.uid} firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)} dimension="115" />
                                 <h1>{user.fullName}</h1>
+                                <div className="text-secondary fw-normal fs-5 mb-4" style={{marginTop: -20}}>{user.email}</div>
                             </div>
-                            <Link to="/logout" className="btn w-100 btn-lg btn-outline-primary">Logout</Link>
+                            <Link to="/logout" className="btn w-100 btn-lg btn-outline-danger"><small>Logout</small></Link>
                         </>
                     )
                 }

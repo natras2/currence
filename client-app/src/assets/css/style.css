@@ -66,7 +66,8 @@ body {
 
 form input[type="text"],
 form input[type="email"],
-form input[type="password"] {
+form input[type="password"],
+form textarea.form-control {
     padding: .8rem 1.5rem;
 }
 
@@ -305,4 +306,28 @@ form .input-guide {
 
 #home.page .logo {
     width: 60%;
+}
+
+/************* CURRENCY INPUT **************/
+input.currency-input {
+    border: none;
+    background: none;
+    font-weight: 600;
+    font-size: 55px;
+    width: 100%;
+    color: #000080;
+    padding: .8rem 0px !important;
+}
+
+input.currency-input:focus-visible {
+    outline: none;
+}
+
+input.currency-input:focus-visible::placeholder {
+    color: #000080;
+}
+
+#AddAsset form label {
+    font-size: 14px;
+    margin-bottom: 4px;
 }

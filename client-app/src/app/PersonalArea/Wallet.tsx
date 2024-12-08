@@ -15,7 +15,9 @@ export default function Wallet(props: any) {
                 setNoAssets(true);
             }
             else {
-
+                retrievedAssets.forEach((asset) => {
+                    console.log(asset);
+                })
             }
         }
         initialize();

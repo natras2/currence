@@ -9,6 +9,7 @@ import { PasswordForgotten, Logout, default as Login } from './app/Login';
 import Signup from './app/Signup';
 import PersonalArea from './app/PersonalArea';
 import Settings from './app/Settings';
+import AddAsset from './app/PersonalArea/Wallet/AddAsset';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -29,7 +30,10 @@ root.render(
 
             <Route path='dashboard' element={<PersonalArea page="Dashboard" />} />
             <Route path='transactions' element={<PersonalArea page="Transactions" />} />
-            <Route path='wallet' element={<PersonalArea page="Wallet" />} />
+            <Route path='wallet'>
+                <Route index element={<PersonalArea page="Wallet" />} />
+                <Route path='new-asset' element={<AddAsset />} />
+            </Route>
             <Route path='evener' element={<PersonalArea page="Evener" />} />
             <Route path='stats' element={<PersonalArea page="Stats" />} />
             <Route path='settings' element={<Settings />} />
