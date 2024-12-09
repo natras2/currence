@@ -1,7 +1,6 @@
-import { doc, getDoc, setDoc, getDocs, collection, addDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, getDocs, collection, addDoc, updateDoc, increment } from "firebase/firestore";
 import { app, db } from "../../firebase/firebaseConfig";
 import Asset, { assetConverter } from "../model/Asset";
-import { assert } from "console";
 
 export async function GetUserAssets(uid: string) {
     const assetsCollectionRef = collection(db, 'Users', uid, 'Assets').withConverter(assetConverter);
@@ -27,6 +26,18 @@ export async function CreateAsset (asset: Asset) {
     // update user setting first access to false
     await updateDoc(doc(db, "Users", asset.uid), {
         firstAccess: false,
+        totalBalance: increment((!asset.hiddenFromTotal) ? asset.balance : 0)
+    });
+
+    return true;
+}
+
+export async function UpdateFavourite (uid: string, assetId: string, updatedStarred: boolean) {
+    const assetRef = doc(db, 'Users', uid, "Assets", assetId).withConverter(assetConverter);
+
+    // update starred reference
+    await updateDoc(assetRef, {
+        starred: updatedStarred
     });
 
     return true;

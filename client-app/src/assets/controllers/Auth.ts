@@ -27,7 +27,8 @@ const authenticate = async (submittedUser: FirebaseUser) => {
             submittedUser.email as string, 
             submittedUser.emailVerified, 
             [...defaultIncomeCategories], 
-            [...defaultExpenseCategories]
+            [...defaultExpenseCategories],
+            0
         );
         await setDoc(userRef, user);
     }

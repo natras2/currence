@@ -121,6 +121,7 @@ form .input-guide {
 /********* PROFILE PICTURE *********/
 #profile-picture {
     position: relative;
+    font-size: 1rem;
 }
 
 #profile-picture .letters {
@@ -139,6 +140,14 @@ form .input-guide {
     position: absolute;
     right: 1.2rem;
     z-index: 10;
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    gap: 18px;
+}
+#top-right-buttons .icon {
+    margin-top: -3px;
+    cursor: pointer;
 }
 
 /********** PERSONAL AREA **********/
@@ -161,6 +170,10 @@ form .input-guide {
     font-weight: 700;
     margin: 3px 0 0;
     font-size: 24px;
+}
+.personal-area.page .body {
+    margin-top: 25px;
+    min-height: 100vh;
 }
 
 /*********** DASHBOARD ************/
@@ -199,25 +212,27 @@ form .input-guide {
 
 #splash-first-access .title {
     font-family: "Baloo Da 2", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
     font-size: 27px;
     font-weight: 600;
     letter-spacing: -.8px;
 }
+
 #splash-first-access .subtitle {
     font-size: 18px;
     font-weight: 500;
     margin: -5px 0 25px;
 }
+
 #splash-first-access .body {
     font-size: 16px;
 }
 
 .callout.page {
-    position:absolute;
-    width:100%;
-    padding:0;
-    top:0;
+    position: absolute;
+    width: 100%;
+    padding: 0;
+    top: 0;
     z-index: 100;
 }
 

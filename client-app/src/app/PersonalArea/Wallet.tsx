@@ -1,35 +1,80 @@
 import { useEffect, useState } from "react";
 import User from "../../assets/model/User";
-import { GetUserAssets } from "../../assets/controllers/Assets";
+import { GetUserAssets, UpdateFavourite } from "../../assets/controllers/Assets";
 import { FaPlus } from "react-icons/fa";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
+import Asset from "../../assets/model/Asset";
+import { currencyFormat } from "../../assets/libraries/Utils";
+import { FaRegStar } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 
 export default function Wallet(props: any) {
     const user: User = props.user;
-    const [noAssets, setNoAssets] = useState(false);
+    const [assets, setAssets] = useState<Asset[]>([]);
+    const [starred, setStarred] = useState<Asset[]>([]);
+    const [processing, setProcessing] = useState(true);
 
     useEffect(() => {
         async function initialize() {
+
             const retrievedAssets = await GetUserAssets(user.uid);
-            if (!retrievedAssets) {
-                setNoAssets(true);
+            if (retrievedAssets && retrievedAssets.length > 0) {
+                setAssets(retrievedAssets);
+                // Filter and set starred assets
+                const starredAssets = retrievedAssets.filter(asset => asset.starred);
+                setStarred(starredAssets);
             }
-            else {
-                retrievedAssets.forEach((asset) => {
-                    console.log(asset);
-                })
-            }
+            setProcessing(false);
         }
         initialize();
-    }, [user]);
+    }, [user, assets]);
+
+    const handlerFavourite = (asset: Asset) => {
+        UpdateFavourite(asset.uid, (asset.id as unknown) as string, !asset.starred);
+    }
 
     return (
         <>
             <div id="wallet">
                 {(user.firstAccess)
-                    ? <SplashFirstAccess userName={user.fullName.split(" ")[0]}/>
-                    : (noAssets)
+                    ? <SplashFirstAccess userName={user.fullName.split(" ")[0]} />
+                    : (user.totalBalance > 0)
                         ? (
+                            <>
+                                <h3 className="page-title">Wallet</h3>
+                                <div className="body">
+                                    <div className="starred">
+                                        <div className="cards">
+                                            {(processing)
+                                                ? <></>
+                                                : <>{(starred && starred.length === 0)
+                                                    ? <></>
+                                                    : <>
+                                                        {starred.map((asset, i) => {
+                                                            return (<div key={i}>{asset.name}</div>)
+                                                        })}
+                                                    </>
+                                                }</>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className="full-list">
+                                        <div className="label">My assets</div>
+                                    </div>
+                                    <div className="items">
+                                        {(processing)
+                                            ? <></>
+                                            : <>{
+                                                assets.map((asset, i) => {
+                                                    return (<div key={i}>{asset.name}:  {currencyFormat(asset.balance)} - {(asset.starred) ? <FaStar onClick={(e) => handlerFavourite(asset)}/> : <FaRegStar  onClick={(e) => handlerFavourite(asset)} />}</div>)
+                                                })
+                                            }</>
+                                        }
+                                    </div>
+                                </div>
+                            </>
+                        )
+                        : (
                             <>
                                 <h3 className="page-title">Wallet</h3>
                                 <div className="empty-content mt-5">
@@ -41,11 +86,6 @@ export default function Wallet(props: any) {
                                 </div>
                             </>
 
-                        )
-                        : (
-                            <>
-                                <h3 className="page-title">Wallet</h3>
-                            </>
                         )
                 }
             </div>

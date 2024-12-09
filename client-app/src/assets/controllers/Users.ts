@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, getAuth, updateProfile } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { app, db } from "../../firebase/firebaseConfig";
 import { userConverter } from "../model/User";
 
@@ -32,4 +32,12 @@ export async function GetUser (uid: string) {
     const userInstance = await getDoc(userRef);
 
     return (userInstance.exists()) ? userInstance.data() : null;
+}
+
+export async function UpdateTotalBalance (uid: string, totalBalance: number) {
+    const userRef = doc(db, 'Users', uid).withConverter(userConverter);
+
+    await updateDoc(userRef, {
+        totalBalance: totalBalance
+    });
 }

@@ -16,6 +16,11 @@ export const encryptPassword = (password: string) => {
     return sha256(password);
 }
 
+export function currencyFormat(num: number) {
+    return '€ ' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,').replace(",", "-").replace(".", ",").replace("-", ".");
+}
+
+
 const baseUrl = (!!process.env.REACT_APP_IS_LOCALE) ? 'http://localhost:8080/v1' : 'https://currence-dzfvg2chhch0h3hd.northeurope-01.azurewebsites.net/v1';
 
 const API_ENDPOINTS = {
@@ -35,7 +40,7 @@ function replaceParameters(url: string, parameters: any) {
         const urlParameters = url.match(/\{(\w+)\}/g);
         if (urlParameters) {
             urlParameters.forEach((parameterToReplace) => {
-                const paramName: string= parameterToReplace.slice(1, -1);
+                const paramName: string = parameterToReplace.slice(1, -1);
                 if (parameters[paramName]) {
                     url = url.replace(parameterToReplace, parameters[paramName]);
                     delete parameters[paramName];
@@ -94,11 +99,11 @@ export async function makeAPIRequest(operation: string, serializedData: any, par
         const user = auth.currentUser;
 
         if (!user)
-            throw("No authenticated user");
+            throw ("No authenticated user");
 
         if (serializedData != null) {
             response = await fetch(url, {
-                method: method, 
+                method: method,
                 body: serializedData,
                 headers: (isProtected) ? { Authorization: `Bearer ${await user.getIdToken()}` } : undefined,
             });

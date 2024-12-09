@@ -8,6 +8,12 @@ import { IoIosWallet } from "react-icons/io";
 import { GrList } from "react-icons/gr";
 import { PiHandCoinsFill } from "react-icons/pi";
 import { FaChartSimple } from "react-icons/fa6";
+import { IoSearchSharp } from "react-icons/io5";
+import { LuEye } from "react-icons/lu";
+import { LuEyeOff } from "react-icons/lu";
+import { MdGroupAdd } from "react-icons/md";
+import { MdPersonAddAlt1 } from "react-icons/md";
+import { FaPlus } from "react-icons/fa6";
 import Dashboard from "./PersonalArea/Dashboard";
 import Wallet from "./PersonalArea/Wallet";
 import Transactions from "./PersonalArea/Transactions";
@@ -64,13 +70,61 @@ function NavigationBar(props: any) {
 function TopRightButtons(props: any) {
     const isSkeleton = (props.type && props.type === "skeleton");
 
+    const buttons = [
+        {
+            id: "search",
+            page: ["Dashboard", "Wallet", "Transactions", "Evener"],
+            icon: <IoSearchSharp />,
+            link: "/search",
+            index: 999
+        },
+        {
+            id: "eye",
+            page: ["Dashboard", "Wallet"],
+            icon: <LuEye />,
+            iconActive: <LuEyeOff />,
+            action: undefined,
+            index: 10
+        },
+        {
+            id: "addAsset",
+            page: ["Wallet"],
+            icon: <FaPlus />,
+            link: "/wallet/new-asset",
+            index: 5
+        },
+        {
+            id: "addCluster",
+            page: ["Evener"],
+            icon: <MdGroupAdd />,
+            link: "/evener/new-cluster",
+            index: 10
+        },
+        {
+            id: "addPerson",
+            page: ["Evener"],
+            icon: <MdPersonAddAlt1 />,
+            link: "/evener/new-person",
+            index: 5
+        }
+    ];
     const content = (isSkeleton)
-        ? <Skeleton circle={true} width={props.dimension} height={props.dimension}/>
+        ? <Skeleton circle={true} width={props.dimension} height={props.dimension} />
         : <Link to={"../settings"}><ProfileImage {...props} /></Link>;
-    
+
+    const icons = buttons.filter((button) => button.page.includes(props.page)).sort((a, b) => a.index - b.index);
+
     return (
         <>
-            <div id="top-right-buttons" style={(isSkeleton) ? {marginTop: -4} : {}}>
+            <div id="top-right-buttons" style={(isSkeleton) ? { marginTop: -4 } : {}}>
+                {(icons && icons.length > 0)
+                    ? <>
+                        {icons.map((icon, i) => {
+                            return <Link to={(icon.link) ? icon.link : ""}key={i} className="icon" style={{color: "#212529", textTransform: "none"}}>{icon.icon}</Link>
+                        })}
+                    </>
+                    : <></>
+                }
                 {content}
             </div>
         </>
@@ -130,10 +184,10 @@ export default function PersonalArea(props: any) {
         <>
             <div className='personal-area page'>
                 {(processing)
-                    ? <>{/*<Skeleton width={250} style={{marginTop: 3, height: 27}}/> */}<TopRightButtons type="skeleton" dimension={35}/></>
+                    ? <>{/*<Skeleton width={250} style={{marginTop: 3, height: 27}}/> */}<TopRightButtons type="skeleton" dimension={35} /></>
                     : (
                         <>
-                            <TopRightButtons uid={user.uid} firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)} dimension={35} />
+                            <TopRightButtons page={page} uid={user.uid} firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)} dimension={35} />
                             {page === 'Dashboard' && <Dashboard user={user} />}
                             {page === 'Wallet' && <Wallet user={user} />}
                             {page === 'Transactions' && <Transactions user={user} />}
