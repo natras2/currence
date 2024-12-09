@@ -11,13 +11,48 @@ import { capitalize } from "../../../assets/libraries/Utils";
 import { CreateAsset } from "../../../assets/controllers/Assets";
 import Loader from "../../../assets/components/Loader";
 
+/*
+const NumericInputWithDotAsComma = () => {
+    const [value, setValue] = useState('');
+
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === '.') {
+            if (!value.includes(","))
+                setValue(value + ",");
+        }
+    };
+
+    return (
+        <CurrencyInput
+            className="currency-input"
+            id="new-asset-balance"
+            autoComplete="off"
+            name="new-asset-balance"
+            placeholder="€ 0,00"
+            prefix="€ "
+            required
+            value={ }
+            decimalsLimit={2}
+            decimalSeparator=","
+            groupSeparator="."
+            allowNegativeValue={false}
+            disableAbbreviations={true}
+            onKeyDown={(e) => handleKeyDown(e)} // Intercept keypress events
+            onValueChange={(value) => { setValue((value as unknown) as string) }}
+        />
+    );
+};
+*/
+
+
+/* eslint-disable */
 export default function AddAsset(props: any) {
     const [processing, setProcessing] = useState(true);
     const [user, setUser] = useState<any>(null);
     const [data, setData] = useState({
-        "new-asset-name": "",
-        "new-asset-description": "",
-        "new-asset-balance": 0
+        "new-asset-name": '',
+        "new-asset-description": '',
+        "new-asset-balance": ''
     });
 
     const auth = getAuth(app);
@@ -82,7 +117,7 @@ export default function AddAsset(props: any) {
         // Set the name data field
         setData(prevState => ({
             ...prevState,
-            ["new-asset-name"]: capitalize(data["new-asset-name"].trim())
+            "new-asset-name": capitalize(data["new-asset-name"].trim())
         }));
 
         // Check if any of the required field is empty
@@ -93,7 +128,7 @@ export default function AddAsset(props: any) {
         }
 
         // Add the new asset to Firestore
-        var result = await CreateAsset(new Asset(user.uid, data["new-asset-name"], data["new-asset-description"], data["new-asset-balance"]));
+        var result = await CreateAsset(new Asset(user.uid, data["new-asset-name"], data["new-asset-description"], (parseFloat(data["new-asset-balance"].replace(',','.')))));
         if (result) {
             navigate(-1)
         }
@@ -105,46 +140,62 @@ export default function AddAsset(props: any) {
         }
     }
 
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === '.') {
+            if (!data["new-asset-balance"].includes(",")) {
+                setData(prevState => ({
+                    ...prevState,
+                    "new-asset-balance": data["new-asset-balance"] + ","
+                }));
+            }
+        }
+    };
+
     return (
         <>
-        <div id="AddAsset" className="personal-area page">
-            <form onSubmit={handleSubmit} className="h-100 d-flex flex-column justify-content-between">
-                <div>
-                    <div className="d-flex gap-3 mb-5">
-                        <BackButton handler={backHandler} />
-                        <div className="page-title" style={{ marginTop: -.5 }}>New asset</div>
+            <div id="AddAsset" className="personal-area page">
+                <form onSubmit={handleSubmit} className="h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <div className="d-flex gap-3 mb-5">
+                            <BackButton handler={backHandler} />
+                            <div className="page-title" style={{ marginTop: -.5 }}>New asset</div>
+                        </div>
+
+                        <CurrencyInput
+                            className="currency-input"
+                            id="new-asset-balance"
+                            autoComplete="off"
+                            name="new-asset-balance"
+                            placeholder="€ 0,00"
+                            prefix="€ "
+                            required
+                            value={data["new-asset-balance"]}
+                            decimalsLimit={2}
+                            decimalSeparator=","
+                            groupSeparator="."
+                            allowNegativeValue={false}
+                            disableAbbreviations={true}
+                            onKeyDown={(e) => handleKeyDown(e)} // Intercept keypress events
+                            onValueChange={(value) => { handleChange({ target: { value: (value as unknown) as string, name: "new-asset-balance" } }) }}
+                        />
                     </div>
-                    <CurrencyInput
-                        className="currency-input"
-                        id="new-asset-balance"
-                        autoComplete="off"
-                        name="new-asset-balance"
-                        placeholder="€ 0,00"
-                        prefix="€ "
-                        required
-                        decimalSeparator=","
-                        groupSeparator="."
-                        decimalsLimit={2}
-                        onValueChange={(value) => {handleChange({target: {value: value, name: "new-asset-balance"}})}}
-                    />
-                </div>
-                <div>
-                    <div className="mb-3">
-                        <label className="form-label">Asset name</label>
-                        <InputField type="text" placeholder='e.g. "Revolut"' name="new-asset-name" handleChange={handleChange} isRegistering='false' value={data["new-asset-name"]}/>
-                        {/*<input type="text" className="form-control" name="new-asset-name" placeholder={'e.g. "Revolut"'} autoComplete="off" required />*/}
+                    <div>
+                        <div className="mb-3">
+                            <label className="form-label">Asset name</label>
+                            <InputField type="text" placeholder='e.g. "Revolut"' name="new-asset-name" handleChange={handleChange} isRegistering='false' value={data["new-asset-name"]} />
+                            {/*<input type="text" className="form-control" name="new-asset-name" placeholder={'e.g. "Revolut"'} autoComplete="off" required />*/}
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Description</label>
+                            <textarea className="form-control" name="new-asset-description" rows={3} placeholder="Optional" onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={data["new-asset-description"]}></textarea>
+                        </div>
+                        <button type='submit' className="btn w-100 border fw-bold text-center btn-primary rounded-pill shadow-sm align-items-center" style={{ padding: "1rem 0" }}>
+                            Create
+                        </button>
                     </div>
-                    <div className="mb-3">
-                        <label className="form-label">Description</label>
-                        <textarea className="form-control" name="new-asset-description" rows={3} placeholder="Optional" onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={data["new-asset-description"]}></textarea>
-                    </div>
-                    <button type='submit' className="btn w-100 border fw-bold text-center btn-primary rounded-pill shadow-sm align-items-center" style={{ padding: "1rem 0" }}>
-                        Create
-                    </button>
-                </div>
-            </form>
-        </div>
-        {processing && <Loader selector="login" />}
+                </form>
+            </div>
+            {processing && <Loader selector="login" />}
         </>
     );
 }
