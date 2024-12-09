@@ -107,6 +107,9 @@ export default function AddAsset(props: any) {
                 [name]: value
             }));
         }
+
+        //if (value && name == "new-asset-balance") console.log(parseFloat(value.replace(',', '.')));
+        
     }
 
     const handleSubmit = async (e: any) => {
@@ -129,7 +132,7 @@ export default function AddAsset(props: any) {
         }
 
         // Add the new asset to Firestore
-        var result = await CreateAsset(new Asset(user.uid, data["new-asset-name"], data["new-asset-description"], (parseFloat(data["new-asset-balance"].replace(',','.')))));
+        var result = await CreateAsset(new Asset(user.uid, data["new-asset-name"], data["new-asset-description"], (parseFloat(data["new-asset-balance"].replace(',', '.')))));
         if (result) {
             navigate(-1)
         }
@@ -152,6 +155,17 @@ export default function AddAsset(props: any) {
             }
         }
     };
+
+    const handleOnBlur = (event: React.FocusEvent) => {
+        if (data["new-asset-balance"] && data["new-asset-balance"].charAt(data["new-asset-balance"].length - 1) === ",") {
+            setData(prevState => ({
+                ...prevState,
+                "new-asset-balance": data["new-asset-balance"] + "00"
+            }));
+        }
+
+    };
+
 
     return (
         <>
@@ -178,6 +192,7 @@ export default function AddAsset(props: any) {
                             allowNegativeValue={false}
                             disableAbbreviations={true}
                             onKeyDown={(e) => handleKeyDown(e)} // Intercept keypress events
+                            onBlur={(e) => handleOnBlur(e)}
                             onValueChange={(value) => { handleChange({ target: { value: (value as unknown) as string, name: "new-asset-balance" } }) }}
                         />
                     </div>
