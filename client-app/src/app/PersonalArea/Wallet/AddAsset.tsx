@@ -49,7 +49,7 @@ const NumericInputWithDotAsComma = () => {
 export default function AddAsset(props: any) {
     const [processing, setProcessing] = useState(true);
     const [user, setUser] = useState<any>(null);
-    const [char, setChar] = useState<any>(null);
+    //const [char, setChar] = useState<any>(null);
     const [data, setData] = useState({
         "new-asset-name": '',
         "new-asset-description": '',
@@ -142,9 +142,8 @@ export default function AddAsset(props: any) {
     }
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
-        const ref = document.getElementById("new-asset-balance");
-        setChar(event.key + " - " + event.code + " | " + event.altKey + " - " + event.ctrlKey + " - " + event.metaKey + " | " + event.which);
-        if (event.key === '.') {
+        //setChar(event.key + " - " + event.code + " | " + event.altKey + " - " + event.ctrlKey + " - " + event.metaKey + " | " + event.which);
+        if (event.key === '.' || event.key == "Unidentified") {
             if (data["new-asset-balance"] && data["new-asset-balance"].includes(",")) {
                 setData(prevState => ({
                     ...prevState,
@@ -163,7 +162,7 @@ export default function AddAsset(props: any) {
                             <BackButton handler={backHandler} />
                             <div className="page-title" style={{ marginTop: -.5 }}>New asset</div>
                         </div>
-                        <div>Here: {char}</div>
+                        {/*<div>Here: {char}</div>*/}
                         <CurrencyInput
                             className="currency-input"
                             id="new-asset-balance"
