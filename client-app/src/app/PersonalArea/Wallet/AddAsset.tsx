@@ -142,7 +142,7 @@ export default function AddAsset(props: any) {
     }
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
-        setChar(event.code);
+        setChar(Math.floor(Math.random() * 100) + " - " + event.key);
         if (event.key === '.') {
             if (!data["new-asset-balance"].includes(",")) {
                 setData(prevState => ({
