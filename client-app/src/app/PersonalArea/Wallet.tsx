@@ -7,6 +7,8 @@ import Asset from "../../assets/model/Asset";
 import { currencyFormat } from "../../assets/libraries/Utils";
 import { FaRegStar } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
+import Skeleton from "react-loading-skeleton";
+import { LuEyeOff } from "react-icons/lu";
 
 export default function Wallet(props: any) {
     const user: User = props.user;
@@ -46,30 +48,48 @@ export default function Wallet(props: any) {
                                     <div className="starred">
                                         <div className="cards">
                                             {(processing)
-                                                ? <></>
+                                                ? <><Skeleton /></>
                                                 : <>{(starred && starred.length === 0)
-                                                    ? <></>
+                                                    ? <><span>
+                                                        <div className="no-favourites">Add your favorites</div>
+                                                    </span>
+                                                    </>
                                                     : <>
                                                         {starred.map((asset, i) => {
-                                                            return (<div key={i}>{asset.name}</div>)
+                                                            return (
+                                                                <span key={i}>
+                                                                    <div className="favourite">{asset.name}</div>
+                                                                </span>
+                                                            )
                                                         })}
                                                     </>
                                                 }</>
                                             }
                                         </div>
                                     </div>
-                                    <div className="full-list">
+                                    <div className="assets-list">
                                         <div className="label">My assets</div>
-                                    </div>
-                                    <div className="items">
-                                        {(processing)
-                                            ? <></>
-                                            : <>{
-                                                assets.map((asset, i) => {
-                                                    return (<div key={i}>{asset.name}:  {currencyFormat(asset.balance)} - {(asset.starred) ? <FaStar onClick={(e) => handlerFavourite(asset)}/> : <FaRegStar  onClick={(e) => handlerFavourite(asset)} />}</div>)
-                                                })
-                                            }</>
-                                        }
+                                        <div className="items">
+                                            {(processing)
+                                                ? <><Skeleton /><Skeleton /></>
+                                                : <>{
+                                                    assets.map((asset, i) => {
+                                                        return (
+                                                            <span key={i}>
+                                                                <div className="asset">
+                                                                    <div className="asset-name">{asset.name}</div>
+                                                                    <div className="d-flex gap-2">
+                                                                        <div className="asset-hidden-selector">{(asset.hiddenFromTotal) ? <LuEyeOff /> : "" }</div>
+                                                                        {<div className="asset-favourite-selector">{(asset.starred) ? <FaStar onClick={(e) => handlerFavourite(asset)} /> : <FaRegStar onClick={(e) => handlerFavourite(asset)} />}</div>}
+                                                                        <div className="asset-balance">{currencyFormat(asset.balance)}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </span>
+                                                        )
+                                                    })
+                                                }</>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </>
