@@ -41,3 +41,11 @@ export async function UpdateTotalBalance (uid: string, totalBalance: number) {
         totalBalance: totalBalance
     });
 }
+
+export async function UpdateHiddenBalance (uid: string, updatedHiddenBalance: boolean) {
+    const userRef = doc(db, 'Users', uid).withConverter(userConverter);
+
+    await updateDoc(userRef, {
+        hiddenBalance: updatedHiddenBalance
+    });
+}

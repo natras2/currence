@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GetUser } from "../assets/controllers/Users";
+import { GetUser, UpdateHiddenBalance } from "../assets/controllers/Users";
 import { getAuth } from "firebase/auth";
 import { app } from "../firebase/firebaseConfig";
 import { Link, useNavigate } from "react-router-dom";
@@ -83,7 +83,8 @@ function TopRightButtons(props: any) {
             page: ["Dashboard", "Wallet"],
             icon: <LuEye />,
             iconActive: <LuEyeOff />,
-            action: undefined,
+            activeCondition: props.hiddenBalance as boolean,
+            action: () => {props.handleHiddenBalance()},
             index: 10
         },
         {
@@ -120,7 +121,10 @@ function TopRightButtons(props: any) {
                 {(icons && icons.length > 0)
                     ? <>
                         {icons.map((icon, i) => {
-                            return <Link to={(icon.link) ? icon.link : ""}key={i} className="icon" style={{color: "#212529", textTransform: "none"}}>{icon.icon}</Link>
+                            return icon.link 
+                                ? <Link key={i} to={icon.link} className="icon" style={{color: "#212529", textTransform: "none"}}>{icon.icon}</Link>
+                                : <div key={i} onClick={icon.action} className="icon" style={{color: "#212529", textTransform: "none"}}>{(icon.activeCondition) ? icon.iconActive : icon.icon}</div>
+
                         })}
                     </>
                     : <></>
@@ -173,11 +177,15 @@ export default function PersonalArea(props: any) {
         }
 
         initialize();
-    }, [auth, navigate]);
+    }, [auth, navigate, user]);
 
     const changePageHandler = (target: string) => {
         setPage(target);
         navigate("../" + target.toLowerCase());
+    }
+
+    const handleHiddenBalance = () => {
+        UpdateHiddenBalance(user.uid, !user.hiddenBalance)
     }
 
     return (
@@ -187,7 +195,7 @@ export default function PersonalArea(props: any) {
                     ? <>{/*<Skeleton width={250} style={{marginTop: 3, height: 27}}/> */}<TopRightButtons type="skeleton" dimension={35} /></>
                     : (
                         <>
-                            <TopRightButtons page={page} uid={user.uid} firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)} dimension={35} />
+                            <TopRightButtons page={page} uid={user.uid} firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)} dimension={35} hiddenBalance={user.hiddenBalance} handleHiddenBalance={handleHiddenBalance}/>
                             {page === 'Dashboard' && <Dashboard user={user} />}
                             {page === 'Wallet' && <Wallet user={user} />}
                             {page === 'Transactions' && <Transactions user={user} />}

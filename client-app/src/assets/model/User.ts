@@ -9,9 +9,10 @@ export default class User {
     incomeCategories: Category[];
     expenceCategories: Category[];
     totalBalance: number;
+    hiddenBalance: boolean;
     firstAccess: boolean;
 
-    constructor(uid: string, fullName: string, email: string, emailVerified: boolean, incomeCategories: Category[], expenceCategories: Category[], totalBalance: number, firstAccess = true) {
+    constructor(uid: string, fullName: string, email: string, emailVerified: boolean, incomeCategories: Category[], expenceCategories: Category[], totalBalance: number, hiddenBalance = false, firstAccess = true) {
         this.uid = uid;
         this.fullName = fullName;
         this.email = email;
@@ -19,6 +20,7 @@ export default class User {
         this.incomeCategories = incomeCategories;
         this.expenceCategories = expenceCategories;
         this.totalBalance = totalBalance;
+        this.hiddenBalance = hiddenBalance;
         this.firstAccess = firstAccess;
     }
 }
@@ -34,12 +36,13 @@ export const userConverter = {
             incomeCategories: user.incomeCategories,
             expenceCategories: user.expenceCategories,
             totalBalance: user.totalBalance,
+            hiddenBalance: user.hiddenBalance,
             firstAccess: user.firstAccess
         };
     },
     fromFirestore: (snapshot: any, options: any): User => {
         const data = snapshot.data(options);
-        const user = new User(data.uid, data.fullName, data.email, data.emailVerified, data.incomeCategories, data.expenceCategories, data.totalBalance, data.firstAccess);
+        const user = new User(data.uid, data.fullName, data.email, data.emailVerified, data.incomeCategories, data.expenceCategories, data.totalBalance, data.hiddenBalance, data.firstAccess);
         user.id = snapshot.id;
         return user;
     }

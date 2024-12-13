@@ -81,7 +81,7 @@ export default function Wallet(props: any) {
                                                                     <div className="d-flex gap-2">
                                                                         <div className="asset-hidden-selector">{(asset.hiddenFromTotal) ? <LuEyeOff /> : "" }</div>
                                                                         {<div className="asset-favourite-selector">{(asset.starred) ? <FaStar onClick={(e) => handlerFavourite(asset)} /> : <FaRegStar onClick={(e) => handlerFavourite(asset)} />}</div>}
-                                                                        <div className="asset-balance">{currencyFormat(asset.balance)}</div>
+                                                                        <div className="asset-balance">{(user.hiddenBalance) ? <span style={{filter: "blur(4px)"}}>{currencyFormat(919)}</span> : currencyFormat(asset.balance)}</div>
                                                                     </div>
                                                                 </div>
                                                             </span>

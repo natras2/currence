@@ -9,6 +9,12 @@ body {
     font-family: "Inter Tight", -apple-system, 'Segoe UI', sans-serif !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
 }
 
 html {
@@ -74,6 +80,14 @@ form .input-guide {
     color: #d1a164;
     font-size: .9rem;
     margin-top: -3px;
+}
+
+.callout.page {
+    position: absolute;
+    width: 100%;
+    padding: 0;
+    top: 0;
+    z-index: 100;
 }
 
 /********* NAVIGATION BAR **********/
@@ -145,6 +159,7 @@ form .input-guide {
     font-size: 22px;
     gap: 18px;
 }
+
 #top-right-buttons .icon {
     margin-top: -3px;
     cursor: pointer;
@@ -171,12 +186,13 @@ form .input-guide {
     margin: 3px 0 0;
     font-size: 24px;
 }
+
 .personal-area.page .body {
     margin-top: 25px;
     min-height: 100vh;
 }
 
-/*********** DASHBOARD ************/
+/*********** SPLASH FIRST ACCESS ************/
 #splash-first-access {
     display: flex;
     margin-top: 205px;
@@ -228,12 +244,26 @@ form .input-guide {
     font-size: 16px;
 }
 
-.callout.page {
-    position: absolute;
-    width: 100%;
-    padding: 0;
-    top: 0;
-    z-index: 100;
+/************ DASHBOARD *************/
+.personal-area.page #dashboard .total-balance {
+    background-color: #0052ff;
+    border-radius: 5px;
+    color: #fefefe;
+    padding: 10px 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 22px;
+    margin-top: 1.5rem;
+    font-weight: 600;
+}
+.personal-area.page #dashboard .total-balance .label {
+    font-weight: 300;
+    font-size: 15px;
+}
+.personal-area.page #dashboard .total-balance .icon {
+    font-size: 28px;
+    margin-right: 10px;
 }
 
 /************ SETTINGS *************/
@@ -363,24 +393,28 @@ input.currency-input:focus-visible::placeholder {
     margin-left: -1.2rem;
     padding: 0 1.2rem;
 }
+
 #wallet .starred .cards::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
-#wallet .starred .cards > * {
+#wallet .starred .cards>* {
     flex: 0 0 185px;
 }
 
-#wallet .starred .cards > * > * {
+#wallet .starred .cards>*>* {
     width: 185px !important;
     height: 115px !important;
+    line-height: unset;
 }
-#wallet .starred .cards > * > .no-favourites {
+
+#wallet .starred .cards>*>.no-favourites {
     padding: 1rem;
     border-radius: 0.25rem;
     border: 4px dashed #000080;
 }
-#wallet .starred .cards > * > .favourite {
+
+#wallet .starred .cards>*>.favourite {
     padding: .8rem .6rem;
     border-radius: 0.25rem;
     border: 1px solid #000080;
@@ -398,28 +432,38 @@ input.currency-input:focus-visible::placeholder {
     margin-top: 10px;
     border-radius: 0;
 }
-#wallet .assets-list .items > * > * {
+
+#wallet .assets-list .items>*>* {
     border-radius: 0;
     height: 60px;
+    line-height: unset;
+    border-top: .5px solid #ffffff;
 }
-#wallet .assets-list .items > * > .asset {
+
+#wallet .assets-list .items>*>*:last-child {
+    border-bottom: .5px solid #ffffff;
+}
+
+#wallet .assets-list .items>*>.asset {
     padding: 0 1.2rem;
     background-color: #ffffff;
+    border-color: #ebebeb;
     display: flex;
-    border-top: .5px solid #ebebeb;
     align-items: center;
     justify-content: space-between;
 }
 
-#wallet .assets-list .items > * > .asset:last-child {
-    border-bottom: .5px solid #ebebeb;
+#wallet .assets-list .items>*>.asset:last-child {
+    border-color: #ebebeb;
 }
-#wallet .assets-list .items > * > .asset .asset-name {
+
+#wallet .assets-list .items>*>.asset .asset-name {
     font-weight: 500;
 }
-#wallet .assets-list .items > * > .asset .asset-favourite-selector,
-#wallet .assets-list .items > * > .asset .asset-hidden-selector {
-    color:#575757;
+
+#wallet .assets-list .items>*>.asset .asset-favourite-selector,
+#wallet .assets-list .items>*>.asset .asset-hidden-selector {
+    color: #575757;
     transform: scale(.9);
     margin-top: -2px;
     cursor: pointer;
