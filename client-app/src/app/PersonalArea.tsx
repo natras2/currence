@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { GetUser, UpdateHiddenBalance } from "../assets/controllers/Users";
 import { getAuth } from "firebase/auth";
 import { app } from "../firebase/firebaseConfig";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { BiSolidDashboard } from "react-icons/bi";
 import { IoIosWallet } from "react-icons/io";
 import { GrList } from "react-icons/gr";
@@ -22,6 +22,9 @@ import Stats from "./PersonalArea/Stats";
 import ProfileImage from "../assets/components/ProfileImage";
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css'
+import Asset from "../assets/model/Asset";
+import AssetDetail from "./PersonalArea/Wallet/AssetDetail";
+import Transaction from "../assets/model/Transaction";
 
 function NavigationBar(props: any) {
     const navButtons = [
@@ -91,7 +94,7 @@ function TopRightButtons(props: any) {
             id: "addAsset",
             page: ["Wallet"],
             icon: <FaPlus />,
-            link: "/wallet/new-asset",
+            link: "/wallet/create",
             index: 5
         },
         {
@@ -136,9 +139,13 @@ function TopRightButtons(props: any) {
 }
 
 export default function PersonalArea(props: any) {
-    const [user, setUser] = useState<any>(null);
     const [page, setPage] = useState<string>(props.page);
-    const [processing, setProcessing] = useState(true);
+    const [user, setUser] = useState<any>(null);
+    const [assets, setAssets] = useState<Asset[]>([]);
+    const [transactions, setTransactions] = useState<Transaction[]>(props.page);
+    const [userProcessing, setUserProcessing] = useState(true);
+    const [assetsProcessing, setAssetsProcessing] = useState(true);
+    const [transactionsProcessing, setTransactionsProcessing] = useState(false);
 
     const navigate = useNavigate();
     const auth = getAuth(app);
@@ -164,11 +171,13 @@ export default function PersonalArea(props: any) {
 
                     // Set the retrieved user to state
                     setUser(retrievedUser);
-                } catch (error) {
+                } 
+                catch (error) {
                     console.error("An error occurred while retrieving the user:", error);
                     navigate("/"); // Redirect to root on error
-                } finally {
-                    setProcessing(false); // Stop processing after everything is done
+                } 
+                finally {
+                    setUserProcessing(false); // Stop processing after everything is done
                 }
             });
 
@@ -177,7 +186,7 @@ export default function PersonalArea(props: any) {
         }
 
         initialize();
-    }, [auth, navigate, user]);
+    }, [navigate, user, assets, transactions]);
 
     const changePageHandler = (target: string) => {
         setPage(target);
@@ -188,14 +197,25 @@ export default function PersonalArea(props: any) {
         UpdateHiddenBalance(user.uid, !user.hiddenBalance)
     }
 
+    const checkProcessing = () => {
+        return userProcessing || assetsProcessing || transactionsProcessing
+    }
+
     return (
         <>
             <div className='personal-area page'>
-                {(processing)
+                {(userProcessing)
                     ? <>{/*<Skeleton width={250} style={{marginTop: 3, height: 27}}/> */}<TopRightButtons type="skeleton" dimension={35} /></>
                     : (
                         <>
-                            <TopRightButtons page={page} uid={user.uid} firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)} dimension={35} hiddenBalance={user.hiddenBalance} handleHiddenBalance={handleHiddenBalance}/>
+                            <TopRightButtons 
+                                page={page} 
+                                uid={user.uid} 
+                                firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)} 
+                                dimension={35} 
+                                hiddenBalance={user.hiddenBalance} 
+                                handleHiddenBalance={handleHiddenBalance}
+                            />
                             {page === 'Dashboard' && <Dashboard user={user} />}
                             {page === 'Wallet' && <Wallet user={user} />}
                             {page === 'Transactions' && <Transactions user={user} />}

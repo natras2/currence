@@ -39,7 +39,7 @@ export function SplashFirstAccess(props: any) {
                     </div>
                 </div>
                 <div>
-                    <Link to={"/wallet/new-asset"} className="btn border btn-primary rounded-4 shadow-sm btn-lg px-3 py-3 w-100 d-flex gap-3 justify-content-center border-0">
+                    <Link to={"/wallet/create"} className="btn border btn-primary rounded-4 shadow-sm btn-lg px-3 py-3 w-100 d-flex gap-3 justify-content-center border-0">
                         <FaPlus style={{ marginTop: 3 }} />
                         <div className='small text-center'>Add your first asset</div>
                     </Link>

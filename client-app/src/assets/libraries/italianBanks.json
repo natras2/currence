@@ -1,0 +1,2107 @@
+[
+    {
+        "name": "BANCA NAZIONALE DEL LAVORO S.P.A. (IN FORMA CONTRATTA BNL S.P.A.)",
+        "country": "Italia",
+        "abi": "1005"
+    },
+    {
+        "name": "BANCO DI SARDEGNA S.P.A.",
+        "country": "Italia",
+        "abi": "1015"
+    },
+    {
+        "name": "BANCA MONTE DEI PASCHI DI SIENA S.P.A.",
+        "country": "Italia",
+        "abi": "1030",
+        "logo": "https://upload.wikimedia.org/wikipedia/it/5/58/Monte_dei_Paschi_di_Siena_logo.svg"
+    },
+    {
+        "name": "UNICREDIT, SOCIETA' PER AZIONI",
+        "country": "Italia",
+        "abi": "2008",
+        "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Unicredit_logo.svg"
+    },
+    {
+        "name": "FINECOBANK BANCA FINECO S.P.A. (IN BREVE FINECOBANK S.P.A. OVVERO BANCA FINECO S.P.A. OVVERO FINECO BANCA S.P.A.)",
+        "country": "Italia",
+        "abi": "3015"
+    },
+    {
+        "name": "HSBC CONTINENTAL EUROPE",
+        "country": "Francia",
+        "abi": "3021"
+    },
+    {
+        "name": "BANCA PROFILO S.P.A. (OVVERO PROFILOBANK S.P.A.)",
+        "country": "Italia",
+        "abi": "3025"
+    },
+    {
+        "name": "CREDITO EMILIANO S.P.A.",
+        "country": "Italia",
+        "abi": "3032"
+    },
+    {
+        "name": "UBS EUROPE SE",
+        "country": "Germania",
+        "abi": "3041"
+    },
+    {
+        "name": "BANCA INVESTIS S.P.A.",
+        "country": "Italia",
+        "abi": "3043"
+    },
+    {
+        "name": "BANCA AKROS S.P.A.",
+        "country": "Italia",
+        "abi": "3045"
+    },
+    {
+        "name": "BANCA CREDITO ATTIVO S.P.A.",
+        "country": "Italia",
+        "abi": "3047"
+    },
+    {
+        "name": "BANCA DEL PIEMONTE S.P.A.",
+        "country": "Italia",
+        "abi": "3048"
+    },
+    {
+        "name": "BARCLAYS BANK IRELAND PUBLIC LIMITED COMPANY",
+        "country": "Irlanda",
+        "abi": "3051"
+    },
+    {
+        "name": "BAYERISCHE LANDESBANK",
+        "country": "Germania",
+        "abi": "3055"
+    },
+    {
+        "name": "MEDIOBANCA PREMIER S.P.A.",
+        "country": "Italia",
+        "abi": "3058"
+    },
+    {
+        "name": "CITIBANK EUROPE PLC",
+        "country": "Irlanda",
+        "abi": "3061"
+    },
+    {
+        "name": "BANCA MEDIOLANUM S.P.A.",
+        "country": "Italia",
+        "abi": "3062"
+    },
+    {
+        "name": "INTESA SANPAOLO S.P.A.",
+        "country": "Italia",
+        "abi": "3069"
+    },
+    {
+        "name": "BHW BAUSPARKASSE AG",
+        "country": "Germania",
+        "abi": "3073"
+    },
+    {
+        "name": "BANCA GENERALI - SOCIETA' PER AZIONI (IN FORMA ABBREVIATA GENERBANCA)",
+        "country": "Italia",
+        "abi": "3075"
+    },
+    {
+        "name": "UNICREDIT BANK GMBH",
+        "country": "Germania",
+        "abi": "3081"
+    },
+    {
+        "name": "BANCA CESARE PONTI S.P.A.",
+        "country": "Italia",
+        "abi": "3084"
+    },
+    {
+        "name": "BANCA FINNAT EURAMERICA S.P.A. (IN FORMA ABBREVIATA BANCA FINNAT S.P.A. OVVERO BANCA EURAMERICA S.P.A.)",
+        "country": "Italia",
+        "abi": "3087"
+    },
+    {
+        "name": "CREDIT SUISSE (ITALY) S.P.A.",
+        "country": "Italia",
+        "abi": "3089"
+    },
+    {
+        "name": "BANK OF CHINA LIMITED - FILIALE DI MILANO O IN FORMA ABBREVIATA BANK OF CHINA - FILIALE DI MILANO",
+        "country": "Cina Rep.Pop.",
+        "abi": "3093"
+    },
+    {
+        "name": "COMMERZBANK AG",
+        "country": "Germania",
+        "abi": "3095"
+    },
+    {
+        "name": "AAREAL BANK AG",
+        "country": "Germania",
+        "abi": "3097"
+    },
+    {
+        "name": "BANCA ALETTI S.P.A.",
+        "country": "Italia",
+        "abi": "3102"
+    },
+    {
+        "name": "RCI BANQUE S.A.",
+        "country": "Francia",
+        "abi": "3103"
+    },
+    {
+        "name": "DEUTSCHE BANK S.P.A.",
+        "country": "Italia",
+        "abi": "3104"
+    },
+    {
+        "name": "VOLKSWAGEN BANK GMBH",
+        "country": "Germania",
+        "abi": "3105"
+    },
+    {
+        "name": "BANCA CREDIFARMA S.P.A.",
+        "country": "Italia",
+        "abi": "3110"
+    },
+    {
+        "name": "FINDOMESTIC BANCA SPA",
+        "country": "Italia",
+        "abi": "3115"
+    },
+    {
+        "name": "BCC LEASING S.P.A.",
+        "country": "Italia",
+        "abi": "3123"
+    },
+    {
+        "name": "BANCA DEL FUCINO S.P.A.",
+        "country": "Italia",
+        "abi": "3124"
+    },
+    {
+        "name": "CA INDOSUEZ WEALTH (EUROPE) S.A.",
+        "country": "Lussemburgo",
+        "abi": "3126"
+    },
+    {
+        "name": "BANCA REALE S.P.A.",
+        "country": "Italia",
+        "abi": "3138"
+    },
+    {
+        "name": "BANCA PER LO SVILUPPO DELLA COOPERAZIONE DI CREDITO S.P.A. E, IN FORMA ABBREVIATA 'BANCA SVILUPPO S.P.A.'",
+        "country": "Italia",
+        "abi": "3139"
+    },
+    {
+        "name": "DEUTSCHE BANK MUTUI S.P.A.",
+        "country": "Italia",
+        "abi": "3150"
+    },
+    {
+        "name": "HYPO TIROL BANK AG",
+        "country": "Austria",
+        "abi": "3151"
+    },
+    {
+        "name": "BANCA SISTEMA S.P.A.",
+        "country": "Italia",
+        "abi": "3158"
+    },
+    {
+        "name": "FININT PRIVATE BANK S.P.A. O IN BREVE ANCHE FPB S.P.A.",
+        "country": "Italia",
+        "abi": "3159"
+    },
+    {
+        "name": "BNP PARIBAS LEASE GROUP",
+        "country": "Francia",
+        "abi": "3179"
+    },
+    {
+        "name": "BANCA IFIGEST - S.P.A.",
+        "country": "Italia",
+        "abi": "3185"
+    },
+    {
+        "name": "NATIXIS S.A.",
+        "country": "Francia",
+        "abi": "3189"
+    },
+    {
+        "name": "SANTANDER CONSUMER BANK S.P.A.",
+        "country": "Italia",
+        "abi": "3191"
+    },
+    {
+        "name": "BANCA IFIS S.P.A. (OVVERO IFIS BANCA S.P.A. O IN FORMA ABBREVIATA IFIS S.P.A.)",
+        "country": "Italia",
+        "abi": "3205"
+    },
+    {
+        "name": "BANCA PATRIMONI SELLA & C. S.P.A. (IN SIGLA BPS S.P.A.)",
+        "country": "Italia",
+        "abi": "3211"
+    },
+    {
+        "name": "CNH INDUSTRIAL CAPITAL EUROPE",
+        "country": "Francia",
+        "abi": "3227"
+    },
+    {
+        "name": "BANCA DI SCONTO S.P.A.",
+        "country": "Italia",
+        "abi": "3235"
+    },
+    {
+        "name": "INTESA SANPAOLO PRIVATE BANKING S.P.A.",
+        "country": "Italia",
+        "abi": "3239"
+    },
+    {
+        "name": "BANCO DI LUCCA E DEL TIRRENO S.P.A. (IN FORMA ABBREVIATA BANCO DI LUCCA S.P.A.)",
+        "country": "Italia",
+        "abi": "3242"
+    },
+    {
+        "name": "CREDEM EUROMOBILIARE PRIVATE BANKING S.P.A.",
+        "country": "Italia",
+        "abi": "3250"
+    },
+    {
+        "name": "ERSEL BANCA PRIVATA S.P.A. IN FORMA ABBREVIATA ERSEL S.P.A.",
+        "country": "Italia",
+        "abi": "3258"
+    },
+    {
+        "name": "IBL ISTITUTO BANCARIO DEL LAVORO S.P.A. (IN FORMA ABBREVIATA IBL BANCA)",
+        "country": "Italia",
+        "abi": "3263"
+    },
+    {
+        "name": "BANCA PROMOS S.P.A.",
+        "country": "Italia",
+        "abi": "3265"
+    },
+    {
+        "name": "BANCA FINANZIARIA INTERNAZIONALE S.P.A. IN BREVE BANCA FININT S.P.A.",
+        "country": "Italia",
+        "abi": "3266"
+    },
+    {
+        "name": "BANCA GALILEO S.P.A.",
+        "country": "Italia",
+        "abi": "3267"
+    },
+    {
+        "name": "BANCA SELLA - S.P.A.",
+        "country": "Italia",
+        "abi": "3268"
+    },
+    {
+        "name": "BANCA DELLA NUOVA TERRA S.P.A.",
+        "country": "Italia",
+        "abi": "3269"
+    },
+    {
+        "name": "ALLFUNDS BANK S.A.",
+        "country": "Spagna",
+        "abi": "3271"
+    },
+    {
+        "name": "SOLUTION BANK S.P.A.",
+        "country": "Italia",
+        "abi": "3273"
+    },
+    {
+        "name": "FIDEURAM - INTESA SANPAOLO PRIVATE BANKING S.P.A.",
+        "country": "Italia",
+        "abi": "3296"
+    },
+    {
+        "name": "DEUTSCHE BANK AG",
+        "country": "Germania",
+        "abi": "3298"
+    },
+    {
+        "name": "BPCE LEASE S.A.",
+        "country": "Francia",
+        "abi": "3305"
+    },
+    {
+        "name": "PRADER BANK S.P.A. (IN LINGUA TEDESCA PRADER BANK AG)",
+        "country": "Italia",
+        "abi": "3306"
+    },
+    {
+        "name": "SOCIETE' GENERALE SECURITIES SERVICES S.P.A. (IN FORMA ABBREVIATA SGSS S.P.A.)",
+        "country": "Italia",
+        "abi": "3307"
+    },
+    {
+        "name": "BANCA SELLA HOLDING S.P.A.",
+        "country": "Italia",
+        "abi": "3311"
+    },
+    {
+        "name": "BANCA MACERATA S.P.A. (IN FORMA ABBREVIATA BPRM S.P.A.)",
+        "country": "Italia",
+        "abi": "3317"
+    },
+    {
+        "name": "BANCA PASSADORE & C. S.P.A.",
+        "country": "Italia",
+        "abi": "3332"
+    },
+    {
+        "name": "SMBC BANK EU AG",
+        "country": "Germania",
+        "abi": "3337"
+    },
+    {
+        "name": "BANK PICTET & CIE (EUROPE) AG",
+        "country": "Germania",
+        "abi": "3343"
+    },
+    {
+        "name": "MIZUHO BANK LIMITED",
+        "country": "Giappone",
+        "abi": "3346"
+    },
+    {
+        "name": "IC FINANCIAL SERVICES S.A.",
+        "country": "Francia",
+        "abi": "3349"
+    },
+    {
+        "name": "THE BANK OF NEW YORK MELLON SA/NV",
+        "country": "Belgio",
+        "abi": "3351"
+    },
+    {
+        "name": "SMART BANK SOCIET\u00c0 PER AZIONI IN AMMINISTRAZIONE STRAORDINARIA",
+        "country": "Italia",
+        "abi": "3353"
+    },
+    {
+        "name": "CLAAS FINANCIAL SERVICES",
+        "country": "Francia",
+        "abi": "3358"
+    },
+    {
+        "name": "DE LAGE LANDEN INTERNATIONAL B.V. (DLL)",
+        "country": "Paesi Bassi",
+        "abi": "3362"
+    },
+    {
+        "name": "CHERRY BANK S.P.A. (CON ACRONIMO CHERRY BANK O CHERRY)",
+        "country": "Italia",
+        "abi": "3365"
+    },
+    {
+        "name": "BANCA SANTA GIULIA S.P.A.",
+        "country": "Italia",
+        "abi": "3367"
+    },
+    {
+        "name": "J.P. MORGAN SE",
+        "country": "Germania",
+        "abi": "3370"
+    },
+    {
+        "name": "KBC BANK N.V. ITALIA",
+        "country": "Belgio",
+        "abi": "3373"
+    },
+    {
+        "name": "SUEDTIROL BANK S.P.A. (IN LINGUA TEDESCA SUEDTIROL BANK AG)",
+        "country": "Italia",
+        "abi": "3374"
+    },
+    {
+        "name": "BANK OF AMERICA EUROPE DESIGNATED ACTIVITY COMPANY",
+        "country": "Irlanda",
+        "abi": "3380"
+    },
+    {
+        "name": "BANK SEPAH",
+        "country": "Iran",
+        "abi": "3381"
+    },
+    {
+        "name": "ISYBANK S.P.A.",
+        "country": "Italia",
+        "abi": "3385"
+    },
+    {
+        "name": "JCB FINANCE",
+        "country": "Francia",
+        "abi": "3386"
+    },
+    {
+        "name": "BANQUE CHAABI DU MAROC - IN ABBREVIATO, B.C.D.M.",
+        "country": "Francia",
+        "abi": "3387"
+    },
+    {
+        "name": "BANCA STABIESE - S.P.A.",
+        "country": "Italia",
+        "abi": "3388"
+    },
+    {
+        "name": "BANCO SANTANDER S.A.",
+        "country": "Spagna",
+        "abi": "3389"
+    },
+    {
+        "name": "ILLIMITY BANK S.P.A.",
+        "country": "Italia",
+        "abi": "3395"
+    },
+    {
+        "name": "BANCA SIMETICA S.P.A.",
+        "country": "Italia",
+        "abi": "3398"
+    },
+    {
+        "name": "EXTRABANCA S.P.A.",
+        "country": "Italia",
+        "abi": "3399"
+    },
+    {
+        "name": "IMPREBANCA S.P.A.",
+        "country": "Italia",
+        "abi": "3403"
+    },
+    {
+        "name": "EDMOND DE ROTHSCHILD (EUROPE)",
+        "country": "Lussemburgo",
+        "abi": "3407"
+    },
+    {
+        "name": "INDUSTRIAL AND COMMERCIAL BANK OF CHINA (EUROPE) S.A. IN FORMA ABBREVIATA ICBC (EUROPE) S.A.",
+        "country": "Lussemburgo",
+        "abi": "3411"
+    },
+    {
+        "name": "ATTIJARIWAFA BANK EUROPE SEDE SECONDARIA ITALIANA",
+        "country": "Francia",
+        "abi": "3415"
+    },
+    {
+        "name": "BANCA PRIVATA LEASING S.P.A.",
+        "country": "Italia",
+        "abi": "3417"
+    },
+    {
+        "name": "BANCO DI CREDITO P.AZZOAGLIO - S.P.A.",
+        "country": "Italia",
+        "abi": "3425"
+    },
+    {
+        "name": "TYCHE BANK S.P.A.",
+        "country": "Italia",
+        "abi": "3426"
+    },
+    {
+        "name": "UNION BANCAIRE PRIVEE (EUROPE) S.A.",
+        "country": "Lussemburgo",
+        "abi": "3427"
+    },
+    {
+        "name": "CREDITO LOMBARDO VENETO S.P.A.",
+        "country": "Italia",
+        "abi": "3430"
+    },
+    {
+        "name": "CREDIT AGRICOLE CORPORATE & INVESTMENT BANK",
+        "country": "Francia",
+        "abi": "3432"
+    },
+    {
+        "name": "BMW BANK GMBH",
+        "country": "Germania",
+        "abi": "3434"
+    },
+    {
+        "name": "BANCA TRANSILVANIA S.A.",
+        "country": "Romania",
+        "abi": "3437"
+    },
+    {
+        "name": "CACEIS BANK S.A.",
+        "country": "Francia",
+        "abi": "3438"
+    },
+    {
+        "name": "STATE STREET BANK INTERNATIONAL GMBH SUCCURSALE ITALIA",
+        "country": "Germania",
+        "abi": "3439"
+    },
+    {
+        "name": "BANCO DI DESIO E DELLA BRIANZA - SOCIETA' PER AZIONI",
+        "country": "Italia",
+        "abi": "3440"
+    },
+    {
+        "name": "BLU BANCA S.P.A.",
+        "country": "Italia",
+        "abi": "3441"
+    },
+    {
+        "name": "WISE DIALOG BANK S.P.A.",
+        "country": "Italia",
+        "abi": "3442"
+    },
+    {
+        "name": "CR\u00c9DIT AGRICOLE AUTO BANK S.P.A.",
+        "country": "Italia",
+        "abi": "3445"
+    },
+    {
+        "name": "WESTERN UNION INTERNATIONAL BANK GMBH",
+        "country": "Austria",
+        "abi": "3446"
+    },
+    {
+        "name": "ING BANK N.V.",
+        "country": "Paesi Bassi",
+        "abi": "3475",
+        "logo": "https://upload.wikimedia.org/wikipedia/commons/4/49/ING_Group_N.V._Logo.svg"
+    },
+    {
+        "name": "BNP PARIBAS SA",
+        "country": "Francia",
+        "abi": "3479"
+    },
+    {
+        "name": "COOPERATIEVE RABOBANK U.A.",
+        "country": "Paesi Bassi",
+        "abi": "3482"
+    },
+    {
+        "name": "MUFG BANK, LTD",
+        "country": "Giappone",
+        "abi": "3487"
+    },
+    {
+        "name": "CASSA LOMBARDA - S.P.A.",
+        "country": "Italia",
+        "abi": "3488"
+    },
+    {
+        "name": "CASSA CENTRALE RAIFFEISEN DELL'ALTO ADIGE - RAIFFEISEN-LANDESBANK SUEDTIROL A.G.",
+        "country": "Italia",
+        "abi": "3493"
+    },
+    {
+        "name": "JPMORGAN CHASE BANK, NATIONAL ASSOCIATION",
+        "country": "Stati Uniti D'America",
+        "abi": "3494"
+    },
+    {
+        "name": "ARAB BANKING CORPORATION SA",
+        "country": "Francia",
+        "abi": "3561"
+    },
+    {
+        "name": "CITIBANK N.A.",
+        "country": "Stati Uniti D'America",
+        "abi": "3566"
+    },
+    {
+        "name": "BANCO BILBAO VIZCAYA ARGENTARIA S.A. (BBVA)",
+        "country": "Spagna",
+        "abi": "3576"
+    },
+    {
+        "name": "ALLIANZ BANK FINANCIAL ADVISORS S.P.A.",
+        "country": "Italia",
+        "abi": "3589"
+    },
+    {
+        "name": "SOCIETE GENERALE",
+        "country": "Francia",
+        "abi": "3593"
+    },
+    {
+        "name": "BANCA UBAE S.P.A.",
+        "country": "Italia",
+        "abi": "3598"
+    },
+    {
+        "name": "CASSA CENTRALE BANCA - CREDITO COOPERATIVO ITALIANOSOCIETA' PER AZIONI (IN SIGLA CASSA CENTRALE BANCA)",
+        "country": "Italia",
+        "abi": "3599"
+    },
+    {
+        "name": "CHINA CONSTRUCTION BANK (EUROPE) SA",
+        "country": "Lussemburgo",
+        "abi": "3620"
+    },
+    {
+        "name": "BANK OF COMMUNICATIONS (LUXEMBOURG) S.A.",
+        "country": "Lussemburgo",
+        "abi": "3623"
+    },
+    {
+        "name": "BANCA AIDEXA S.P.A.",
+        "country": "Italia",
+        "abi": "3625"
+    },
+    {
+        "name": "STELLANTIS FINANCIAL SERVICES ITALIA S.P.A.",
+        "country": "Italia",
+        "abi": "3628"
+    },
+    {
+        "name": "YOUNITED",
+        "country": "Francia",
+        "abi": "3638"
+    },
+    {
+        "name": "LOMBARD ODIER (EUROPE) S.A.",
+        "country": "Lussemburgo",
+        "abi": "3645"
+    },
+    {
+        "name": "N26 BANK AG",
+        "country": "Germania",
+        "abi": "3646",
+        "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/N26_logo.svg"
+    },
+    {
+        "name": "BUNQ B.V.",
+        "country": "Paesi Bassi",
+        "abi": "3647"
+    },
+    {
+        "name": "TOYOTA MATERIAL HANDLING COMMERCIAL FINANCE AB",
+        "country": "Svezia",
+        "abi": "3654"
+    },
+    {
+        "name": "GRENKE BANK AG",
+        "country": "Germania",
+        "abi": "3655"
+    },
+    {
+        "name": "GUBER BANCA S.P.A.",
+        "country": "Italia",
+        "abi": "3656"
+    },
+    {
+        "name": "NATWEST MARKETS N.V.",
+        "country": "Paesi Bassi",
+        "abi": "3657"
+    },
+    {
+        "name": "GOLDMAN SACHS BANK EUROPE SE",
+        "country": "Germania",
+        "abi": "3658"
+    },
+    {
+        "name": "PERSIA INTERNATIONAL BANK PLC",
+        "country": "Regno Unito",
+        "abi": "3660"
+    },
+    {
+        "name": "MGF",
+        "country": "Francia",
+        "abi": "3661"
+    },
+    {
+        "name": "AK NORDIC AB",
+        "country": "Svezia",
+        "abi": "3662"
+    },
+    {
+        "name": "SOCI\u00c9T\u00c9 G\u00c9N\u00c9RALE LUXEMBOURG",
+        "country": "Lussemburgo",
+        "abi": "3663"
+    },
+    {
+        "name": "HYUNDAI CAPITAL BANK EUROPE GMBH",
+        "country": "Germania",
+        "abi": "3664"
+    },
+    {
+        "name": "SOLARIS SE",
+        "country": "Germania",
+        "abi": "3665"
+    },
+    {
+        "name": "CREDIT SUISSE BANK (EUROPE), S.A.",
+        "country": "Spagna",
+        "abi": "3666"
+    },
+    {
+        "name": "ZURICH ITALY BANK S.P.A.",
+        "country": "Italia",
+        "abi": "3667"
+    },
+    {
+        "name": "CAIXABANK S.A.",
+        "country": "Spagna",
+        "abi": "3668"
+    },
+    {
+        "name": "REVOLUT BANK UAB",
+        "country": "Lituania",
+        "abi": "3669",
+        "logo": "https://upload.wikimedia.org/wikipedia/commons/7/73/Revolut_logo.svg"
+    },
+    {
+        "name": "BANQUE J. SAFRA SARASIN (LUXEMBOURG) SA",
+        "country": "Lussemburgo",
+        "abi": "3670"
+    },
+    {
+        "name": "COFIDIS SA",
+        "country": "Francia",
+        "abi": "3671"
+    },
+    {
+        "name": "CREDIT AGRICOLE LEASING & FACTORING SA",
+        "country": "Francia",
+        "abi": "3672"
+    },
+    {
+        "name": "PEAC (GERMANY) GMBH",
+        "country": "Germania",
+        "abi": "3673"
+    },
+    {
+        "name": "BFF BANK SPA",
+        "country": "Italia",
+        "abi": "5000"
+    },
+    {
+        "name": "BANCA PROGETTO S.P.A.",
+        "country": "Italia",
+        "abi": "5015"
+    },
+    {
+        "name": "BANCA POPOLARE ETICA - SOCIETA' COOPERATIVA PER AZIONI (IN FORMA ABBREVIATA BANCA ETICA O BPE)",
+        "country": "Italia",
+        "abi": "5018"
+    },
+    {
+        "name": "IGEA DIGITAL BANK S.P.A.",
+        "country": "Italia",
+        "abi": "5029"
+    },
+    {
+        "name": "VIVIBANCA S.P.A.",
+        "country": "Italia",
+        "abi": "5030"
+    },
+    {
+        "name": "BANCA POPOLARE DELLE PROVINCE MOLISANE - SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "5033"
+    },
+    {
+        "name": "BANCO BPM SOCIETA' PER AZIONI",
+        "country": "Italia",
+        "abi": "5034"
+    },
+    {
+        "name": "BANCA AGRICOLA POPOLARE DI SICILIA SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "5036"
+    },
+    {
+        "name": "BANCA DI IMOLA S.P.A.",
+        "country": "Italia",
+        "abi": "5080"
+    },
+    {
+        "name": "BANCA POPOLARE DEL LAZIO SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "5104"
+    },
+    {
+        "name": "BANCA VALSABBINA SOCIETA' COOPERATIVA PER AZIONI (IN BREVE LA VALSABBINA)",
+        "country": "Italia",
+        "abi": "5116"
+    },
+    {
+        "name": "'BANCA DI CREDITO POPOLARE', SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "5142"
+    },
+    {
+        "name": "BANCA DI PIACENZA - SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "5156"
+    },
+    {
+        "name": "BANCA POPOLARE DI LAJATICO SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "5232"
+    },
+    {
+        "name": "BANCA POPOLARE PUGLIESE - SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "5262"
+    },
+    {
+        "name": "BANCA POPOLARE DI FONDI - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "5296"
+    },
+    {
+        "name": "BANCA POPOLARE DEL FRUSINATE SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "5297"
+    },
+    {
+        "name": "BANCA POPOLARE DEL CASSINATE SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "5372"
+    },
+    {
+        "name": "BANCA POPOLARE DI PUGLIA E BASILICATA - SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "5385"
+    },
+    {
+        "name": "BPER BANCA S.P.A.",
+        "country": "Italia",
+        "abi": "5387"
+    },
+    {
+        "name": "BDM BANCA S.P.A.",
+        "country": "Italia",
+        "abi": "5424"
+    },
+    {
+        "name": "BANCA DI CIVIDALE SOCIETA' PER AZIONI O IN FORMA ABBREVIATA CIVIBANK",
+        "country": "Italia",
+        "abi": "5484"
+    },
+    {
+        "name": "BANCA POPOLARE DI CORTONA - SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "5496"
+    },
+    {
+        "name": "BANCA POPOLARE COMMERCIALE SOCIET\u00c0 PER AZIONI",
+        "country": "Italia",
+        "abi": "5602"
+    },
+    {
+        "name": "SANFELICE 1893 BANCA POPOLARE SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "5652"
+    },
+    {
+        "name": "BIBANCA S.P.A.",
+        "country": "Italia",
+        "abi": "5676"
+    },
+    {
+        "name": "BANCA POPOLARE DI SONDRIO SOCIETA' PER AZIONI",
+        "country": "Italia",
+        "abi": "5696"
+    },
+    {
+        "name": "CASSA DI SOVVENZIONI E RISPARMIO FRA IL PERSONALE DELLA BANCA D'ITALIA - SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "5824"
+    },
+    {
+        "name": "BANCA POPOLARE DELL'ALTO ADIGE SOCIETA' PER AZIONI (IN TEDESCO SUDTIROLER VOLKSBANK A.G.)",
+        "country": "Italia",
+        "abi": "5856"
+    },
+    {
+        "name": "CASSA DI RISPARMIO DI BOLZANO S.P.A. - SUDTIROLER SPARKASSE AG",
+        "country": "Italia",
+        "abi": "6045"
+    },
+    {
+        "name": "CASSA DI RISPARMIO DI ASTI S.P.A. (IN FORMA ABBREVIATA BANCA C.R. ASTI S.P.A.)",
+        "country": "Italia",
+        "abi": "6085"
+    },
+    {
+        "name": "CASSA DI RISPARMIO DI FERMO S.P.A. (IN FORMA ABBREVIATA CARIFERMO S.P.A.)",
+        "country": "Italia",
+        "abi": "6150"
+    },
+    {
+        "name": "CASSA DI RISPARMIO DI FOSSANO S.P.A.",
+        "country": "Italia",
+        "abi": "6170"
+    },
+    {
+        "name": "CASSA DI RISPARMIO DI ORVIETO S.P.A.",
+        "country": "Italia",
+        "abi": "6220"
+    },
+    {
+        "name": "CR\u00c9DIT AGRICOLE ITALIA S.P.A.",
+        "country": "Italia",
+        "abi": "6230"
+    },
+    {
+        "name": "LA CASSA DI RAVENNA S.P.A.",
+        "country": "Italia",
+        "abi": "6270"
+    },
+    {
+        "name": "BANCA CASSA DI RISPARMIO DI SAVIGLIANO S.P.A.",
+        "country": "Italia",
+        "abi": "6305"
+    },
+    {
+        "name": "CASSA DI RISPARMIO DI VOLTERRA S.P.A.",
+        "country": "Italia",
+        "abi": "6370"
+    },
+    {
+        "name": "BANCA DI BARI E TARANTO CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7012"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DEL CIRCEO E PRIVERNATE - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7017"
+    },
+    {
+        "name": "BANCA DELL'ELBA CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7048"
+    },
+    {
+        "name": "BANCA DELL'ALTA MURGIA CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7056"
+    },
+    {
+        "name": "CREDITO COOPERATIVO MEDIOCRATI - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7062"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO MAGNA GRECIA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7066"
+    },
+    {
+        "name": "CREDITO COOP.VO ROMAGNOLO - BCC DI CESENA E GATTEO - S.C.",
+        "country": "Italia",
+        "abi": "7070"
+    },
+    {
+        "name": "EMIL BANCA - CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7072"
+    },
+    {
+        "name": "BANCA CENTRO-CREDITO COOPERATIVO TOSCANA-UMBRIA SOC.COOPERATIVA",
+        "country": "Italia",
+        "abi": "7075"
+    },
+    {
+        "name": "BANCA CREMASCA E MANTOVANA - CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7076"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DEI CASTELLI E DEGLI IBLEI SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7078"
+    },
+    {
+        "name": "BANCA DELLA MARCA CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7084"
+    },
+    {
+        "name": "CREDITO COOPERATIVO FRIULI (ABBREVIATO CREDIFRIULI) - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7085"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DELL'ADRIATICO TERAMANO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7086"
+    },
+    {
+        "name": "BANCA MALATESTIANA - CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7090"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DELLA CALABRIA ULTERIORE - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7091"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DEI CASTELLI ROMANI E DEL TUSCOLO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7092"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI CAGLIARI SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7096"
+    },
+    {
+        "name": "BANCA DI ANDRIA DI CREDITO COOPERATIVO - SOCIETA' COOPERATIVA PER AZIONI A RESPONSABILITA' LIMITATA",
+        "country": "Italia",
+        "abi": "7101"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO AGRIGENTINO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "7108"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI NAPOLI SOCIETA' COOPERATIVA PER AZIONI (IN SIGLA B.C.C. DI NAPOLI)",
+        "country": "Italia",
+        "abi": "7110"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI PUTIGNANO - SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "7113"
+    },
+    {
+        "name": "ICCREA BANCA S.P.A. - ISTITUTO CENTRALE DEL CREDITO COOPERATIVO (IN FORMA ABBREVIATA: ICCREA BANCA S.P.A.)",
+        "country": "Italia",
+        "abi": "8000"
+    },
+    {
+        "name": "CASSA RAIFFEISEN VAL BADIA SOCIETA' COOPERATIVA - GENOSSENSCHAFT",
+        "country": "Italia",
+        "abi": "8010"
+    },
+    {
+        "name": "CASSA RURALE VALLAGARINA - BANCA DI CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8011"
+    },
+    {
+        "name": "CASSA RURALE ALTOGARDA - ROVERETO - BANCA DI CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8016"
+    },
+    {
+        "name": "CASSA RAIFFEISEN ALTA PUSTERIA SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE HOCHPUSTERTAL GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8020"
+    },
+    {
+        "name": "CASSA RURALE DI LEDRO - BANCA DI CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8026"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI BRUNICO SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE BRUNECK GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8035"
+    },
+    {
+        "name": "CASSA RAIFFEISEN CASTELROTTO - ORTISEI SOC. COOPERATIVA - RAIFFEISENKASSE KASTELRUTH - ST. ULRICH GENOSSENSCHAFT",
+        "country": "Italia",
+        "abi": "8056"
+    },
+    {
+        "name": "CASSA RAIFFEISEN SCHLERN - ROSENGARTEN SOCIETA' COOPERATIVA (IN TED. RAIFFEISENKASSE SCHLERN-ROSENGARTEN GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8065"
+    },
+    {
+        "name": "CASSA RAIFFEISEN ALTA VENOSTA SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE OBERVINSCHGAU GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8066"
+    },
+    {
+        "name": "LA CASSA RURALE - CREDITO COOPERATIVO ADAMELLO GIUDICARIE VALSABBIA PAGANELLA  - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8078"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI DOBBIACO SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE TOBLACH GENOSSENSHAFT)",
+        "country": "Italia",
+        "abi": "8080"
+    },
+    {
+        "name": "CASSA RURALE DI BOLZANO SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE BOZEN GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8081"
+    },
+    {
+        "name": "BANCA DI ANCONA E FALCONARA MARITTIMA CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8086"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI FUNES SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE VILLNOESS GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8094"
+    },
+    {
+        "name": "CASSA RURALE VALSUGANA E TESINO - BANCA DI CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8102"
+    },
+    {
+        "name": "CASSA RAIFFEISEN LACES SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE LATSCH GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8110"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI LAGUNDO SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE ALGUND GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8112"
+    },
+    {
+        "name": "CASSA RAIFFEISEN BASSA VALL'ISARCO SOCIETA' COOPERATIVA (IN TEDESCO RAIFFEISENKASSE UNTEREISACKTAL GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8113"
+    },
+    {
+        "name": "CASSA RAIFFEISEN BASSA ATESINA (IN LINGUA TEDESCA RAIFFEISENKASSE UNTERLAND)",
+        "country": "Italia",
+        "abi": "8114"
+    },
+    {
+        "name": "CASSA RAIFFEISEN LANA SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE LANA GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8115"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI LASA SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE LAAS GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8117"
+    },
+    {
+        "name": "BANCA MONTEPAONE - CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8126"
+    },
+    {
+        "name": "CASSA RAIFFEISEN MERANO SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE MERAN GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8133"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI MARLENGO SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE MARLING GENOSSENSHAFT)",
+        "country": "Italia",
+        "abi": "8134"
+    },
+    {
+        "name": "FPB CASSA DI FASSA PRIMIERO BELLUNO - BANCA DI CREDITO COOPERATIVO - SOCIET\u00c0 COOPERATIVA",
+        "country": "Italia",
+        "abi": "8140"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI MONGUELFO-CASIES-TESIDO SOCIETA' COOPERATIVA (RAIFFEISENKASSE WELSBERG-GSIES-TAISTEN GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8148"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI BASCIANO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8149"
+    },
+    {
+        "name": "CASSA RAIFFEISEN BASSA VENOSTA SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE UNTERVINSCHGAU GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8157"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI NOVA PONENTE-ALDINO SOCIETA' COOPERATIVA(IN TEDESCO RAIFFEISENKASSE DEUTSCHNOFEN-ALDEIN GEN.)",
+        "country": "Italia",
+        "abi": "8162"
+    },
+    {
+        "name": "CASSA RURALE VAL DI SOLE - BANCA DI CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8163"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI PARCINES SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE PARTSCHINS GENOSSENSHAFT)",
+        "country": "Italia",
+        "abi": "8175"
+    },
+    {
+        "name": "CASSA RURALE ALTA VALSUGANA - BANCA DI CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8178"
+    },
+    {
+        "name": "CASSA RAIFFEISEN WIPPTAL SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE WIPPTAL GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8182"
+    },
+    {
+        "name": "CASSA RAIFFEISEN PRATO-TUBRE SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE PRAD-TAUFERS GENOSSENSHAFT)",
+        "country": "Italia",
+        "abi": "8183"
+    },
+    {
+        "name": "CASSA RURALE  VAL DI FIEMME - BANCA DI CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8184"
+    },
+    {
+        "name": "CASSA RURALE RENON SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE RITTEN GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8187"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DELLA VALLE DEL TRIGNO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8189"
+    },
+    {
+        "name": "CASSA RURALE DI SALORNO SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE SALURN GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8220"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI SAN MARTINO IN PASSIRIA SOCIETA' COOPERATIVA (RAIFFEISENKASSE ST. MARTIN IN PASSEIER GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8226"
+    },
+    {
+        "name": "CASSA RAIFFEISEN ULTIMO - S. PANCRAZIO - LAUREGNO SOCIETA' COOPERATIVA (RAIFFEISENKASSE ULTEN-ST.PANKRAZ-LAUREIN GEN.)",
+        "country": "Italia",
+        "abi": "8231"
+    },
+    {
+        "name": "CASSA RAIFFEISEN VAL SARENTINO SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE SARNTAL GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8233"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI SCENA SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE SCHENNA GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8234"
+    },
+    {
+        "name": "CASSA RAIFFEISEN VAL GARDENA SOCIETA' COOPERATIVA (RAIFFEISENKASSE GRODEN GENOSSENSCHAFT - CASSA RAIFFEISEN GHERDEINA)",
+        "country": "Italia",
+        "abi": "8238"
+    },
+    {
+        "name": "CASSA RAIFFEISEN SILANDRO SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE SCHLANDERS GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8244"
+    },
+    {
+        "name": "CASSA RAIFFEISEN CAMPO DI TRENS SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE FREIENFELD GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8249"
+    },
+    {
+        "name": "CASSA RAIFFEISEN OLTRADIGE SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE UBERETSCH GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8255"
+    },
+    {
+        "name": "BANCA CENTRO CALABRIA - CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8258"
+    },
+    {
+        "name": "CASSA RAIFFEISEN ETSCHTAL SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE ETSCHTAL GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8269"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI TESIMO SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE TISENS GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8273"
+    },
+    {
+        "name": "CASSA RAIFFEISEN TIROLO SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE TIROL GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8278"
+    },
+    {
+        "name": "CASSA RURALE VAL DI NON - ROTALIANA E GIOVO - BANCA DI CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8282"
+    },
+    {
+        "name": "CASSA RAIFFEISEN TURES-AURINA SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE TAUFERER-AHRNTAL GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8285"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI VANDOIES SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE VINTL GENOSSENSHAFT)",
+        "country": "Italia",
+        "abi": "8295"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DI VILLABASSA SOCIETA' COOPERATIVA (IN LINGUA TEDESCA RAIFFEISENKASSE NIEDERDORF GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8302"
+    },
+    {
+        "name": "BANCA PER IL TRENTINO ALTO ADIGE - BANK F\u00dcR TRENTINO-S\u00dcDTIROL - CREDITO COOPERATIVO ITALIANO SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8304"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DELLA VALLE ISARCO SOCIETA' COOPERATIVA ( IN LINGUA TEDESCA RAIFFEISENKASSE EISACKTAL GENOSSENSCHAFT)",
+        "country": "Italia",
+        "abi": "8307"
+    },
+    {
+        "name": "VALPOLICELLA BENACO BANCA CREDITO COOPERATIVO (VERONA) SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8315"
+    },
+    {
+        "name": "BANCA VERONESE CREDITO COOPERATIVO DI CONCAMARISE SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8322"
+    },
+    {
+        "name": "BANCA CENTROPADANA CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8324"
+    },
+    {
+        "name": "BANCO FIORENTINO - MUGELLO IMPRUNETA SIGNA - CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8325"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI ROMA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8327"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO BRIANZA E LAGHI - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8329"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI ALBEROBELLO, SAMMICHELE E MONOPOLI  - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8338"
+    },
+    {
+        "name": "CASSA PADANA BANCA DI CREDITO COOPERATIVO SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8340"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI ALTOFONTE E CACCAMO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8341"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI AQUARA SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8342"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI ANAGNI SOCIETA' COOPERATIVA (IN BREVE BANCANAGNI CREDITO COOPERATIVO)",
+        "country": "Italia",
+        "abi": "8344"
+    },
+    {
+        "name": "BANCA DI ANGHIARI E STIA - CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8345"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI AVETRANA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8354"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO PORDENONESE E MONSILE - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8356"
+    },
+    {
+        "name": "BANCA DI PESCIA E CASCINA - CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8358"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI ARBOREA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8362"
+    },
+    {
+        "name": "BCC CALABRIA NORD - CREDITO COOPERATIVO",
+        "country": "Italia",
+        "abi": "8365"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI BARLASSINA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8374"
+    },
+    {
+        "name": "BCC CAMPANIA CENTRO - CASSA RURALE ED ARTIGIANA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8378"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI BELLEGRA SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8381"
+    },
+    {
+        "name": "BENE BANCA CREDITO COOPERATIVO DI BENE VAGIENNA (CUNEO) - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8382"
+    },
+    {
+        "name": "CASSA RURALE ED ARTIGIANA DI BINASCO - CREDITO COOPERATIVO SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8386"
+    },
+    {
+        "name": "CASSA RURALE ED ARTIGIANA DI BORGO SAN GIACOMO (BRESCIA) - CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8393"
+    },
+    {
+        "name": "CASSA RURALE ED ARTIGIANA DI BOVES - BANCA DI CREDITO COOPERATIVO (BOVES-CUNEO) - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8397"
+    },
+    {
+        "name": "BANCA DELLE TERRE VENETE CREDITO COOPERATIVO \u00bf SOCIET\u00c0 COOPERATIVA",
+        "country": "Italia",
+        "abi": "8399"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI BUSTO GAROLFO E BUGUGGIATE -SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8404"
+    },
+    {
+        "name": "BANCA CAMBIANO 1884 S.P.A.",
+        "country": "Italia",
+        "abi": "8425"
+    },
+    {
+        "name": "CASSA RURALE ED ARTIGIANA DI CANTU' BANCA DI CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8430"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI CAPACCIO PAESTUM E SERINO- SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8431"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO ABRUZZESE - CAPPELLE SUL TAVO SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8434"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DEL BASSO SEBINO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8437"
+    },
+    {
+        "name": "BANCA DI CARAGLIO, DEL CUNEESE E DELLA RIVIERA DEI FIORI - CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8439"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI CARATE BRIANZA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8440"
+    },
+    {
+        "name": "CREDITO COOPERATIVO DI CARAVAGGIO ADDA E CREMASCO - CASSA RURALE - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8441"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI TERRA D'OTRANTO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8445"
+    },
+    {
+        "name": "BANCA ALPI MARITTIME CREDITO COOPERATIVO CARRU' - SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "8450"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI VENEZIA, PADOVA E ROVIGO - BANCA ANNIA SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8452"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI MILANO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8453"
+    },
+    {
+        "name": "CREDITO PADANO BANCA DI CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8454"
+    },
+    {
+        "name": "BANCA DEI SIBILLINI-CREDITO COOPERATIVO DI CASAVECCHIA-SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8456"
+    },
+    {
+        "name": "CREDITO COOPERATIVO VALDARNO FIORENTINO BANCA DI CASCIA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8457"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI CASSANO DELLE MURGE E TOLVE - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8460"
+    },
+    {
+        "name": "CASTAGNETO BANCA 1910 - CREDITO COOPERATIVO - S.C.",
+        "country": "Italia",
+        "abi": "8461"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DELLA ROMAGNA OCCIDENTALE - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8462"
+    },
+    {
+        "name": "CASSA RURALE ED ARTIGIANA DI CASTELLANA GROTTE CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8469"
+    },
+    {
+        "name": "BCC FELSINEA - BANCA DI CREDITO COOPERATIVO DAL1902 - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8472"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI CASTIGLIONE MESSER RAIMONDO E PIANELLA - SOCIETA' COOPERATIVA A RESPONSABILITA' LIMITATA",
+        "country": "Italia",
+        "abi": "8473"
+    },
+    {
+        "name": "BANCA DEL PICENO CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8474"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI CHERASCO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8487"
+    },
+    {
+        "name": "BANCO MARCHIGIANO CREDITO COOPERATIVO",
+        "country": "Italia",
+        "abi": "8491"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI CONVERSANO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8503"
+    },
+    {
+        "name": "'BANCA CENTRO EMILIA - CREDITO COOPERATIVO' SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8509"
+    },
+    {
+        "name": "CORTINABANCA - CREDITO COOPERATIVO - SOCIET\u00c0 COOPERATIVA",
+        "country": "Italia",
+        "abi": "8511"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DELL'OGLIO E DEL SERIO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8514"
+    },
+    {
+        "name": "BANCA DELLA VALSASSINA CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8515"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI FANO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8519"
+    },
+    {
+        "name": "BCC DI ALBA, LANGHE, ROERO E DEL CANAVESE S.C.",
+        "country": "Italia",
+        "abi": "8530"
+    },
+    {
+        "name": "CREDITO COOPERATIVO CASSA RURALE ED ARTIGIANA DI ERCHIE - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8537"
+    },
+    {
+        "name": "CREDITO COOPERATIVO RAVENNATE, FORLIVESE E IMOLESE SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8542"
+    },
+    {
+        "name": "BANCA DI FILOTTRANO - CREDITO COOPERATIVO DI FILOTTRANO E CAMERANO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8549"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI FLUMERI - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8553"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI GAUDIANO DI LAVELLO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8554"
+    },
+    {
+        "name": "BANCA DI PISA E FORNACETTE CREDITO COOPERATIVO - SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "8562"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI GAMBATESA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8572"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO AGROBRESCIANO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8575"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO VALDOSTANA - COOPERATIVE DE CREDIT VALDOTAINE - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8587"
+    },
+    {
+        "name": "BVR BANCA VENETO CENTRALE  CREDITO COOPERATIVO ITALIANO - SOC. COOP.",
+        "country": "Italia",
+        "abi": "8590"
+    },
+    {
+        "name": "BCC BASILICATA - CREDITO COOPERATIVO DI LAURENZANA E COMUNI LUCANI - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8597"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO VALLE DEL TORTO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8601"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI LEVERANO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8603"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI CANOSA - LOCONIA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8606"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI LOCOROTONDO CASSA RURALE E ARTIGIANA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8607"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI LEZZENO (COMO) - SOCIETA' COOPERATIVA A RESPONSABILITA' LIMITATA",
+        "country": "Italia",
+        "abi": "8618"
+    },
+    {
+        "name": "CREDITO COOPERATIVO - CASSA RURALE ED ARTIGIANA DEL FRIULI VENEZIA GIULIA (ABBREVIATO CASSA RURALE FVG) - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8622"
+    },
+    {
+        "name": "BANCA 360 CREDITO COOPERATIVO FVG  - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8631"
+    },
+    {
+        "name": "PRIMACASSA - CREDITO COOPERATIVO FVG - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8637"
+    },
+    {
+        "name": "CHIANTIBANCA - CREDITO COOPERATIVO S.C.",
+        "country": "Italia",
+        "abi": "8673"
+    },
+    {
+        "name": "B.C.C. DEL GARDA - BANCA DI CREDITO COOPERATIVO COLLI MORENICI DEL GARDA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8676"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI MOZZANICA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8679"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI MARINA DI GINOSA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8688"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI BRESCIA - SOCIETA' COOPERATIVA (ABBR. BCC BRESCIA - SOCIETA' COOPERATIVA)",
+        "country": "Italia",
+        "abi": "8692"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI NETTUNO SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8693"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DEL METAURO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8700"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI OSTRA E MORRO D'ALBA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8704"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI OSTRA VETERE SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8705"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI OSTUNI - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8706"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI PACHINO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8713"
+    },
+    {
+        "name": "BANCA DI UDINE CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8715"
+    },
+    {
+        "name": "BANCA CENTRO LAZIO CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8716"
+    },
+    {
+        "name": "CREDITO COOPERATIVO CASSA RURALE ED ARTIGIANA DI PALIANO SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8717"
+    },
+    {
+        "name": "BANCA VERSILIA LUNIGIANA E GARFAGNANA - CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8726"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI PERGOLA E CORINALDO SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8731"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO VICENTINO - POJANA MAGGIORE (VICENZA) - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8732"
+    },
+    {
+        "name": "BANCA DEL TERRITORIO LOMBARDO CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8735"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI PONTASSIEVE - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8736"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI PRATOLA PELIGNA (L'AQUILA) -SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8747"
+    },
+    {
+        "name": "CENTROMARCA BANCA - CREDITO COOPERATIVO DI TREVISO E VENEZIA, SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "8749"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI PIANFEI E ROCCA DE' BALDI - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8753"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI RECANATI E COLMURANO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8765"
+    },
+    {
+        "name": "BANCA DI RIPATRANSONE E DEL FERMANO - CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8769"
+    },
+    {
+        "name": "CASSA RURALE ED ARTIGIANA DI RIVAROLO MANTOVANO (MANTOVA) CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8770"
+    },
+    {
+        "name": "BANCA MONTE PRUNO - CREDITO COOPERATIVO DI FISCIANO, ROSCIGNO E LAURINO- SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8784"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DELLA PROVINCIA ROMANA SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8787"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO LODI SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8794"
+    },
+    {
+        "name": "BCC VENETA - CREDITO COOPERATIVO - SOCIET\u00c0 COOPERATIVA",
+        "country": "Italia",
+        "abi": "8807"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI SAN GIOVANNI ROTONDO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8810"
+    },
+    {
+        "name": "BANCA DEL VALDARNO - CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8811"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI SAN MARZANO DI SAN GIUSEPPE - TARANTO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8817"
+    },
+    {
+        "name": "BANCA DI PESARO CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8826"
+    },
+    {
+        "name": "BANCA TERRITORI DEL MONVISO - CREDITO COOPERATIVO DI CASALGRASSO E SANT'ALBANO STURA SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8833"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI SANTERAMO IN COLLE - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8844"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI SARSINA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8850"
+    },
+    {
+        "name": "TERRE ETRUSCHE DI VALDICHIANA E DI MAREMMA - CREDITO COOPERATIVO- S.C.",
+        "country": "Italia",
+        "abi": "8851"
+    },
+    {
+        "name": "ROMAGNABANCA CREDITO COOPERATIVO ROMAGNA EST E SALA DI CESENATICO S.C.",
+        "country": "Italia",
+        "abi": "8852"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI SCAFATI E CETARA SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8855"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI SPELLO E DEL VELINO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8871"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO APPULO LUCANA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8873"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO VENEZIA GIULIA SOCIETA\u00bf COOPERATIVA",
+        "country": "Italia",
+        "abi": "8877"
+    },
+    {
+        "name": "BANCA DI BOLOGNA CREDITO COOPERATIVO SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8883"
+    },
+    {
+        "name": "CASSA RURALE - BANCA DI CREDITO COOPERATIVO DI TREVIGLIO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8899"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI TRIUGGIO E DELLA VALLE DEL LAMBRO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8901"
+    },
+    {
+        "name": "BANCA PREALPI SANBIAGIO CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8904"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DELLA VALLE DEL FITALIA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8913"
+    },
+    {
+        "name": "BANCA ALTA TOSCANA CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8922"
+    },
+    {
+        "name": "ZKB ZADRU\u017dNA KRA\u0160KA BANKA TRST GORICA ZADRUGA - ZKB CREDITO COOPERATIVO DI TRIESTE E GORIZIA SOCIET\u00c0 COOPERATIVA IN FORMA ABBREVIATA ZKB",
+        "country": "Italia",
+        "abi": "8928"
+    },
+    {
+        "name": "BANCA LAZIO NORD CREDITO COOPERATIVO - SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "8931"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO BERGAMASCA E OROBICA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8940"
+    },
+    {
+        "name": "BANCA DON RIZZO - CREDITO COOPERATIVO DELLA SICILIA OCCIDENTALE - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8946"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DEI COLLI ALBANI - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8951"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO G. TONIOLO E SAN MICHELE DI SAN CATALDO (CALTANISSETTA)  SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8952"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO LA RISCOSSA DI REGALBUTO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8954"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI ABRUZZI E MOLISE - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8968"
+    },
+    {
+        "name": "BANCA SAN FRANCESCO CREDITO COOPERATIVO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8969"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DELLE MADONIE - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8976"
+    },
+    {
+        "name": "BANCA ADRIA COLLI EUGANEI - CREDITO COOPERATIVO SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8982"
+    },
+    {
+        "name": "SICILBANCA CREDITO COOPERATIVO ITALIANO - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8985"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO TERRA DI LAVORO - S. VINCENZO DE' PAOLI SOCIETA' COOPERATIVA PER AZIONI",
+        "country": "Italia",
+        "abi": "8987"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DEGLI ULIVI - TERRA DI BARI - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8988"
+    },
+    {
+        "name": "RIVIERABANCA - CREDITO COOPERATIVO DI RIMINI E GRADARA - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8995"
+    },
+    {
+        "name": "BANCA DI CREDITO COOPERATIVO DI SAN MARCO DEI CAVOTI E DEL SANNIO-CALVI - SOCIETA' COOPERATIVA",
+        "country": "Italia",
+        "abi": "8997"
+    },
+    {
+        "name": "CASSA RAIFFEISEN DELLA VAL PASSIRIA SOCIETA' COOPERATIVA ( IN LINGUA TEDESCA RAIFFEISENKASSE PASSEIER GENOSSENSHAFT)",
+        "country": "Italia",
+        "abi": "8998"
+    },
+    {
+        "name": "BANCA CF+ CREDITO FONDIARIO S.P.A.",
+        "country": "Italia",
+        "abi": "10312"
+    },
+    {
+        "name": "ISTITUTO PER IL CREDITO SPORTIVO E CULTURALE S.P.A.",
+        "country": "Italia",
+        "abi": "10630"
+    },
+    {
+        "name": "MEDIOBANCA - BANCA DI CREDITO FINANZIARIO S.P.A.",
+        "country": "Italia",
+        "abi": "10631"
+    },
+    {
+        "name": "MEDIOCREDITO TRENTINO-ALTO ADIGE - S.P.A. (IN LINGUA TEDESCA INVESTITIONSBANK TRENTINO-SUDTIROL - A.G.)",
+        "country": "Italia",
+        "abi": "10638"
+    },
+    {
+        "name": "BCC FINANCING S.P.A.",
+        "country": "Italia",
+        "abi": "10640"
+    },
+    {
+        "name": "MEDIOCREDITO CENTRALE - BANCA DEL MEZZOGIORNO SPA",
+        "country": "Italia",
+        "abi": "10680"
+    },
+    {
+        "name": "BANCA AGEVOLARTI S.P.A.",
+        "country": "Italia",
+        "abi": "10681"
+    },
+    {
+        "name": "COMPASS BANCA SPA",
+        "country": "Italia",
+        "abi": "19275"
+    }
+]

@@ -10,6 +10,7 @@ import Signup from './app/Signup';
 import PersonalArea from './app/PersonalArea';
 import Settings from './app/Settings';
 import AddAsset from './app/PersonalArea/Wallet/AddAsset';
+import AssetDetail from './app/PersonalArea/Wallet/AssetDetail';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -19,8 +20,6 @@ root.render(
         <Routes>
             {/* Customer routes */}
             <Route index element={<App />} />
-            <Route path='auth' />
-            <Route index element={<Error />} />
             <Route path='signup' element={<Signup />} />
             <Route path='logout' element={<Logout />} />
             <Route path='login'>
@@ -32,7 +31,8 @@ root.render(
             <Route path='transactions' element={<PersonalArea page="Transactions" />} />
             <Route path='wallet'>
                 <Route index element={<PersonalArea page="Wallet" />} />
-                <Route path='new-asset' element={<AddAsset />} />
+                <Route path='create' element={<AddAsset />} />
+                <Route path=':id' element={<AssetDetail />} />
             </Route>
             <Route path='evener' element={<PersonalArea page="Evener" />} />
             <Route path='stats' element={<PersonalArea page="Stats" />} />
