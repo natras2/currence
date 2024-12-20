@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import User from "../../assets/model/User";
-import { GetUserAssets, UpdateFavourite } from "../../assets/controllers/Assets";
+import AssetsController from "../../assets/controllers/Assets";
 import { FaPlus } from "react-icons/fa";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import Asset from "../../assets/model/Asset";
@@ -9,30 +9,31 @@ import { FaRegStar } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import { LuEyeOff } from "react-icons/lu";
+import { Link, useOutletContext } from "react-router-dom";
+import { PersonalAreaContext } from "../PersonalArea";
 
-export default function Wallet(props: any) {
-    const user: User = props.user;
-    const [assets, setAssets] = useState<Asset[]>([]);
+export default function Wallet() {
+    const { data, controllers } = useOutletContext<PersonalAreaContext>();
+
+    const user = data.user;
+    const assets = data.assets;
     const [starred, setStarred] = useState<Asset[]>([]);
     const [processing, setProcessing] = useState(true);
 
     useEffect(() => {
         async function initialize() {
-
-            const retrievedAssets = await GetUserAssets(user.uid);
-            if (retrievedAssets && retrievedAssets.length > 0) {
-                setAssets(retrievedAssets);
+            if (assets && assets.length > 0) {
                 // Filter and set starred assets
-                const starredAssets = retrievedAssets.filter(asset => asset.starred);
+                const starredAssets = assets.filter(asset => asset.starred);
                 setStarred(starredAssets);
             }
             setProcessing(false);
         }
         initialize();
-    }, [user, assets]);
+    }, [assets]);
 
-    const handlerFavourite = (asset: Asset) => {
-        UpdateFavourite(asset.uid, (asset.id as unknown) as string, !asset.starred);
+    const handlerFavourite = async (asset: Asset) => {
+        await controllers.assetsController.UpdateFavourite((asset.id as unknown) as string, !asset.starred);
     }
 
     return (
@@ -76,14 +77,14 @@ export default function Wallet(props: any) {
                                                     assets.map((asset, i) => {
                                                         return (
                                                             <span key={i}>
-                                                                <div className="asset">
+                                                                <Link to={ "./"+ asset.id } style={{ textDecoration: 'none', color: "inherit" }} className="asset">
                                                                     <div className="asset-name">{asset.name}</div>
                                                                     <div className="d-flex gap-2">
                                                                         <div className="asset-hidden-selector">{(asset.hiddenFromTotal) ? <LuEyeOff /> : "" }</div>
-                                                                        {<div className="asset-favourite-selector">{(asset.starred) ? <FaStar onClick={(e) => handlerFavourite(asset)} /> : <FaRegStar onClick={(e) => handlerFavourite(asset)} />}</div>}
+                                                                        {/*<div className="asset-favourite-selector">{(asset.starred) ? <FaStar onClick={(e) => handlerFavourite(asset)} /> : <FaRegStar onClick={(e) => handlerFavourite(asset)} />}</div>*/}
                                                                         <div className="asset-balance">{(user.hiddenBalance) ? <span style={{filter: "blur(4px)"}}>{currencyFormat(919)}</span> : currencyFormat(asset.balance)}</div>
                                                                     </div>
-                                                                </div>
+                                                                </Link>
                                                             </span>
                                                         )
                                                     })

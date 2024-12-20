@@ -1,32 +1,33 @@
 import { useEffect, useState } from "react";
 import User from "../../assets/model/User";
-import { GetUserAssets } from "../../assets/controllers/Assets";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import { currencyFormat } from "../../assets/libraries/Utils";
-import { UpdateTotalBalance } from "../../assets/controllers/Users";
 import { BsCashCoin } from "react-icons/bs";
+import { PersonalAreaContext } from "../PersonalArea";
+import { useOutletContext } from "react-router-dom";
+import Asset from "../../assets/model/Asset";
 
+export default function Dashboard() {
+    const { data, controllers } = useOutletContext<PersonalAreaContext>();
 
-export default function Dashboard(props: any) {
-    const user: User = props.user;
+    const user: User = data.user;
+    const assets: Asset[] = data.assets;
     const [totalBalance, setTotalBalance] = useState(user.totalBalance);
 
     useEffect(() => {
         async function initialize() {
-            const retrievedAssets = await GetUserAssets(user.uid);
-            if (retrievedAssets) {
-                const contributingAssets = retrievedAssets.filter(asset => !asset.hiddenFromTotal);
+            if (assets.length > 0) {
+                const contributingAssets = assets.filter(asset => !asset.hiddenFromTotal);
                 const updatedTotalBalance = contributingAssets.reduce((accumulator, asset) => accumulator + asset.balance, 0);
                 setTotalBalance(updatedTotalBalance);
 
                 // if total balance doesn't correspond updates it.
                 if (updatedTotalBalance !== totalBalance)
-                    await UpdateTotalBalance(user.uid, updatedTotalBalance);
-
+                    controllers.userController.UpdateTotalBalance(updatedTotalBalance);
             }
         }
         initialize();
-    }, [user, totalBalance]);
+    }, [assets, totalBalance]);
 
     return (
         <>

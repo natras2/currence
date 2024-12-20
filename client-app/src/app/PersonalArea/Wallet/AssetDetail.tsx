@@ -1,60 +1,68 @@
 import { useEffect, useState } from "react";
-import Skeleton from "react-loading-skeleton";
-import User from "../../../assets/model/User";
 import Asset from "../../../assets/model/Asset";
 import Loader from "../../../assets/components/Loader";
-import { UpdateFavourite } from "../../../assets/controllers/Assets";
 import { BackButton } from "../../../assets/components/Utils";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useOutletContext, useParams, useSearchParams } from "react-router-dom";
+import { PersonalAreaContext } from "../../PersonalArea";
+import ErrorPage from "../../../Error";
+import { currencyFormat } from "../../../assets/libraries/Utils";
 
-interface AssetDetailProps {
-    user: User,
+interface DisplayAssetDetailType {
     asset: Asset
 }
 
-export default function AssetDetail(props: any) {
-    const user: User = props.user;
-    const asset: Asset = props.asset;
-    const [processing, setProcessing] = useState(true);
-
+function DisplayAssetDetail({asset}: DisplayAssetDetailType) {
     const navigate = useNavigate();
-
-    useEffect(() => {
-        async function initialize() {
-
-
-        }
-        initialize();
-    }, [user, asset]);
-
-    const handlerFavourite = (asset: Asset) => {
-        UpdateFavourite(asset.uid, (asset.id as unknown) as string, !asset.starred);
-    }
-
     const backHandler = () => {
         navigate(-1);
     }
 
+    console.log(asset)
+
     return (
         <>
-            <div id="AssetDetail">
-                <div>
-                    <div className="d-flex gap-3 mb-5">
-                        <BackButton handler={backHandler} />
-                        <div className="page-title" style={{ marginTop: -.5 }}>{asset.name}</div>
-                    </div>
-                </div>
-                <div>
-                    <div className="mb-3">
-                        <label className="form-label">Asset name</label>
-                        {/*<input type="text" className="form-control" name="new-asset-name" placeholder={'e.g. "Revolut"'} autoComplete="off" required />*/}
-                    </div>
-                    <button type='submit' className="btn w-100 border fw-bold text-center btn-primary rounded-pill shadow-sm align-items-center" style={{ padding: "1rem 0" }}>
-                        Create
-                    </button>
+            <div>
+                <div className="d-flex gap-3 mb-5">
+                    <BackButton handler={backHandler} />
+                    <div className="page-title" style={{ marginTop: -.5 }}>{asset.name}</div>
                 </div>
             </div>
-            {processing && <Loader selector="login" />}
+            <div>
+                {currencyFormat(asset.balance)}
+            </div>
         </>
     );
+}
+
+export default function AssetDetail() {
+    const { data, controllers } = useOutletContext<PersonalAreaContext>();
+    const { id } = useParams();
+
+    const assets = data.assets;
+    var rendered;
+
+        if (!id) {
+            rendered = <ErrorPage />;
+        }
+        const currentAsset = assets.find((asset) => (asset.id === id))
+        if (!currentAsset) {
+            rendered = <ErrorPage />;
+        }
+        else {
+            rendered = <DisplayAssetDetail asset={currentAsset} />
+        }
+    
+
+    const handlerFavourite = async (asset: Asset) => {
+        await controllers.assetsController.UpdateFavourite((asset.id as unknown) as string, !asset.starred);
+    }
+
+    return (
+        <>
+            <div id="AssetDetail" className="callout page">
+                {rendered}
+            </div>
+        </>
+    );
+
 }

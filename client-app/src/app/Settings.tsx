@@ -1,53 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProfileImage from "../assets/components/ProfileImage";
-import { getAuth } from "firebase/auth";
-import { app } from "../firebase/firebaseConfig";
-import { Link, useNavigate } from "react-router-dom";
-import { GetUser } from "../assets/controllers/Users";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { BackButton } from "../assets/components/Utils";
+import { PersonalAreaContext } from "./PersonalArea";
+import User from "../assets/model/User";
 
 export default function Settings() {
-    const [processing, setProcessing] = useState(true);
-    const [user, setUser] = useState<any>(null);
+    const { data, controllers } = useOutletContext<PersonalAreaContext>();
 
-    const auth = getAuth(app);
+    const user: User = data.user;
+    const [processing, setProcessing] = useState(false);
+
     const navigate = useNavigate();
-
-    useEffect(() => {
-        async function initialize() {
-            const unsubscribe = auth.onAuthStateChanged(async (loggedUser) => {
-                if (!loggedUser) {
-                    console.log("The user is not logged. Redirecting to root...");
-                    navigate("/");
-                    return;
-                }
-
-                try {
-                    // Fetch the user data from Firestore
-                    const retrievedUser = await GetUser(loggedUser.uid);
-                    if (!retrievedUser) {
-                        console.log("The user is not registered on Firestore. Redirecting to root...");
-                        navigate("/");
-                        return;
-                    }
-
-                    // Set the retrieved user to state
-                    setUser(retrievedUser);
-                } 
-                catch (error) {
-                    console.error("An error occurred while retrieving the user:", error);
-                    navigate("/"); // Redirect to root on error
-                } 
-                finally {
-                    setProcessing(false); // Stop processing after everything is done
-                }
-            });
-
-            // Cleanup the auth listener on component unmount
-            return () => unsubscribe();
-        }
-        initialize();
-    }, [auth, navigate]);
 
     const backHandler = () => {
         navigate(-1);
@@ -55,7 +19,7 @@ export default function Settings() {
 
     return (
         <>
-            <div id="settings" className="page">
+            <div id="settings" className="callout page">
                 <BackButton handler={backHandler}/>
                 {(processing)
                     ? <></>

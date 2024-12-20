@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { GetUser, UpdateHiddenBalance } from "../assets/controllers/Users";
+import UserController, { GetUser } from "../assets/controllers/Users";
 import { getAuth } from "firebase/auth";
 import { app } from "../firebase/firebaseConfig";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { BiSolidDashboard } from "react-icons/bi";
 import { IoIosWallet } from "react-icons/io";
 import { GrList } from "react-icons/gr";
@@ -14,17 +14,37 @@ import { LuEyeOff } from "react-icons/lu";
 import { MdGroupAdd } from "react-icons/md";
 import { MdPersonAddAlt1 } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
-import Dashboard from "./PersonalArea/Dashboard";
-import Wallet from "./PersonalArea/Wallet";
-import Transactions from "./PersonalArea/Transactions";
-import Evener from "./PersonalArea/Evener";
-import Stats from "./PersonalArea/Stats";
 import ProfileImage from "../assets/components/ProfileImage";
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css'
 import Asset from "../assets/model/Asset";
-import AssetDetail from "./PersonalArea/Wallet/AssetDetail";
 import Transaction from "../assets/model/Transaction";
+import User from "../assets/model/User";
+import AssetsController from "../assets/controllers/Assets";
+import { titleCase } from "../assets/libraries/Utils";
+
+export interface PersonalAreaContext {
+    data: DataContext,
+    controllers: ControllersContext
+}
+
+export interface DataContext {
+    user: User,
+    setUser: React.Dispatch<React.SetStateAction<User>>,
+    assets: Asset[],
+    setAssets: React.Dispatch<React.SetStateAction<Asset[]>>,
+    transactions: Transaction[],
+    setTransactions: React.Dispatch<React.SetStateAction<Transaction[]>>,
+    userProcessing: boolean,
+    assetsProcessing: boolean,
+    transactionsProcessing: boolean
+}
+
+export interface ControllersContext {
+    userController: UserController,
+    assetsController: AssetsController,
+    transactionsController: AssetsController
+}
 
 function NavigationBar(props: any) {
     const navButtons = [
@@ -87,7 +107,7 @@ function TopRightButtons(props: any) {
             icon: <LuEye />,
             iconActive: <LuEyeOff />,
             activeCondition: props.hiddenBalance as boolean,
-            action: () => {props.handleHiddenBalance()},
+            action: () => { props.handleHiddenBalance() },
             index: 10
         },
         {
@@ -124,9 +144,9 @@ function TopRightButtons(props: any) {
                 {(icons && icons.length > 0)
                     ? <>
                         {icons.map((icon, i) => {
-                            return icon.link 
-                                ? <Link key={i} to={icon.link} className="icon" style={{color: "#212529", textTransform: "none"}}>{icon.icon}</Link>
-                                : <div key={i} onClick={icon.action} className="icon" style={{color: "#212529", textTransform: "none"}}>{(icon.activeCondition) ? icon.iconActive : icon.icon}</div>
+                            return icon.link
+                                ? <Link key={i} to={icon.link} className="icon" style={{ color: "#212529", textTransform: "none" }}>{icon.icon}</Link>
+                                : <div key={i} onClick={icon.action} className="icon" style={{ color: "#212529", textTransform: "none" }}>{(icon.activeCondition) ? icon.iconActive : icon.icon}</div>
 
                         })}
                     </>
@@ -138,55 +158,87 @@ function TopRightButtons(props: any) {
     );
 }
 
-export default function PersonalArea(props: any) {
-    const [page, setPage] = useState<string>(props.page);
+export default function PersonalArea() {
+    const [page, setPage] = useState<string>(titleCase(useLocation().pathname.split("/")[1]));
     const [user, setUser] = useState<any>(null);
     const [assets, setAssets] = useState<Asset[]>([]);
-    const [transactions, setTransactions] = useState<Transaction[]>(props.page);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [userProcessing, setUserProcessing] = useState(true);
     const [assetsProcessing, setAssetsProcessing] = useState(true);
     const [transactionsProcessing, setTransactionsProcessing] = useState(false);
+
+    const data = {
+        user: user,
+        setUser: setUser,
+        assets: assets,
+        setAssets: setAssets,
+        transactions: transactions,
+        setTransactions: setTransactions,
+        userProcessing: userProcessing,
+        assetsProcessing: assetsProcessing,
+        transactionsProcessing: transactionsProcessing
+    } as DataContext;
+
+    const controllers = {
+        userController: new UserController(data),
+        assetsController: new AssetsController(data),
+        transactionsController: new AssetsController(data)
+    } as ControllersContext;
 
     const navigate = useNavigate();
     const auth = getAuth(app);
 
     useEffect(() => {
-        async function initialize() {
-            // Set up an auth state listener
-            const unsubscribe = auth.onAuthStateChanged(async (loggedUser) => {
-                if (!loggedUser) {
-                    console.log("The user is not logged. Redirecting to root...");
+        const unsubscribe = auth.onAuthStateChanged(async (loggedUser) => {
+            if (!loggedUser) {
+                console.log("The user is not logged. Redirecting to root...");
+                navigate("/");
+                return;
+            }
+
+            try {
+                const retrievedUser = await GetUser(loggedUser.uid);
+                if (!retrievedUser) {
+                    console.log("The user is not registered on Firestore. Redirecting to root...");
                     navigate("/");
                     return;
                 }
 
-                try {
-                    // Fetch the user data from Firestore
-                    const retrievedUser = await GetUser(loggedUser.uid);
-                    if (!retrievedUser) {
-                        console.log("The user is not registered on Firestore. Redirecting to root...");
-                        navigate("/");
-                        return;
-                    }
+                setUser(retrievedUser);
+            }
+            catch (error) {
+                console.error("An error occurred while retrieving the user:", error);
+                navigate("/");
+            }
+            finally {
+                setUserProcessing(false); // Stop processing after everything is done
+            }
+        });
 
-                    // Set the retrieved user to state
-                    setUser(retrievedUser);
-                } 
-                catch (error) {
-                    console.error("An error occurred while retrieving the user:", error);
-                    navigate("/"); // Redirect to root on error
-                } 
-                finally {
-                    setUserProcessing(false); // Stop processing after everything is done
-                }
-            });
+        // Cleanup on component unmount
+        return () => unsubscribe();
+    }, [auth, navigate]);
 
-            // Cleanup the auth listener on component unmount
-            return () => unsubscribe();
+    // Fetch assets when the user is available
+    useEffect(() => {
+        if (userProcessing) return; // Ensure user is set before fetching assets
+
+        async function fetchAssets() {
+            try {
+                const retrievedAssets = await controllers.assetsController.GetUserAssets();
+                console.log("Assets retrieved");
+                setAssets(retrievedAssets || []);
+            } 
+            catch (error) {
+                console.error("An error occurred while retrieving the assets:", error);
+            }
+            finally {
+                setAssetsProcessing(false);
+            }
         }
 
-        initialize();
-    }, [navigate, user, assets, transactions]);
+        fetchAssets();
+    }, [userProcessing]);
 
     const changePageHandler = (target: string) => {
         setPage(target);
@@ -194,33 +246,26 @@ export default function PersonalArea(props: any) {
     }
 
     const handleHiddenBalance = () => {
-        UpdateHiddenBalance(user.uid, !user.hiddenBalance)
-    }
-
-    const checkProcessing = () => {
-        return userProcessing || assetsProcessing || transactionsProcessing
+        controllers.userController.UpdateHiddenBalance(!user.hiddenBalance);
     }
 
     return (
         <>
             <div className='personal-area page'>
-                {(userProcessing)
-                    ? <>{/*<Skeleton width={250} style={{marginTop: 3, height: 27}}/> */}<TopRightButtons type="skeleton" dimension={35} /></>
+                {(userProcessing || assetsProcessing || transactionsProcessing)
+                    ? <><Skeleton width={250} style={{marginTop: 3, height: 27}}/><TopRightButtons type="skeleton" dimension={35} /></>
                     : (
                         <>
-                            <TopRightButtons 
-                                page={page} 
-                                uid={user.uid} 
-                                firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)} 
-                                dimension={35} 
-                                hiddenBalance={user.hiddenBalance} 
+                            <TopRightButtons
+                                page={page}
+                                uid={user.uid}
+                                firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)}
+                                dimension={35}
+                                hiddenBalance={user.hiddenBalance}
                                 handleHiddenBalance={handleHiddenBalance}
                             />
-                            {page === 'Dashboard' && <Dashboard user={user} />}
-                            {page === 'Wallet' && <Wallet user={user} />}
-                            {page === 'Transactions' && <Transactions user={user} />}
-                            {page === 'Evener' && <Evener user={user} />}
-                            {page === 'Stats' && <Stats user={user} />}</>
+                            <Outlet context={{ data, controllers }} />
+                        </>
                     )}
                 <NavigationBar active={page} handler={changePageHandler} />
             </div>

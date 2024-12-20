@@ -11,6 +11,11 @@ import PersonalArea from './app/PersonalArea';
 import Settings from './app/Settings';
 import AddAsset from './app/PersonalArea/Wallet/AddAsset';
 import AssetDetail from './app/PersonalArea/Wallet/AssetDetail';
+import Dashboard from './app/PersonalArea/Dashboard';
+import Transactions from './app/PersonalArea/Transactions';
+import Wallet from './app/PersonalArea/Wallet';
+import Evener from './app/PersonalArea/Evener';
+import Stats from './app/PersonalArea/Stats';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -27,16 +32,18 @@ root.render(
                 <Route path='recover' element={<PasswordForgotten />} />
             </Route>
 
-            <Route path='dashboard' element={<PersonalArea page="Dashboard" />} />
-            <Route path='transactions' element={<PersonalArea page="Transactions" />} />
-            <Route path='wallet'>
-                <Route index element={<PersonalArea page="Wallet" />} />
-                <Route path='create' element={<AddAsset />} />
-                <Route path=':id' element={<AssetDetail />} />
+            <Route element={<PersonalArea />} >
+                <Route path='dashboard' element={<Dashboard />} />
+                <Route path='transactions' element={<Transactions />} />
+                <Route path='wallet'>
+                    <Route index element={<Wallet />} />
+                    <Route path='create' element={<AddAsset />} />
+                    <Route path=':id' element={<AssetDetail />} />
+                </Route>
+                <Route path='evener' element={<Evener />} />
+                <Route path='stats' element={<Stats />} />
+                <Route path='settings' element={<Settings />} />
             </Route>
-            <Route path='evener' element={<PersonalArea page="Evener" />} />
-            <Route path='stats' element={<PersonalArea page="Stats" />} />
-            <Route path='settings' element={<Settings />} />
 
             {/* Fallback error route */}
             <Route path='*' element={<Error />} />

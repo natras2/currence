@@ -12,6 +12,10 @@ export function capitalize(inputString: string) {
     return inputString.replace(/\b\w/g, char => char.toUpperCase());
 }
 
+export function titleCase(string: string) {
+    return string[0].toUpperCase() + string.slice(1).toLowerCase();
+}
+
 export const encryptPassword = (password: string) => {
     return sha256(password);
 }

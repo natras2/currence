@@ -1,9 +1,13 @@
+import { useOutletContext } from "react-router-dom";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import User from "../../assets/model/User";
+import { PersonalAreaContext } from "../PersonalArea";
 
-export default function Stats(props: any) {
-    const user: User = props.user;
+export default function Stats() {
+    const { data, controllers } = useOutletContext<PersonalAreaContext>();
 
+    const user: User = data.user;
+    
     return (
         <>
             <div id="stats">
