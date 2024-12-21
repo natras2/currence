@@ -34,17 +34,20 @@ function App() {
 
             async function checkLoggedUser() {
                 // Wrap `onAuthStateChanged` in a Promise
-                const userLoggedIn = await new Promise<boolean>((resolve) => {
-                    auth.onAuthStateChanged((user) => {
-                        if (user) {
-                            resolve(true); // Resolve with `true` if the user is logged in
-                        } else {
-                            resolve(false); // Resolve with `false` if no user is logged in
-                        }
+                var userLoggedIn;
+                userLoggedIn = await CheckRedirectSignIn();
+
+                if (!userLoggedIn) {
+                    userLoggedIn = await new Promise<boolean>((resolve) => {
+                        auth.onAuthStateChanged((user) => {
+                            if (user) {
+                                resolve(true); // Resolve with `true` if the user is logged in
+                            } else {
+                                resolve(false); // Resolve with `false` if no user is logged in
+                            }
+                        });
                     });
-                });
-                
-                await CheckRedirectSignIn();
+                }
 
                 return userLoggedIn;
             }
