@@ -43,11 +43,8 @@ function App() {
                         }
                     });
                 });
-
-                // Additional check if needed (e.g., sign-in redirect)
-                if (!userLoggedIn) {
-                    return await CheckRedirectSignIn();
-                }
+                
+                await CheckRedirectSignIn();
 
                 return userLoggedIn;
             }

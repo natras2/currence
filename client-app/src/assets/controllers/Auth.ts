@@ -21,12 +21,12 @@ const authenticate = async (submittedUser: FirebaseUser) => {
 
     if (!userInstance.exists()) {
         console.log("It looks like this is the first time up here! I'm uploading your data...");
-        const user = new User (
-            submittedUser.uid, 
-            submittedUser.displayName as string, 
-            submittedUser.email as string, 
-            submittedUser.emailVerified, 
-            [...defaultIncomeCategories], 
+        const user = new User(
+            submittedUser.uid,
+            submittedUser.displayName as string,
+            submittedUser.email as string,
+            submittedUser.emailVerified,
+            [...defaultIncomeCategories],
             [...defaultExpenseCategories],
             0
         );
