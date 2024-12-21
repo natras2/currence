@@ -34,7 +34,7 @@ function App() {
 
             async function checkLoggedUser() {
                 // Wrap `onAuthStateChanged` in a Promise
-                var userLoggedIn;
+                var userLoggedIn: boolean;
                 userLoggedIn = await CheckRedirectSignIn();
 
                 if (!userLoggedIn) {
