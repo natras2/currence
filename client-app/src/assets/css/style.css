@@ -486,6 +486,7 @@ input.currency-input:focus-visible::placeholder {
     justify-content: space-between;
     color:inherit;
     text-decoration: none;
+    cursor: pointer;
 }
 
 #wallet .assets-list .items>*>.asset .asset-name {

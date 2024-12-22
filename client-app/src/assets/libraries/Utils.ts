@@ -1,13 +1,14 @@
 import { getAuth } from 'firebase/auth';
 import { sha256 } from 'js-sha256';
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 
 const useLongPress = (
     onLongPress: any,
+    onClick: any,
     { shouldPreventDefault = true, delay = 300 } = {},
-    args? : any
+    args: any
 ) => {
-    //const [longPressTriggered, setLongPressTriggered] = useState(false);
+    const [longPressTriggered, setLongPressTriggered] = useState(false);
     const timeout = useRef<NodeJS.Timeout | null>(null);
     const target = useRef<EventTarget | null>(null);
 
@@ -21,29 +22,30 @@ const useLongPress = (
             }
             timeout.current = setTimeout(() => {
                 onLongPress(args);
-                //setLongPressTriggered(true);
+                setLongPressTriggered(true);
             }, delay);
         },
         [onLongPress, delay, shouldPreventDefault, args]
     );
 
     const clear = useCallback(
-        (event: React.MouseEvent | React.TouchEvent) => {
+        (event: React.MouseEvent | React.TouchEvent, shouldTriggerClick = true) => {
             if (timeout.current) clearTimeout(timeout.current);
-            //setLongPressTriggered(false);
+            if (shouldTriggerClick && !longPressTriggered) onClick(args);
+            setLongPressTriggered(false);
 
             if (shouldPreventDefault && target.current) {
                 (target.current as HTMLElement).removeEventListener("touchend", preventDefault);
             }
         },
-        [shouldPreventDefault]
+        [onClick, longPressTriggered, shouldPreventDefault, args]
     );
 
     return {
         onMouseDown: (e: React.MouseEvent) => start(e),
         onTouchStart: (e: React.TouchEvent) => start(e),
         onMouseUp: (e: React.MouseEvent) => clear(e),
-        onMouseLeave: (e: React.MouseEvent) => clear(e),
+        onMouseLeave: (e: React.MouseEvent) => clear(e, false),
         onTouchEnd: (e: React.TouchEvent) => clear(e)
     };
 };
@@ -55,7 +57,6 @@ const preventDefault = (event: TouchEvent) => {
 };
 
 export default useLongPress;
-
 
 
 export function checkPassword(password: string) {

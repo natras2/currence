@@ -6,7 +6,7 @@ import Asset from "../../assets/model/Asset";
 import useLongPress, { currencyFormat } from "../../assets/libraries/Utils";
 import Skeleton from "react-loading-skeleton";
 import { LuEyeOff } from "react-icons/lu";
-import { Link, useOutletContext } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { ControllersContext, DataContext, PersonalAreaContext } from "../PersonalArea";
 
 interface AssetItemType {
@@ -16,22 +16,26 @@ interface AssetItemType {
 }
 
 function AssetListItem({ data, controllers, asset } : AssetItemType) {
+    const navigate = useNavigate();
 
-    const onLongPressOnAsset = (args: any) => {
-        alert(args);
+    const onLongPressOnAsset = (assetId: string) => {
+        alert(assetId);
     }
-    const longPressOnAsset = useLongPress(onLongPressOnAsset, {delay: 500}, asset.id);
+    const onClickOnAsset = (assetId: string) => {
+        navigate("/wallet/" + assetId);
+    }
+    const longPressOnAsset = useLongPress(onLongPressOnAsset, onClickOnAsset, {delay: 500}, asset.id);
 
     return (
         <span className="asset-wrapper">
-            <Link to={"/wallet/" + asset.id} {...longPressOnAsset} className="asset">
+            <div {...longPressOnAsset} className="asset">
                 <div className="asset-name">{asset.name}</div>
                 <div className="d-flex gap-2">
                     <div className="asset-hidden-selector">{(asset.hiddenFromTotal) ? <LuEyeOff /> : ""}</div>
                     {/*<div className="asset-favorite-selector">{(asset.starred) ? <FaStar onClick={(e) => handlerFavourite(asset)} /> : <FaRegStar onClick={(e) => handlerFavourite(asset)} />}</div>*/}
                     <div className="asset-balance">{(data.user.hiddenBalance) ? <span style={{ filter: "blur(4px)" }}>{currencyFormat(919)}</span> : currencyFormat(asset.balance)}</div>
                 </div>
-            </Link>
+            </div>
         </span>
     );
 }
