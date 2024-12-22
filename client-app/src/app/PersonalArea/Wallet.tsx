@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import User from "../../assets/model/User";
-import AssetsController from "../../assets/controllers/Assets";
+import illustration from '../../assets/images/illustrations/favorite.svg'
 import { FaPlus } from "react-icons/fa";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import Asset from "../../assets/model/Asset";
 import { currencyFormat } from "../../assets/libraries/Utils";
-import { FaRegStar } from "react-icons/fa";
-import { FaStar } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import { LuEyeOff } from "react-icons/lu";
 import { Link, useOutletContext } from "react-router-dom";
@@ -52,7 +49,13 @@ export default function Wallet() {
                                                 ? <><Skeleton /></>
                                                 : <>{(starred && starred.length === 0)
                                                     ? <><span>
-                                                        <div className="no-favourites">Add your favorites</div>
+                                                        <div className="no-favourites">
+                                                            <img
+                                                                src={illustration}
+                                                                alt='add favourite'
+                                                                className='no-favourites-image'
+                                                            />
+                                                            Add your favorites</div>
                                                     </span>
                                                     </>
                                                     : <>
@@ -77,12 +80,12 @@ export default function Wallet() {
                                                     assets.map((asset, i) => {
                                                         return (
                                                             <span key={i}>
-                                                                <Link to={ "./"+ asset.id } style={{ textDecoration: 'none', color: "inherit" }} className="asset">
+                                                                <Link to={"./" + asset.id} style={{ textDecoration: 'none', color: "inherit" }} className="asset">
                                                                     <div className="asset-name">{asset.name}</div>
                                                                     <div className="d-flex gap-2">
-                                                                        <div className="asset-hidden-selector">{(asset.hiddenFromTotal) ? <LuEyeOff /> : "" }</div>
+                                                                        <div className="asset-hidden-selector">{(asset.hiddenFromTotal) ? <LuEyeOff /> : ""}</div>
                                                                         {/*<div className="asset-favourite-selector">{(asset.starred) ? <FaStar onClick={(e) => handlerFavourite(asset)} /> : <FaRegStar onClick={(e) => handlerFavourite(asset)} />}</div>*/}
-                                                                        <div className="asset-balance">{(user.hiddenBalance) ? <span style={{filter: "blur(4px)"}}>{currencyFormat(919)}</span> : currencyFormat(asset.balance)}</div>
+                                                                        <div className="asset-balance">{(user.hiddenBalance) ? <span style={{ filter: "blur(4px)" }}>{currencyFormat(919)}</span> : currencyFormat(asset.balance)}</div>
                                                                     </div>
                                                                 </Link>
                                                             </span>

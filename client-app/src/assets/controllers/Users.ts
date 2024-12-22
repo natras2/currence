@@ -35,25 +35,25 @@ export default class UserController extends Controller {
     }
 
     async UpdateTotalBalance(totalBalance: number) {
-        try{
-    const userRef = doc(db, 'Users', this.user.uid).withConverter(userConverter);
+        try {
+            const userRef = doc(db, 'Users', this.user.uid).withConverter(userConverter);
 
-    await updateDoc(userRef, {
-        totalBalance: totalBalance
-    });
+            await updateDoc(userRef, {
+                totalBalance: totalBalance
+            });
 
-    this.setUser((prevUser: any) => ({
-        ...prevUser,
-        totalBalance: totalBalance,
-    }));
-    
-    return true;
-}
-catch (error) {
-    console.error("Error updating the field totalBalance:", error);
-    return false;
-}
-}
+            this.setUser((prevUser: any) => ({
+                ...prevUser,
+                totalBalance: totalBalance,
+            }));
+
+            return true;
+        }
+        catch (error) {
+            console.error("Error updating the field totalBalance:", error);
+            return false;
+        }
+    }
 }
 
 

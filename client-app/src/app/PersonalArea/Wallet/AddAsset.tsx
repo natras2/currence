@@ -5,7 +5,6 @@ import { useState } from "react";
 import Asset from "../../../assets/model/Asset";
 import InputField from "../../../assets/components/InputField";
 import { capitalize } from "../../../assets/libraries/Utils";
-import { CreateAsset } from "../../../assets/controllers/Assets";
 import Loader from "../../../assets/components/Loader";
 import { PersonalAreaContext } from "../../PersonalArea";
 import User from "../../../assets/model/User";
@@ -97,9 +96,8 @@ export default function AddAsset() {
         const asset = new Asset(user.uid, formData["new-asset-name"], formData["new-asset-description"], (parseFloat(formData["new-asset-balance"].replace(',', '.'))));
 
         // Add the new asset to Firestore
-        var result = await CreateAsset(asset);
+        var result = await controllers.assetsController.CreateAsset(asset);
         if (result) {
-            data.setAssets((prevAsset) => [...prevAsset, asset]);
             navigate(-1)
         }
         else {

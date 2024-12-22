@@ -36,6 +36,7 @@ function App() {
                 // Wrap `onAuthStateChanged` in a Promise
                 var userLoggedIn: boolean;
                 userLoggedIn = await CheckRedirectSignIn();
+                console.log("Redirect:", userLoggedIn);
 
                 if (!userLoggedIn) {
                     userLoggedIn = await new Promise<boolean>((resolve) => {

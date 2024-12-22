@@ -5,7 +5,7 @@ import { DataContext } from "../../app/PersonalArea";
 import Controller from "./Controller";
 
 export default class AssetsController extends Controller {
-    constructor (context: DataContext) {
+    constructor(context: DataContext) {
         super(context);
     };
 
@@ -47,6 +47,28 @@ export default class AssetsController extends Controller {
             console.error("Error fetching user assets:", error);
         }
     }
+
+    async CreateAsset(asset: Asset) {
+        try {
+            const assetCollectionRef = collection(db, 'Users', asset.uid, "Assets").withConverter(assetConverter);
+            const createdAssetRef = await addDoc(assetCollectionRef, asset);
+
+            // update user setting first access to false
+            await updateDoc(doc(db, "Users", asset.uid), {
+                firstAccess: false,
+                totalBalance: increment((!asset.hiddenFromTotal) ? asset.balance : 0)
+            });
+            
+            const createdAsset = (await getDoc(createdAssetRef)).data()!;
+            this.setAssets((prevAsset) => [...prevAsset, createdAsset]);
+
+            return true;
+        }
+        catch (error) {
+            console.error("Error creating a new asset:", error);
+            return false;
+        }
+    }
 }
 
 export async function GetUserAssets(uid: string) {
@@ -66,15 +88,3 @@ export async function GetUserAssets(uid: string) {
     }
 }
 
-export async function CreateAsset(asset: Asset) {
-    const assetCollectionRef = collection(db, 'Users', asset.uid, "Assets").withConverter(assetConverter);
-    await addDoc(assetCollectionRef, asset);
-
-    // update user setting first access to false
-    await updateDoc(doc(db, "Users", asset.uid), {
-        firstAccess: false,
-        totalBalance: increment((!asset.hiddenFromTotal) ? asset.balance : 0)
-    });
-
-    return true;
-}

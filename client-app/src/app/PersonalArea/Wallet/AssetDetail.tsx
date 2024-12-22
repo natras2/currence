@@ -11,7 +11,7 @@ interface DisplayAssetDetailType {
     asset: Asset
 }
 
-function DisplayAssetDetail({asset}: DisplayAssetDetailType) {
+function DisplayAssetDetail({ asset }: DisplayAssetDetailType) {
     const navigate = useNavigate();
     const backHandler = () => {
         navigate(-1);
@@ -41,17 +41,19 @@ export default function AssetDetail() {
     const assets = data.assets;
     var rendered;
 
-        if (!id) {
-            rendered = <ErrorPage />;
-        }
-        const currentAsset = assets.find((asset) => (asset.id === id))
-        if (!currentAsset) {
-            rendered = <ErrorPage />;
-        }
-        else {
-            rendered = <DisplayAssetDetail asset={currentAsset} />
-        }
-    
+    if (!id) {
+        console.log("No Asset ID");
+        rendered = <ErrorPage />;
+    }
+    const currentAsset = assets.find((asset) => (asset.id === id))
+    if (!currentAsset) {
+        console.log("No Asset instance");
+        rendered = <ErrorPage />;
+    }
+    else {
+        rendered = <DisplayAssetDetail asset={currentAsset} />
+    }
+
 
     const handlerFavourite = async (asset: Asset) => {
         await controllers.assetsController.UpdateFavourite((asset.id as unknown) as string, !asset.starred);

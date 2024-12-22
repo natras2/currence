@@ -190,7 +190,6 @@ form .input-guide {
 
 .personal-area.page .body {
     margin-top: 25px;
-    min-height: 100vh;
 }
 
 /*********** SPLASH FIRST ACCESS ************/
@@ -243,7 +242,6 @@ form .input-guide {
 
 #splash-first-access .body {
     font-size: 16px;
-    min-height: unset;
 }
 
 /************ DASHBOARD *************/
@@ -401,19 +399,27 @@ input.currency-input:focus-visible::placeholder {
 }
 
 #wallet .starred .cards>* {
-    flex: 0 0 185px;
+    flex: 0 0 210px;
 }
 
 #wallet .starred .cards>*>* {
-    width: 185px !important;
-    height: 115px !important;
+    width: 210px !important;
+    height: 130px !important;
     line-height: unset;
 }
 
 #wallet .starred .cards>*>.no-favourites {
     padding: 1rem;
     border-radius: 0.25rem;
-    border: 4px dashed #000080;
+    border: 1px dashed #000080;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+#wallet .starred .cards>*>.no-favourites>.no-favourites-image {
+    margin: -1rem;
+    margin-top: -1.3rem;
+    height: 120px;
 }
 
 #wallet .starred .cards>*>.favourite {
@@ -433,6 +439,14 @@ input.currency-input:focus-visible::placeholder {
     margin-left: -1.2rem;
     margin-top: 10px;
     border-radius: 0;
+    overflow-y: scroll;
+    height: calc(100vh - 2rem - 310px);
+    padding-bottom: 50px;
+}
+
+
+#wallet .assets-list .items::-webkit-scrollbar {
+    display: none;
 }
 
 #wallet .assets-list .items>*>* {
