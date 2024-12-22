@@ -10,7 +10,6 @@ export default class AssetsController extends Controller {
         super(context);
     };
 
-
     async UpdateHiddenFromTotal(assetId: string, updatedHiddenFromTotal: boolean) {
         try {
             const assetRef = doc(db, 'Users', this.user.uid, "Assets", assetId).withConverter(assetConverter);

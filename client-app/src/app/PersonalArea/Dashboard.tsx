@@ -18,7 +18,10 @@ export default function Dashboard() {
         async function initialize() {
             if (assets.length > 0) {
                 const contributingAssets = assets.filter(asset => !asset.hiddenFromTotal);
-                const updatedTotalBalance = contributingAssets.reduce((accumulator, asset) => accumulator + asset.balance, 0);
+                var updatedTotalBalance = 0;
+                if (contributingAssets.length > 0) {
+                    updatedTotalBalance = contributingAssets.reduce((accumulator, asset) => accumulator + asset.balance, 0);
+                }
                 setTotalBalance(updatedTotalBalance);
 
                 // if total balance doesn't correspond updates it.
