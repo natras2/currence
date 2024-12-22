@@ -1,5 +1,62 @@
 import { getAuth } from 'firebase/auth';
 import { sha256 } from 'js-sha256';
+import { useCallback, useRef } from "react";
+
+const useLongPress = (
+    onLongPress: any,
+    { shouldPreventDefault = true, delay = 300 } = {},
+    args? : any
+) => {
+    //const [longPressTriggered, setLongPressTriggered] = useState(false);
+    const timeout = useRef<NodeJS.Timeout | null>(null);
+    const target = useRef<EventTarget | null>(null);
+
+    const start = useCallback(
+        (event: React.MouseEvent | React.TouchEvent) => {
+            if (shouldPreventDefault && event.target) {
+                (event.target as HTMLElement).addEventListener("touchend", preventDefault, {
+                    passive: false
+                });
+                target.current = event.target;
+            }
+            timeout.current = setTimeout(() => {
+                onLongPress(args);
+                //setLongPressTriggered(true);
+            }, delay);
+        },
+        [onLongPress, delay, shouldPreventDefault, args]
+    );
+
+    const clear = useCallback(
+        (event: React.MouseEvent | React.TouchEvent) => {
+            if (timeout.current) clearTimeout(timeout.current);
+            //setLongPressTriggered(false);
+
+            if (shouldPreventDefault && target.current) {
+                (target.current as HTMLElement).removeEventListener("touchend", preventDefault);
+            }
+        },
+        [shouldPreventDefault]
+    );
+
+    return {
+        onMouseDown: (e: React.MouseEvent) => start(e),
+        onTouchStart: (e: React.TouchEvent) => start(e),
+        onMouseUp: (e: React.MouseEvent) => clear(e),
+        onMouseLeave: (e: React.MouseEvent) => clear(e),
+        onTouchEnd: (e: React.TouchEvent) => clear(e)
+    };
+};
+
+const preventDefault = (event: TouchEvent) => {
+    if (event.touches.length < 2 && event.preventDefault) {
+        event.preventDefault();
+    }
+};
+
+export default useLongPress;
+
+
 
 export function checkPassword(password: string) {
     // Regular expression to enforce password criteria

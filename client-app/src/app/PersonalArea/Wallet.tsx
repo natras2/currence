@@ -3,11 +3,38 @@ import illustration from '../../assets/images/illustrations/favorite.svg'
 import { FaPlus } from "react-icons/fa";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import Asset from "../../assets/model/Asset";
-import { currencyFormat } from "../../assets/libraries/Utils";
+import useLongPress, { currencyFormat } from "../../assets/libraries/Utils";
 import Skeleton from "react-loading-skeleton";
 import { LuEyeOff } from "react-icons/lu";
 import { Link, useOutletContext } from "react-router-dom";
-import { PersonalAreaContext } from "../PersonalArea";
+import { ControllersContext, DataContext, PersonalAreaContext } from "../PersonalArea";
+
+interface AssetItemType {
+    data: DataContext,
+    controllers: ControllersContext,
+    asset: Asset
+}
+
+function AssetListItem({ data, controllers, asset } : AssetItemType) {
+
+    const onLongPressOnAsset = (args: any) => {
+        alert(args);
+    }
+    const longPressOnAsset = useLongPress(onLongPressOnAsset, {delay: 500}, asset.id);
+
+    return (
+        <span className="asset-wrapper">
+            <Link to={"/wallet/" + asset.id} {...longPressOnAsset} className="asset">
+                <div className="asset-name">{asset.name}</div>
+                <div className="d-flex gap-2">
+                    <div className="asset-hidden-selector">{(asset.hiddenFromTotal) ? <LuEyeOff /> : ""}</div>
+                    {/*<div className="asset-favorite-selector">{(asset.starred) ? <FaStar onClick={(e) => handlerFavourite(asset)} /> : <FaRegStar onClick={(e) => handlerFavourite(asset)} />}</div>*/}
+                    <div className="asset-balance">{(data.user.hiddenBalance) ? <span style={{ filter: "blur(4px)" }}>{currencyFormat(919)}</span> : currencyFormat(asset.balance)}</div>
+                </div>
+            </Link>
+        </span>
+    );
+}
 
 export default function Wallet() {
     const { data, controllers } = useOutletContext<PersonalAreaContext>();
@@ -29,10 +56,6 @@ export default function Wallet() {
         initialize();
     }, [assets]);
 
-    const handlerFavourite = async (asset: Asset) => {
-        await controllers.assetsController.UpdateFavourite((asset.id as unknown) as string, !asset.starred);
-    }
-
     return (
         <>
             <div id="wallet">
@@ -49,20 +72,21 @@ export default function Wallet() {
                                                 ? <><Skeleton /></>
                                                 : <>{(starred && starred.length === 0)
                                                     ? <><span>
-                                                        <div className="no-favourites">
+                                                        <div className="no-favorites">
                                                             <img
                                                                 src={illustration}
-                                                                alt='add favourite'
-                                                                className='no-favourites-image'
+                                                                alt='add favorite'
+                                                                className='no-favorites-image'
                                                             />
-                                                            Add your favorites</div>
+                                                            <div className='no-favorites-label'>Add your favorites, they will appear here</div>
+                                                        </div>
                                                     </span>
                                                     </>
                                                     : <>
                                                         {starred.map((asset, i) => {
                                                             return (
                                                                 <span key={i}>
-                                                                    <div className="favourite">{asset.name}</div>
+                                                                    <Link to={"./" + asset.id} style={{ textDecoration: 'none' }} className="favorite">{asset.name}</Link>
                                                                 </span>
                                                             )
                                                         })}
@@ -78,18 +102,7 @@ export default function Wallet() {
                                                 ? <><Skeleton /><Skeleton /></>
                                                 : <>{
                                                     assets.map((asset, i) => {
-                                                        return (
-                                                            <span key={i}>
-                                                                <Link to={"./" + asset.id} style={{ textDecoration: 'none', color: "inherit" }} className="asset">
-                                                                    <div className="asset-name">{asset.name}</div>
-                                                                    <div className="d-flex gap-2">
-                                                                        <div className="asset-hidden-selector">{(asset.hiddenFromTotal) ? <LuEyeOff /> : ""}</div>
-                                                                        {/*<div className="asset-favourite-selector">{(asset.starred) ? <FaStar onClick={(e) => handlerFavourite(asset)} /> : <FaRegStar onClick={(e) => handlerFavourite(asset)} />}</div>*/}
-                                                                        <div className="asset-balance">{(user.hiddenBalance) ? <span style={{ filter: "blur(4px)" }}>{currencyFormat(919)}</span> : currencyFormat(asset.balance)}</div>
-                                                                    </div>
-                                                                </Link>
-                                                            </span>
-                                                        )
+                                                        return <AssetListItem key={i} data={data} controllers={controllers} asset={asset} />;
                                                     })
                                                 }</>
                                             }

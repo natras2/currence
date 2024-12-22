@@ -400,29 +400,40 @@ input.currency-input:focus-visible::placeholder {
 
 #wallet .starred .cards>* {
     flex: 0 0 210px;
+    height: 130px
 }
 
 #wallet .starred .cards>*>* {
     width: 210px !important;
     height: 130px !important;
     line-height: unset;
+    display: block;
 }
 
-#wallet .starred .cards>*>.no-favourites {
+#wallet .starred .cards>*>.no-favorites {
+    position: absolute;
     padding: 1rem;
     border-radius: 0.25rem;
-    border: 1px dashed #000080;
     display: flex;
-    gap: 15px;
     align-items: center;
+    overflow: hidden;
+    width: 100% !important;
 }
-#wallet .starred .cards>*>.no-favourites>.no-favourites-image {
+#wallet .starred .cards>*>.no-favorites>.no-favorites-image {
     margin: -1rem;
-    margin-top: -1.3rem;
-    height: 120px;
+    margin-left: -40px;
+    margin-top: 2.2rem;
+    height: 280px;
+}
+#wallet .starred .cards>*>.no-favorites>.no-favorites-label {
+    position: relative;
+    left: -17px;
+    flex: 1 0 160px;
+    text-align: center;
+    font-weight: 500;
 }
 
-#wallet .starred .cards>*>.favourite {
+#wallet .starred .cards>*>.favorite {
     padding: .8rem .6rem;
     border-radius: 0.25rem;
     border: 1px solid #000080;
@@ -449,38 +460,126 @@ input.currency-input:focus-visible::placeholder {
     display: none;
 }
 
+#wallet .assets-list .items>* {
+    display: block;
+    border-top: .5px solid #ffffff;
+}
+#wallet .assets-list .items>*:last-child {
+    border-bottom: .5px solid #ffffff;
+}
+#wallet .assets-list .items>.asset-wrapper,
+#wallet .assets-list .items>.asset-wrapper:last-child {
+    border-color: #dfdfdf;
+}
+
 #wallet .assets-list .items>*>* {
     border-radius: 0;
     height: 60px;
     line-height: unset;
-    border-top: .5px solid #ffffff;
-}
-
-#wallet .assets-list .items>*>*:last-child {
-    border-bottom: .5px solid #ffffff;
 }
 
 #wallet .assets-list .items>*>.asset {
     padding: 0 1.2rem;
     background-color: #ffffff;
-    border-color: #ebebeb;
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-#wallet .assets-list .items>*>.asset:last-child {
-    border-color: #ebebeb;
+    color:inherit;
+    text-decoration: none;
 }
 
 #wallet .assets-list .items>*>.asset .asset-name {
     font-weight: 500;
 }
 
-#wallet .assets-list .items>*>.asset .asset-favourite-selector,
+#wallet .assets-list .items>*>.asset .asset-favorite-selector,
 #wallet .assets-list .items>*>.asset .asset-hidden-selector {
     color: #575757;
     transform: scale(.9);
     margin-top: -2px;
     cursor: pointer;
+}
+
+.personal-area.page #asset-detail {
+    display: flex;
+    justify-content: space-between;
+}
+
+.personal-area.page #asset-detail .page-title {
+    font-weight: 500;
+    font-size: 22px;
+}
+
+.personal-area.page #asset-detail .asset-balance {
+    background-color: #0040c7;
+    border-radius: 5px;
+    color: #fefefe;
+    padding: 1rem;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 600;
+}
+.personal-area.page #asset-detail .asset-balance > .asset-balance-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.personal-area.page #asset-detail .asset-balance > .asset-balance-wrapper .label {
+    font-weight: 300;
+    font-size: 15px;
+}
+.personal-area.page #asset-detail .asset-balance > .asset-balance-wrapper .icon {
+    font-size: 28px;
+    margin-right: 10px;
+}
+.personal-area.page #asset-detail .asset-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.personal-area.page #asset-detail .asset-actions > * {
+    flex: 1 0;
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    align-items: center;
+    border-radius: 5px;
+    /* box-shadow: 2px 2px 4px 0px rgb(0 0 0 / 25%); */
+    border: 1px solid #c4c4c4;
+}
+
+.personal-area.page #asset-detail .asset-actions > * > .icon {
+    margin-top:-3px
+}
+.personal-area.page #asset-detail .asset-actions > * > .label {
+    font-size: 14px;
+}
+
+.personal-area.page #asset-detail .asset-actions > .set-starred.is-starred {
+    border-color: #cb9800;
+    background-color: #cb9800;
+    color: #fff5d8;
+    font-weight: 500;
+}
+
+.personal-area.page #asset-detail .asset-actions > .set-hidden-from-total.is-hidden {
+    border-color: #870000;
+    background-color: #870000;
+    color: #ffe2e2;
+    font-weight: 500;
+}
+
+@media screen and (max-width: 414px) {
+    #wallet .starred .cards>*>.no-favorites>.no-favorites-image {
+        height: 66vw;
+        margin-top: 1.5rem;
+    }
+}
+@media screen and (max-width: 380px) {
+    #wallet .starred .cards>*>.no-favorites>.no-favorites-image {
+        height: 60vw;
+        margin-top: 0;
+        margin-left: -30px;
+    }
 }
