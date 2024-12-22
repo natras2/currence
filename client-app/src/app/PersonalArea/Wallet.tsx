@@ -65,7 +65,7 @@ export default function Wallet() {
             <div id="wallet">
                 {(user.firstAccess)
                     ? <SplashFirstAccess userName={user.fullName.split(" ")[0]} />
-                    : (user.totalBalance > 0)
+                    : (assets.length > 0)
                         ? (
                             <>
                                 <h3 className="page-title">Wallet</h3>
@@ -120,10 +120,10 @@ export default function Wallet() {
                                 <h3 className="page-title">Wallet</h3>
                                 <div className="empty-content mt-5">
                                     <div className="title fs-1 fw-bolder text-black-50">Hey! It seems like there's nothing to show here</div>
-                                    <button onClick={() => { }} className="btn border btn-primary rounded-4 shadow-sm btn-lg px-3 py-3 w-100 d-flex gap-3 justify-content-center">
+                                    <Link to={"./create"} className="btn border btn-primary rounded-4 shadow-sm btn-lg px-3 py-3 w-100 d-flex gap-3 justify-content-center mt-3">
                                         <FaPlus style={{ marginTop: 3 }} />
                                         <div className='small text-center'>Add your first asset</div>
-                                    </button>
+                                    </Link>
                                 </div>
                             </>
 
