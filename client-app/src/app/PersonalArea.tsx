@@ -145,8 +145,8 @@ function TopRightButtons(props: any) {
                     ? <>
                         {icons.map((icon, i) => {
                             return icon.link
-                                ? <Link key={i} to={icon.link} className="icon" style={{ color: "#212529", textTransform: "none" }}>{icon.icon}</Link>
-                                : <div key={i} onClick={icon.action} className="icon" style={{ color: "#212529", textTransform: "none" }}>{(icon.activeCondition) ? icon.iconActive : icon.icon}</div>
+                                ? <Link key={i} to={icon.link} className="icon" style={{ textTransform: "none" }}>{icon.icon}</Link>
+                                : <div key={i} onClick={icon.action} className="icon" style={{ textTransform: "none" }}>{(icon.activeCondition) ? icon.iconActive : icon.icon}</div>
 
                         })}
                     </>
@@ -159,7 +159,9 @@ function TopRightButtons(props: any) {
 }
 
 export default function PersonalArea() {
-    const [page, setPage] = useState<string>(titleCase(useLocation().pathname.split("/")[1]));
+    const location = useLocation();
+
+    const [page, setPage] = useState<string>(titleCase(location.pathname.split("/")[1]));
     const [user, setUser] = useState<any>(null);
     const [assets, setAssets] = useState<Asset[]>([]);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -187,6 +189,11 @@ export default function PersonalArea() {
 
     const navigate = useNavigate();
     const auth = getAuth(app);
+
+    useEffect (() => {
+        console.log("AAA");
+        setPage(titleCase(location.pathname.split("/")[1]));
+    }, [location]);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (loggedUser) => {
@@ -241,7 +248,7 @@ export default function PersonalArea() {
     }, [userProcessing]);
 
     const changePageHandler = (target: string) => {
-        setPage(target);
+        //setPage(target);
         navigate("../" + target.toLowerCase());
     }
 

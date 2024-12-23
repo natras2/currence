@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ProfileImage from "../assets/components/ProfileImage";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { BackButton } from "../assets/components/Utils";
 import { PersonalAreaContext } from "./PersonalArea";
 import User from "../assets/model/User";
+import { BiMoon, BiSun } from "react-icons/bi";
+import { ThemeContext } from "../App";
 
-export default function Settings() {
+export default function Settings(props: any) {
+    const theme = useContext(ThemeContext);
     const { data, controllers } = useOutletContext<PersonalAreaContext>();
 
     const user: User = data.user;
@@ -30,7 +33,11 @@ export default function Settings() {
                                 <h1>{user.fullName}</h1>
                                 <div className="text-secondary fw-normal fs-5 mb-4" style={{marginTop: -20}}>{user.email}</div>
                             </div>
-                            <Link to="/logout" className="btn w-100 btn-lg btn-outline-danger"><small>Logout</small></Link>
+                            <>{(theme === "dark")
+                                ? <div className="btn w-100 btn-lg btn-light" onClick={() => props.changeTheme(true)}><small><BiSun /> Light theme</small></div>
+                                : <div className="btn w-100 btn-lg btn-dark" onClick={() => props.changeTheme(true)}><small><BiMoon /> Dark theme</small></div>
+                            }</>
+                            <Link to="/logout" className="mt-3 btn w-100 btn-lg btn-outline-danger"><small>Logout</small></Link>
                         </>
                     )
                 }

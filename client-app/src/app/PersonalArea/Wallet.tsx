@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import illustration from '../../assets/images/illustrations/favorite.svg'
+import darkIllustration from '../../assets/images/illustrations/favorite_dark.svg'
 import { FaPlus } from "react-icons/fa";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import Asset from "../../assets/model/Asset";
@@ -8,6 +9,7 @@ import Skeleton from "react-loading-skeleton";
 import { LuEyeOff } from "react-icons/lu";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { ControllersContext, DataContext, PersonalAreaContext } from "../PersonalArea";
+import { ThemeContext } from "../../App";
 
 interface AssetItemType {
     data: DataContext,
@@ -41,6 +43,7 @@ function AssetListItem({ data, controllers, asset } : AssetItemType) {
 }
 
 export default function Wallet() {
+    const theme = useContext(ThemeContext);
     const { data, controllers } = useOutletContext<PersonalAreaContext>();
 
     const user = data.user;
@@ -78,7 +81,7 @@ export default function Wallet() {
                                                     ? <><span>
                                                         <div className="no-favorites">
                                                             <img
-                                                                src={illustration}
+                                                                src={(theme === "dark") ? darkIllustration : illustration }
                                                                 alt='add favorite'
                                                                 className='no-favorites-image'
                                                             />

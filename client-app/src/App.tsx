@@ -20,13 +20,22 @@ export const ThemeContext = createContext('light');
 
 function App() {
     const [theme, setTheme] = useState<string>('light');
+    const [toggleTheme, setToggleTheme] = useState(false);
 
     useEffect(() => {
-        // Add listener to update styles
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => onSelectMode(e.matches ? 'dark' : 'light'));
+        const cachedThemePreference = localStorage.getItem("preferredTheme");
+        if (!cachedThemePreference) {
+            // Add listener to update styles
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => onSelectMode(e.matches ? 'dark' : 'light'));
 
-        // Setup dark/light mode for the first time
-        onSelectMode(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            // Setup dark/light mode for the first time
+            onSelectMode(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        }
+        else {
+            onSelectMode(cachedThemePreference);
+
+            console.log("Setup from theme preference:", localStorage.getItem("preferredTheme"));
+        }
 
         // Remove listener
         return () => {
@@ -35,8 +44,21 @@ function App() {
         }
     }, []);
 
+    useEffect(() => {
+        if (!toggleTheme) return;// Setup dark/light mode for the first time
+
+        const targetTheme = (theme === "light") ? "dark" : "light";
+
+        onSelectMode(targetTheme);
+        localStorage.setItem("preferredTheme", targetTheme);
+        console.log("Saved theme preference:", localStorage.getItem("preferredTheme"));
+
+        setToggleTheme(false);
+
+    }, [toggleTheme]);
+
     const onSelectMode = (theme: string) => {
-        setTheme(theme)
+        setTheme(theme);
         if (theme === 'dark') {
             document.documentElement.classList.add('dark-mode');
             document.documentElement.setAttribute("data-bs-theme", "dark");
@@ -76,7 +98,7 @@ function App() {
                         </Route>
                         <Route path='evener' element={<Evener />} />
                         <Route path='stats' element={<Stats />} />
-                        <Route path='settings' element={<Settings />} />
+                        <Route path='settings' element={<Settings changeTheme={setToggleTheme}/>} />
                     </Route>
 
                     {/* Fallback error route */}
