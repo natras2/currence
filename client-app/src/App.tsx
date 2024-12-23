@@ -1,133 +1,89 @@
-import { useEffect, useRef, useState } from 'react'; import logo from './assets/images/logo/logo-b-ng.svg'
-import illustration from './assets/images/illustrations/home.svg'
-import { Typewriter } from 'react-simple-typewriter'
-import { Link, useNavigate } from 'react-router-dom';
-import { FcGoogle } from "react-icons/fc";
-import { BsAt } from "react-icons/bs";
-import { CheckRedirectSignIn, SignInWithGoogleAuth } from './assets/controllers/Auth';
-import Loader from './assets/components/Loader';
-import { getAuth } from 'firebase/auth';
-import { app } from './firebase/firebaseConfig';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+
+import Error from './Error';
+
+import { PasswordForgotten, Logout, default as Login } from './app/Login';
+import LandingPage from './app/LandingPage';
+import Signup from './app/Signup';
+import PersonalArea from './app/PersonalArea';
+import Settings from './app/Settings';
+import AddAsset from './app/PersonalArea/Wallet/AddAsset';
+import AssetDetail from './app/PersonalArea/Wallet/AssetDetail';
+import Dashboard from './app/PersonalArea/Dashboard';
+import Transactions from './app/PersonalArea/Transactions';
+import Wallet from './app/PersonalArea/Wallet';
+import Evener from './app/PersonalArea/Evener';
+import Stats from './app/PersonalArea/Stats';
+import { createContext, useEffect, useState } from 'react';
+
+export const ThemeContext = createContext('light');
 
 function App() {
-    const refTitle = useRef(null);
-    const refDevice = useRef(null);
-
-    const [titleWidth, setTitleWidth] = useState(0);
-    const [deviceWidth, setDeviceWidth] = useState(0);
-
-    const [processing, setProcessing] = useState(true);
-
-    const navigate = useNavigate();
-    const auth = getAuth(app);
+    const [theme, setTheme] = useState<string>('light');
 
     useEffect(() => {
-        async function initialize() {
+        // Add listener to update styles
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => onSelectMode(e.matches ? 'dark' : 'light'));
 
-            //Check whether I'm getting redirected from a Sign In with Google request
-            if (sessionStorage.getItem("signingInWithGoogle")) 
-                sessionStorage.removeItem("signingInWithGoogle");
-                
+        // Setup dark/light mode for the first time
+        onSelectMode(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
 
-            setTitleWidth((refTitle.current as any).offsetWidth);
-            setDeviceWidth((refDevice.current as any).offsetWidth);
-
-            async function checkLoggedUser() {
-                // Wrap `onAuthStateChanged` in a Promise
-                var userLoggedIn: boolean;
-                userLoggedIn = await CheckRedirectSignIn();
-                console.log("Redirect:", userLoggedIn);
-
-                if (!userLoggedIn) {
-                    userLoggedIn = await new Promise<boolean>((resolve) => {
-                        auth.onAuthStateChanged((user) => {
-                            if (user) {
-                                resolve(true); // Resolve with `true` if the user is logged in
-                            } else {
-                                resolve(false); // Resolve with `false` if no user is logged in
-                            }
-                        });
-                    });
-                }
-
-                return userLoggedIn;
-            }
-
-
-            const result = await checkLoggedUser();
-
-            if (result) {
-                navigate("../dashboard");
-            }
-            else {
-                setProcessing(false);
-            }
+        // Remove listener
+        return () => {
+            window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', () => {
+            });
         }
+    }, []);
 
-        initialize();
-    }, [navigate, auth]);
-
-
-
-    const width = (deviceWidth - titleWidth) / 2;
+    const onSelectMode = (theme: string) => {
+        setTheme(theme)
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+            document.documentElement.setAttribute("data-bs-theme", "dark");
+            document.querySelector('meta[name="theme-color"]')!.setAttribute("content", "#333333");
+            document.querySelector('meta[name="msapplication-TileColor"]')!.setAttribute("content", "#333333");
+            document.body.classList.add('dark-mode');
+        }
+        else {
+            document.documentElement.classList.remove('dark-mode');
+            document.documentElement.removeAttribute("data-bs-theme");
+            document.querySelector('meta[name="theme-color"]')!.setAttribute("content", "#fdfdfd");
+            document.querySelector('meta[name="msapplication-TileColor"]')!.setAttribute("content", "#fdfdfd");
+            document.body.classList.remove('dark-mode');
+        }
+    }
 
     return (
-        <>
-            <div id="home" className="page justify-content-between">
-                <div className='top-content'>
-                    <div ref={refDevice} className="logo-wrapper">
-                        <img
-                            src={logo}
-                            alt='currence logo'
-                            className='logo'
-                        />
-                    </div>
-                    <h1 className='header-title' style={{ marginLeft: width }}>
-                        <span ref={refTitle}>Your finance,<br /></span>
-                        made&nbsp;
-                        <span className='typewriter-wrapper'>
-                            <Typewriter
-                                words={['easy', 'fast', 'cool']}
-                                loop={0}
-                                cursor
-                                cursorStyle='_'
-                                typeSpeed={100}
-                                deleteSpeed={100}
-                                delaySpeed={3000}
-                            />
-                        </span>
-                    </h1>
-                </div>
-                <div className='illustration-wrapper middle-content'>
-                    <img
-                        src={illustration}
-                        className='illustration'
-                        alt='home illustration'
-                    />
-                </div>
-                <div className='bottom-content buttons d-flex flex-column'>
-                    <div className='google-button mb-2'>
-                        <button className="btn border w-100 btn-light rounded-2 shadow-sm btn-lg d-flex gap-3 align-items-center px-3 py-3" onClick={SignInWithGoogleAuth}>
-                            <FcGoogle style={{ fontSize: 'larger' }} />
-                            <div className='text small'>Sign in with Google</div>
-                        </button>
-                    </div>
-                    <div className='login-button'>
-                        <Link to='login' type="button" className="btn border btn-primary rounded-2 shadow-sm btn-lg d-flex gap-3 align-items-center px-3 py-3">
-                            <BsAt style={{ fontSize: 'larger' }} />
-                            <div className='text small'>Sign in with your email</div>
-                        </Link>
-                    </div>
-                    <div className="divider my-3"></div>
-                    <Link to="signup" className='signin-link mx-auto '>
-                        You don't have an account? Sign up!
-                    </Link>
-                </div>
-            </div>
-            {processing &&
-                <Loader selector='app' />
-            }
-        </>
+        <ThemeContext.Provider value={theme}>
+            <Router>
+                <Routes>
+                    {/* Customer routes */}
+                    <Route index element={<LandingPage />} />
+                    <Route path='signup' element={<Signup />} />
+                    <Route path='logout' element={<Logout />} />
+                    <Route path='login'>
+                        <Route index element={<Login />} />
+                        <Route path='recover' element={<PasswordForgotten />} />
+                    </Route>
+
+                    <Route element={<PersonalArea />} >
+                        <Route path='dashboard' element={<Dashboard />} />
+                        <Route path='transactions' element={<Transactions />} />
+                        <Route path='wallet'>
+                            <Route index element={<Wallet />} />
+                            <Route path='create' element={<AddAsset />} />
+                            <Route path=':id' element={<AssetDetail />} />
+                        </Route>
+                        <Route path='evener' element={<Evener />} />
+                        <Route path='stats' element={<Stats />} />
+                        <Route path='settings' element={<Settings />} />
+                    </Route>
+
+                    {/* Fallback error route */}
+                    <Route path='*' element={<Error />} />
+                </Routes>
+            </Router>
+        </ThemeContext.Provider>
     );
 }
 

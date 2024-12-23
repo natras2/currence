@@ -1,6 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
 
+:root {
+    --background: #fdfdfd;
+    --text-color: #212529;
+    --palette-blue-1: #000080;
+    --palette-blue-2: #0052ff;
+    --palette-blue-3: #01a0ff;
+    --palette-blue-4: #88e9ff;
+    --palette-yellow: #ffda18;
+}
+html {
+    --background: #ffffff;
+}
+html.dark-mode {
+    --background: #202020;
+}
+body.dark-mode, body.dark-mode .page {
+    --background: #333333;
+    --text-color: #d8d8d8;
+    --palette-blue-1: #88e9ff;
+    --palette-blue-2: #01a0ff;
+    --palette-blue-3: #0052ff;
+    --palette-blue-4: #000080;
+    --palette-yellow: #ffda18;
+}
+
 html,
 body {
     height: 100%;
@@ -9,24 +34,20 @@ body {
     font-family: "Inter Tight", -apple-system, 'Segoe UI', sans-serif !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
     -webkit-user-select: none;
     /* Safari */
     -ms-user-select: none;
     /* IE 10 and IE 11 */
     user-select: none;
     /* Standard syntax */
-}
-
-html {
-    background-color: #FFFFFF;
-    overflow-x: hidden;
+    background-color: var(--background);
+    color: var(--text-color);
 }
 
 body {
-    background-color: #FDFDFD;
     max-width: 414px;
     margin: 0 auto;
-    overflow-x: hidden;
 }
 
 #root {
@@ -57,7 +78,7 @@ body {
 }
 
 .page {
-    background-color: #FDFDFD;
+    background-color: var(--light-background);
     height: 100%;
     padding: 4em 1.2em 2.5em;
     overflow: hidden;
@@ -125,7 +146,7 @@ form .input-guide {
 }
 
 #navigation-bar .nav-btn.active .icon {
-    color: #0052ff;
+    color: var(--palette-blue-2);
 }
 
 #navigation-bar .nav-btn.active .name {
@@ -246,7 +267,7 @@ form .input-guide {
 
 /************ DASHBOARD *************/
 .personal-area.page #dashboard .total-balance {
-    background-color: #0052ff;
+    background-color: var(--palette-blue-2);
     border-radius: 5px;
     color: #fefefe;
     padding: 10px 1rem;
@@ -307,7 +328,7 @@ form .input-guide {
     left: 0;
     top: 0;
     width: 100%;
-    background-color: #FDFDFD;
+    background-color: var(--light-background);
 }
 
 .password-strength-bar>*>div {
@@ -334,7 +355,7 @@ form .input-guide {
 
 #home.page .typewriter-wrapper {
     font-family: 'Baloo Da 2';
-    color: #0052ff;
+    color: var(--palette-blue-2);
     font-weight: 800;
     font-size: 55px;
 }
@@ -436,8 +457,8 @@ input.currency-input:focus-visible::placeholder {
 #wallet .starred .cards>*>.favorite {
     padding: .8rem .6rem;
     border-radius: 0.25rem;
-    border: 1px solid #000080;
-    background-color: #0052ff;
+    border: 1px solid var(--palette-blue-1);
+    background-color: var(--palette-blue-2);
     color: #F5F5F5;
 }
 
