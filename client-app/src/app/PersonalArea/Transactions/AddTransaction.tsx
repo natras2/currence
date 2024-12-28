@@ -9,6 +9,7 @@ import CurrencyInput from "react-currency-input-field";
 import { BackButton } from "../../../assets/components/Utils";
 import InputField from "../../../assets/components/InputField";
 import Loader from "../../../assets/components/Loader";
+import { BiCalendar } from "react-icons/bi";
 
 export default function AddTransaction() {
     const { data, controllers } = useOutletContext<PersonalAreaContext>();
@@ -17,11 +18,11 @@ export default function AddTransaction() {
 
     const [formData, setFormData] = useState({
         "new-transaction-type": TransactionType.EXPENCE,
-        "new-transaction-category": {name: ''} as Category,
-        "new-transaction-name": '',
+        "new-transaction-category": { name: '' } as Category,
         "new-transaction-description": '',
         "new-transaction-amount": '',
-        "new-transaction-date": undefined,
+        "new-transaction-date": new Date(),
+        "new-transaction-notes": ''
     });
 
     const user: User = data.user;
@@ -42,31 +43,32 @@ export default function AddTransaction() {
     }
 
     const handleSubmit = async (e: any) => {
-        setProcessing(true);
-
         // Prevent the browser from reloading the page
         e.preventDefault();
+
+        setProcessing(true);
 
         // Set the name data field
         setFormData(prevState => ({
             ...prevState,
-            "new-transaction-name": capitalize(formData["new-transaction-name"].trim())
+            "new-transaction-description": capitalize(formData["new-transaction-description"].trim())
         }));
 
         // Check if any of the required field is empty
-        if (!formData["new-transaction-name"] || !formData["new-transaction-amount"]) {
+        if (!formData["new-transaction-description"] || !formData["new-transaction-amount"]) {
             setProcessing(false);
             console.error("Empty required fields");
             return;
         }
 
         const transaction = new Transaction(
-            user.uid, 
-            formData["new-transaction-date"], 
-            formData["new-transaction-description"], 
-            formData["new-transaction-type"], 
-            formData["new-transaction-category"], 
-            (parseFloat(formData["new-transaction-amount"].replace(',', '.'))));
+            user.uid,
+            formData["new-transaction-date"],
+            formData["new-transaction-description"],
+            formData["new-transaction-type"],
+            formData["new-transaction-category"],
+            (parseFloat(formData["new-transaction-amount"].replace(',', '.')))
+        );
 
         // Add the new transaction to Firestore
         var result = await controllers.transactionsController.CreateTransaction(transaction);
@@ -109,11 +111,16 @@ export default function AddTransaction() {
             <div id="add-transaction" className="callout page">
                 <form onSubmit={handleSubmit} className="h-100 d-flex flex-column justify-content-between">
                     <div>
-                        <div className="d-flex gap-3 mb-5">
+                        <div className="d-flex justify-content-between">
                             <BackButton handler={backHandler} />
                             <div className="page-title" style={{ marginTop: -.5 }}>New transaction</div>
+                            <div style={{width: "31px"}}></div>
                         </div>
-                        {/*<div>Here: {char}</div>*/}
+                        <div className="type-selector" style={{marginBottom: "1.5rem"}}>
+                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "active" : ""}`} onClick={() => handleChange({target: {name: "new-transaction-type", value: TransactionType.EXPENCE}})}>Expense</div>
+                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.INCOME) ? "active" : ""}`} onClick={() => handleChange({target: {name: "new-transaction-type", value: TransactionType.INCOME}})}>Income</div>
+                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.TRANSFER) ? "active" : ""}`} onClick={() => handleChange({target: {name: "new-transaction-type", value: TransactionType.TRANSFER}})}>Transfer</div>
+                        </div>
                         <CurrencyInput
                             className="currency-input"
                             id="new-transaction-amount"
@@ -134,18 +141,21 @@ export default function AddTransaction() {
                         />
                     </div>
                     <div>
-                        <div className="mb-3">
-                            <label className="form-label">Asset name</label>
-                            <InputField type="text" placeholder='e.g. "Revolut"' name="new-transaction-name" handleChange={handleChange} isRegistering='false' value={formData["new-transaction-name"]} />
+                        <div className="">
+                            <label className="form-label">Description</label>
+                            <InputField type="text" placeholder='e.g. "Monthly rent"' name="new-transaction-description" handleChange={handleChange} isRegistering='false' value={formData["new-transaction-description"]} />
                             {/*<input type="text" className="form-control" name="new-transaction-name" placeholder={'e.g. "Revolut"'} autoComplete="off" required />*/}
                         </div>
-                        <div className="mb-3">
-                            <label className="form-label">Description</label>
-                            <textarea className="form-control" name="new-transaction-description" rows={3} placeholder="Optional" onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={formData["new-transaction-description"]}></textarea>
+                        <div className="">
+                            <label className="form-label">Notes</label>
+                            <textarea className="form-control" name="new-transaction-notes" rows={2} placeholder="Optional" onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={formData["new-transaction-notes"]}></textarea>
                         </div>
-                        <button type='submit' className="btn w-100 border fw-bold text-center btn-primary rounded-pill shadow-sm align-items-center" style={{ padding: "1rem 0" }}>
-                            Create
-                        </button>
+                        <div className="d-flex mt-4 gap-2">
+                            <div className="date-picker-button"><BiCalendar /></div>
+                            <button type='submit' className="btn w-100 border fw-bold text-center btn-primary rounded-pill shadow-sm" style={{ height: 50 }}>
+                                Create
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

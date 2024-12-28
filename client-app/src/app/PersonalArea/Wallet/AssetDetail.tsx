@@ -6,15 +6,20 @@ import ErrorPage from "../../../Error";
 import { currencyFormat } from "../../../assets/libraries/Utils";
 import { FaRegStar, FaStar } from "react-icons/fa6";
 import { LuEye, LuEyeOff } from "react-icons/lu";
+import { useContext, useState } from "react";
+import Loader from "../../../assets/components/Loader";
+import { ThemeContext } from "../../../App";
 
 interface DisplayAssetDetailType {
     data: DataContext,
     controllers: ControllersContext,
-    asset: Asset
+    asset: Asset,
+    setDeleteProcessing: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function DisplayAssetDetail({ data, controllers, asset }: DisplayAssetDetailType) {
+function DisplayAssetDetail({ data, controllers, asset, setDeleteProcessing }: DisplayAssetDetailType) {
     const navigate = useNavigate();
+
     const backHandler = () => {
         navigate(-1);
     }
@@ -28,9 +33,13 @@ function DisplayAssetDetail({ data, controllers, asset }: DisplayAssetDetailType
     }
 
     const handlerDeleteAsset = async () => {
+        setDeleteProcessing(true);
         const result = await controllers.assetsController.DeleteAsset(asset.id!);
         if (result) {
             navigate("/wallet");
+        }
+        else {
+            setDeleteProcessing(false);
         }
     }
 
@@ -83,8 +92,11 @@ function DisplayAssetDetail({ data, controllers, asset }: DisplayAssetDetailType
 }
 
 export default function AssetDetail() {
+    const [deleteProcessing, setDeleteProcessing] = useState(false);
     const { data, controllers } = useOutletContext<PersonalAreaContext>();
     const { id } = useParams();
+
+    const theme = useContext(ThemeContext);
 
     const assets = data.assets;
     var rendered;
@@ -95,11 +107,16 @@ export default function AssetDetail() {
     }
     const currentAsset = assets.find((asset) => (asset.id === id))
     if (!currentAsset) {
-        console.log("No Asset instance");
-        rendered = <ErrorPage />;
+        if (!deleteProcessing) {
+            console.log("No Asset instance");
+            rendered = <ErrorPage />;
+        }
+        else {
+            rendered = <Loader theme={theme} selector="home" />
+        }
     }
     else {
-        rendered = <DisplayAssetDetail data={data} controllers={controllers} asset={currentAsset} />
+        rendered = <DisplayAssetDetail data={data} controllers={controllers} asset={currentAsset} setDeleteProcessing={setDeleteProcessing} />
     }
 
     return (

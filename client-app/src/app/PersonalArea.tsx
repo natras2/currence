@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import UserController, { GetUser } from "../assets/controllers/UserController";
 import { getAuth } from "firebase/auth";
 import { app } from "../firebase/firebaseConfig";
@@ -191,11 +191,18 @@ export default function PersonalArea() {
         transactionsProcessing: transactionsProcessing
     } as DataContext;
 
-    const controllers = {
+    const controllers = useMemo(() => ({
         userController: new UserController(data),
         assetsController: new AssetsController(data),
         transactionsController: new TransactionsController(data)
-    } as ControllersContext;
+    } as ControllersContext), [data]);
+
+    controllers.userController.assetsController = controllers.assetsController;
+    controllers.userController.transactionsController = controllers.transactionsController;
+    controllers.assetsController.userController = controllers.userController;
+    controllers.assetsController.transactionsController = controllers.transactionsController;
+    controllers.transactionsController.userController = controllers.userController;
+    controllers.transactionsController.assetsController = controllers.assetsController;
 
     const navigate = useNavigate();
     const auth = getAuth(app);
@@ -205,56 +212,47 @@ export default function PersonalArea() {
     }, [location]);
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(async (loggedUser) => {
+        const unsubscribeAuth = auth.onAuthStateChanged((loggedUser) => {
             if (!loggedUser) {
                 console.log("The user is not logged. Redirecting to root...");
                 navigate("/");
                 return;
             }
-
-            try {
-                const retrievedUser = await GetUser(loggedUser.uid);
-                if (!retrievedUser) {
-                    console.log("The user is not registered on Firestore. Redirecting to root...");
-                    navigate("/");
-                    return;
+    
+            const unsubscribeUser = controllers.userController.ListenForUserUpdates(
+                loggedUser.uid,
+                (updatedUser) => {
+                    console.log("Updated user")
+                    setUser(updatedUser);
+                    setUserProcessing(false);
                 }
-
-                setUser(retrievedUser);
-            }
-            catch (error) {
-                console.error("An error occurred while retrieving the user:", error);
-                navigate("/");
-            }
-            finally {
-                setUserProcessing(false); // Stop processing after everything is done
-            }
+            );
+    
+            // Cleanup user listener
+            return () => unsubscribeUser();
         });
-
-        // Cleanup on component unmount
-        return () => unsubscribe();
-    }, [auth, navigate]);
-
-    // Fetch assets when the user is available
+    
+        // Cleanup auth listener
+        return () => unsubscribeAuth();
+    }, []);
+    
     useEffect(() => {
-        if (userProcessing) return; // Ensure user is set before fetching assets
-
-        async function fetchAssets() {
-            try {
-                const retrievedAssets = await controllers.assetsController.GetUserAssets();
-                console.log("Assets retrieved");
-                setAssets(retrievedAssets || []);
-            }
-            catch (error) {
-                console.error("An error occurred while retrieving the assets:", error);
-            }
-            finally {
+        if (!user) return; // Only start listening for assets when the user is available
+    
+        const unsubscribeAssets = controllers.assetsController.ListenForAssetUpdates(
+            user.uid,
+            (updatedAssets) => {
+                console.log("Updated assets")
+                setAssets(updatedAssets);
                 setAssetsProcessing(false);
             }
-        }
+        );
+    
+        // Cleanup assets listener
+        return () => unsubscribeAssets();
+    }, [user?.uid]); // Depend only on user.uid
+    
 
-        fetchAssets();
-    }, [userProcessing]);
 
     const changePageHandler = (target: string) => {
         //setPage(target);
@@ -276,7 +274,7 @@ export default function PersonalArea() {
                         ? (
                             <>
                                 <TopRightButtons type="skeleton" dimension={35} />
-                                <div style={{height: 'calc(100% - 90px)', overflow: 'hidden'}}>
+                                <div style={{ height: 'calc(100% - 90px)', overflow: 'hidden' }}>
                                     <Skeleton width={150} style={{ marginTop: 3, height: 27 }} />
                                     <Skeleton width={'100%'} style={{ marginTop: '1.5rem', height: 75 }} />
                                     <Skeleton width={100} style={{ marginTop: 25, height: 20 }} />

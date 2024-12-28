@@ -25,8 +25,10 @@ export default function Dashboard() {
                 setTotalBalance(updatedTotalBalance);
 
                 // if total balance doesn't correspond updates it.
-                if (updatedTotalBalance !== totalBalance)
+                if (updatedTotalBalance !== totalBalance) {
+                    console.log("Updated total balance");
                     controllers.userController.UpdateTotalBalance(updatedTotalBalance);
+                }
             }
         }
         initialize();

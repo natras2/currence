@@ -1,11 +1,15 @@
-import { doc, getDoc, setDoc, getDocs, collection, addDoc, updateDoc, increment, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, getDocs, collection, addDoc, updateDoc, increment, deleteDoc, onSnapshot } from "firebase/firestore";
 import { app, db } from "../../firebase/firebaseConfig";
 import Asset, { assetConverter } from "../model/Asset";
 import { DataContext } from "../../app/PersonalArea";
 import Controller from "./Controller";
-import { UpdateTotalBalance } from "./UserController";
+import UserController, { UpdateTotalBalance } from "./UserController";
+import TransactionsController from "./TransactionsController";
 
 export default class AssetsController extends Controller {
+    userController?: UserController;
+    transactionsController?: TransactionsController;
+
     constructor(context: DataContext) {
         super(context);
     };
@@ -19,17 +23,10 @@ export default class AssetsController extends Controller {
                 hiddenFromTotal: updatedHiddenFromTotal
             });
 
-            const updatedAssetsList = [...this.assets];
-            const updatedAsset = updatedAssetsList.find(asset => (asset.id === assetId))!
-            updatedAsset.hiddenFromTotal = updatedHiddenFromTotal;
-            this.setAssets(updatedAssetsList);
-
+            const updatedAsset = this.assets.find(asset => (asset.id === assetId))!
             const balanceDelta = (updatedHiddenFromTotal) ? updatedAsset.balance * -1  : updatedAsset.balance;
 
-            this.setUser((prevUser: any) => ({
-                ...prevUser,
-                totalBalance: this.user.totalBalance + balanceDelta,
-            }));
+            await this.userController?.UpdateTotalBalance(balanceDelta, true);
 
             return true;
         }
@@ -47,11 +44,6 @@ export default class AssetsController extends Controller {
             await updateDoc(assetRef, {
                 starred: updatedStarred
             });
-
-            const updatedAssetsList = [...this.assets];
-            const updatedAsset = updatedAssetsList.find(asset => (asset.id === assetId))!
-            updatedAsset.starred = updatedStarred;
-            this.setAssets(updatedAssetsList);
 
             return true;
         }
@@ -81,16 +73,14 @@ export default class AssetsController extends Controller {
     async CreateAsset(asset: Asset) {
         try {
             const assetCollectionRef = collection(db, 'Users', asset.uid, "Assets").withConverter(assetConverter);
-            const createdAssetRef = await addDoc(assetCollectionRef, asset);
+            
+            await addDoc(assetCollectionRef, asset);
 
             // update user setting first access to false
             await updateDoc(doc(db, "Users", asset.uid), {
                 firstAccess: false,
                 totalBalance: increment((!asset.hiddenFromTotal) ? asset.balance : 0)
             });
-            
-            const createdAsset = (await getDoc(createdAssetRef)).data()!;
-            this.setAssets((prevAsset) => [...prevAsset, createdAsset]);
 
             return true;
         }
@@ -117,17 +107,8 @@ export default class AssetsController extends Controller {
             const assetRef = doc(db, 'Users', this.user.uid, "Assets", assetId).withConverter(assetConverter);
             const assetBalance = asset.balance;
 
-            // update user setting first access to false
             await deleteDoc(assetRef);
-            
-            // deletes the asset from the assets array
-            this.assets.splice(this.assets.indexOf(asset)!, 1);
-
-            // updates the user total balance
-            this.setUser((prevUser: any) => ({
-                ...prevUser,
-                totalBalance: this.user.totalBalance - assetBalance,
-            }));
+            await this.userController?.UpdateTotalBalance(assetBalance * -1, true);
 
             return true;
         }
@@ -136,6 +117,20 @@ export default class AssetsController extends Controller {
             return false;
         }
     }
+
+    ListenForAssetUpdates(uid: string, onUpdate: (assets: Asset[]) => void): () => void {
+        const assetsCollectionRef = collection(db, 'Users', uid, 'Assets').withConverter(assetConverter);
+
+        // Set up real-time listener
+        const unsubscribe = onSnapshot(assetsCollectionRef, (querySnapshot) => {
+            const retrievedAssets = querySnapshot.docs.map((doc) => doc.data());
+            onUpdate(retrievedAssets);
+        });
+
+        // Return the unsubscribe function for cleanup
+        return unsubscribe;
+    }
+
 }
 
 export async function GetUserAssets(uid: string) {

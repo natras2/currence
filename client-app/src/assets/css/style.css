@@ -3,6 +3,7 @@
 
 :root {
     --background: #fdfdfd;
+    --highlight-background: #ffffff;
     --text-color: #212529;
     --list-background: #ffffff;
     --list-border: #dfdfdf;
@@ -15,6 +16,7 @@
     --palette-yellow: #ffda18;
     --splash-bgcolor-1: #dfffed;
     --splash-bgcolor-2: #c9f0ff;
+    --currency-input-color: #000080;
 }
 html {
     --background: #ffffff;
@@ -24,6 +26,7 @@ html.dark-mode {
 }
 body.dark-mode, body.dark-mode .page {
     --background: #333333;
+    --highlight-background: #212529;
     --text-color: #d8d8d8;
     --list-background: #2b2b2b;
     --list-border: #444444;
@@ -35,6 +38,7 @@ body.dark-mode, body.dark-mode .page {
     --palette-blue-4: #000080;
     --splash-bgcolor-1: #006930;
     --splash-bgcolor-2: #001b7b;
+    --currency-input-color: #d8d8d8;
 }
 
 html,
@@ -221,6 +225,11 @@ form .input-guide {
     font-size: 24px;
 }
 
+.personal-area.page .callout.page .page-title {
+    font-weight: 500;
+    font-size: 22px;
+}
+
 .personal-area.page .body {
     margin-top: 25px;
 }
@@ -392,7 +401,7 @@ input.currency-input {
     font-weight: 600;
     font-size: 55px;
     width: 100%;
-    color: var(--palette-blue-1);
+    color: var(--currency-input-color);
     padding: .8rem 0px !important;
 }
 
@@ -401,7 +410,7 @@ input.currency-input:focus-visible {
 }
 
 input.currency-input:focus-visible::placeholder {
-    color: var(--palette-blue-1) !important;
+    color: var(--currency-input-color) !important;
 }
 
 #add-asset form label {
@@ -474,7 +483,6 @@ body.dark-mode input.currency-input::placeholder {
 #wallet .starred .cards>*>.favorite {
     padding: .8rem .6rem;
     border-radius: 0.25rem;
-    border: 1px solid var(--palette-blue-1);
     background-color: var(--palette-blue-2);
     color: #F5F5F5;
 }
@@ -535,11 +543,6 @@ body.dark-mode input.currency-input::placeholder {
 .personal-area.page #asset-detail {
     display: flex;
     justify-content: space-between;
-}
-
-.personal-area.page #asset-detail .page-title {
-    font-weight: 500;
-    font-size: 22px;
 }
 
 .personal-area.page #asset-detail .asset-balance {
@@ -647,3 +650,48 @@ body.dark-mode .btn-outline-danger {
     90% { transform: translateY(-1px) rotate(.5deg); }
     100% { transform: translateY(0px) rotate(0deg); }
   }*/
+
+#add-transaction .type-selector {
+    display: flex;
+    padding: 5px;
+    width: calc(100% + .8rem);
+    border: 1px solid var(--list-background);
+    background-color: var(--highlight-background);
+    border-radius: 50px;
+    margin-top: -5px;
+    margin-left: -.4rem;
+}
+#add-transaction .type-selector > .selector {
+    flex: 1 0 33.33%;
+    border-radius: 50px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    cursor: pointer;
+}
+#add-transaction .type-selector > .selector.active {
+    background-color: var(--palette-blue-3);
+    font-weight: 600;
+}
+#add-transaction .date-picker-button {
+    height: 50px;
+    width: 50px;
+    flex: 0 0 auto;
+    background-color: var(--highlight-background);
+    border: 1px solid var(--list-border);
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    cursor: pointer;
+}
+#add-transaction .date-picker-button > * {
+    transform: scale(1.2);
+}
+#add-transaction .form-label {
+    margin-bottom: .3rem;
+    font-size: 15px;
+}

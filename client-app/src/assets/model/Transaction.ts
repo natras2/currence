@@ -1,3 +1,7 @@
+import { IconType } from "react-icons";
+import { IoIosCash } from "react-icons/io";
+import { JsxElement } from "typescript";
+
 export enum TransactionType {
     EXPENCE = "static.transactiontype.expence",
     INCOME = "static.transactiontype.income",
@@ -8,12 +12,14 @@ export enum TransactionType {
 export type Category = {
     name: string;
     i18n_selector?: string;
+    icon?: IconType;
 }
 
 export const defaultIncomeCategories: Category[] = [
     {
         name: "Salary",
-        i18n_selector: "default.incomecategory.salary"
+        i18n_selector: "default.incomecategory.salary",
+        icon: IoIosCash
     },
     {
         name: "Business",
@@ -149,8 +155,9 @@ export default class Transaction {
     fromAssetId?: string[];
     toAssetId?: string[];
     associatedPendingsId?: string[];
+    notes?: string;
 
-    constructor(uid: string, date = new Date(), description: string, type: TransactionType, category: Category, amount: number, fromAssetId?: string[], toAssetId?: string[], associatedPendingsId?: string[], creationTime: number = new Date().getTime()) {
+    constructor(uid: string, date = new Date(), description: string, type: TransactionType, category: Category, amount: number, fromAssetId?: string[], toAssetId?: string[], associatedPendingsId?: string[], notes?: string, creationTime: number = new Date().getTime()) {
         this.uid = uid;
         this.date = date;
         this.description = description;
@@ -159,7 +166,8 @@ export default class Transaction {
         this.amount = amount;
         this.fromAssetId = fromAssetId;
         this.toAssetId = toAssetId;
-        this.associatedPendingsId = associatedPendingsId
+        this.associatedPendingsId = associatedPendingsId;
+        this.notes = notes;
         this.creationTime = creationTime;
     }
 }
@@ -177,12 +185,13 @@ export const transactionConverter = {
             fromAssetId: transaction.fromAssetId,
             toAssetId: transaction.toAssetId,
             associatedPendingsId: transaction.associatedPendingsId,
+            notes: transaction.notes,
             creationTime: transaction.creationTime
         };
     },
     fromFirestore: (snapshot: any, options: any) => {
         const data = snapshot.data(options);
-        const transaction = new Transaction(data.uid, data.date, data.description, data.type, data.category, data.amount, data.fromAssetId, data.toAssetId, data.associatedPendingsId, data.creationTime);
+        const transaction = new Transaction(data.uid, data.date, data.description, data.type, data.category, data.amount, data.fromAssetId, data.toAssetId, data.associatedPendingsId, data.notes, data.creationTime);
         transaction.id = snapshot.id;
         return transaction;
     }
