@@ -3,7 +3,7 @@ import { app, db } from "../../firebase/firebaseConfig";
 import Asset, { assetConverter } from "../model/Asset";
 import { DataContext } from "../../app/PersonalArea";
 import Controller from "./Controller";
-import { UpdateTotalBalance } from "./Users";
+import { UpdateTotalBalance } from "./UserController";
 
 export default class AssetsController extends Controller {
     constructor(context: DataContext) {

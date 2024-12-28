@@ -11,8 +11,10 @@
     --palette-blue-1: #000080;
     --palette-blue-2: #0052ff;
     --palette-blue-3: #01a0ff;
-    --palette-blue-4: #88e9ff;
+    --palette-blue-4: #77cdff;
     --palette-yellow: #ffda18;
+    --splash-bgcolor-1: #dfffed;
+    --splash-bgcolor-2: #c9f0ff;
 }
 html {
     --background: #ffffff;
@@ -27,10 +29,12 @@ body.dark-mode, body.dark-mode .page {
     --list-border: #444444;
     --nav-background: #242424;
     --nav-link-color: #6ea5dd;
-    --palette-blue-1: #88e9ff;
+    --palette-blue-1: #77cdff;
     --palette-blue-2: #01a0ff;
     --palette-blue-3: #0052ff;
     --palette-blue-4: #000080;
+    --splash-bgcolor-1: #006930;
+    --splash-bgcolor-2: #001b7b;
 }
 
 html,
@@ -81,7 +85,7 @@ body {
     right: 5%;
     width: 90%;
     height: 1px;
-    background-image: linear-gradient(to right, transparent, rgb(48, 49, 51), transparent);
+    background-image: linear-gradient(to right, transparent, var(--text-color), transparent);
 }
 
 .page {
@@ -235,7 +239,7 @@ form .input-guide {
     --a: 25deg;
     width: 100%;
     aspect-ratio: 1;
-    background: linear-gradient(50deg, #dfffed, #c9f0ff);
+    background: linear-gradient(50deg, var(--splash-bgcolor-1), var(--splash-bgcolor-2));
     border-radius: var(--r);
     --_m: 0 / calc(2* var(--r)) var(--r) no-repeat radial-gradient(50% 100% at bottom, #000 calc(100% - 1px), #0000);
     --_d: (var(--s) + var(--r))* cos(var(--a));
@@ -388,7 +392,7 @@ input.currency-input {
     font-weight: 600;
     font-size: 55px;
     width: 100%;
-    color: #000080;
+    color: var(--palette-blue-1);
     padding: .8rem 0px !important;
 }
 
@@ -397,12 +401,16 @@ input.currency-input:focus-visible {
 }
 
 input.currency-input:focus-visible::placeholder {
-    color: #000080;
+    color: var(--palette-blue-1) !important;
 }
 
-#AddAsset form label {
+#add-asset form label {
     font-size: 14px;
     margin-bottom: 4px;
+}
+
+body.dark-mode input.currency-input::placeholder {
+    color: #a4a4a4;
 }
 
 /*************** WALLET ****************/
@@ -420,7 +428,7 @@ input.currency-input:focus-visible::placeholder {
     overflow-x: scroll;
     width: calc(100% + 2.4rem);
     margin-left: -1.2rem;
-    padding: 0 1.2rem;
+    padding: 0 0.7rem;
 }
 
 #wallet .starred .cards::-webkit-scrollbar {
@@ -442,11 +450,12 @@ input.currency-input:focus-visible::placeholder {
 #wallet .starred .cards>*>.no-favorites {
     position: absolute;
     padding: 1rem;
+    padding-left: 1.5rem;
     border-radius: 0.25rem;
     display: flex;
     align-items: center;
     overflow: hidden;
-    width: 100% !important;
+    width: 103% !important;
 }
 #wallet .starred .cards>*>.no-favorites>.no-favorites-image {
     margin: -1rem;
@@ -475,34 +484,25 @@ input.currency-input:focus-visible::placeholder {
 }
 
 #wallet .assets-list .items {
-    width: calc(100% + 2.4rem);
-    margin-left: -1.2rem;
+    width: calc(100% + 1rem);
+    margin-left: -.5rem;
     margin-top: 10px;
-    border-radius: 0;
     overflow-y: scroll;
     height: calc(100vh - 2rem - 310px);
     padding-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 3px;
 }
-
 
 #wallet .assets-list .items::-webkit-scrollbar {
     display: none;
 }
-
-#wallet .assets-list .items>* {
-    display: block;
-    border-top: .5px solid;
+#wallet .assets-list .items.edit > .asset-wrapper {
+    animation: shake 1s;
+    animation-iteration-count: infinite;
 }
-#wallet .assets-list .items>*:last-child {
-    border-bottom: .5px solid;
-}
-#wallet .assets-list .items>.asset-wrapper,
-#wallet .assets-list .items>.asset-wrapper:last-child {
-    border-color: var(--list-border);
-}
-
 #wallet .assets-list .items>*>* {
-    border-radius: 0;
     height: 60px;
     line-height: unset;
 }
@@ -516,6 +516,8 @@ input.currency-input:focus-visible::placeholder {
     color:inherit;
     text-decoration: none;
     cursor: pointer;
+    border-radius: 5px;
+    /*box-shadow: 1px 1px 2px var(--list-border);*/
 }
 
 #wallet .assets-list .items>*>.asset .asset-name {
@@ -614,3 +616,34 @@ input.currency-input:focus-visible::placeholder {
         margin-left: -30px;
     }
 }
+
+body.dark-mode .btn-outline-danger {
+    --bs-btn-color: #f04d5d;
+    --bs-btn-border-color: #f04d5d;
+    --bs-btn-hover-color: #dadada;
+    --bs-btn-hover-bg: #f04d5d;
+    --bs-btn-hover-border-color: #f04d5d;
+    --bs-btn-focus-shadow-rgb: 220, 53, 69;
+    --bs-btn-active-color: #dadada;
+    --bs-btn-active-bg: #f04d5d;
+    --bs-btn-active-border-color: #f04d5d;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #f04d5d;
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: #f04d5d;
+    --bs-gradient: none;
+}
+
+/*@keyframes shake {
+    0% { transform: translateY(0px) rotate(0deg); }
+    10% { transform: translateY(-1px) rotate(-.5deg); }
+    20% { transform: translateY(0px) rotate(0deg); }
+    30% { transform: translateY(1px) rotate(.5deg); }
+    40% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-1px) rotate(-.5deg); }
+    60% { transform: translateY(0px) rotate(0deg); }
+    70% { transform: translateY(1px) rotate(.5deg); }
+    80% { transform: translateY(0px) rotate(0deg); }
+    90% { transform: translateY(-1px) rotate(.5deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+  }*/

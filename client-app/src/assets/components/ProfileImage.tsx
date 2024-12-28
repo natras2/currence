@@ -2,8 +2,9 @@
 import hash from 'string-hash'
 import color from 'tinycolor2'
 
-export default function ProfileImage(props: any) {
-    var { uid, firstLetters, dimension } = props;
+export default function ProfileImage({ user, dimension }: any) {
+    const uid = user.uid;
+    const firstLetters = user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0);
 
     const n = hash(uid);
     const c1 = color({ h: n % 360, s: 0.95, l: 0.5 });

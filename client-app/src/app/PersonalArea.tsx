@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import UserController, { GetUser } from "../assets/controllers/Users";
+import { useContext, useEffect, useState } from "react";
+import UserController, { GetUser } from "../assets/controllers/UserController";
 import { getAuth } from "firebase/auth";
 import { app } from "../firebase/firebaseConfig";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -15,13 +15,15 @@ import { MdGroupAdd } from "react-icons/md";
 import { MdPersonAddAlt1 } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import ProfileImage from "../assets/components/ProfileImage";
-import Skeleton from "react-loading-skeleton";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css'
 import Asset from "../assets/model/Asset";
 import Transaction from "../assets/model/Transaction";
 import User from "../assets/model/User";
-import AssetsController from "../assets/controllers/Assets";
+import AssetsController from "../assets/controllers/AssetsController";
 import { titleCase } from "../assets/libraries/Utils";
+import { ThemeContext } from "../App";
+import TransactionsController from "../assets/controllers/TransactionsController";
 
 export interface PersonalAreaContext {
     data: DataContext,
@@ -43,7 +45,7 @@ export interface DataContext {
 export interface ControllersContext {
     userController: UserController,
     assetsController: AssetsController,
-    transactionsController: AssetsController
+    transactionsController: TransactionsController,
 }
 
 function NavigationBar(props: any) {
@@ -134,14 +136,21 @@ function TopRightButtons(props: any) {
     ];
     const content = (isSkeleton)
         ? <Skeleton circle={true} width={props.dimension} height={props.dimension} />
-        : <Link to={"../settings"}><ProfileImage {...props} /></Link>;
+        : <Link to={"../settings"}><ProfileImage user={props.user} dimension={props.dimension} /></Link>;
 
     const icons = buttons.filter((button) => button.page.includes(props.page)).sort((a, b) => a.index - b.index);
 
     return (
         <>
             <div id="top-right-buttons" style={(isSkeleton) ? { marginTop: -4 } : {}}>
-                {(icons && icons.length > 0)
+                {(isSkeleton)
+                    ? <>
+                        <Skeleton circle={true} className="icon" width={props.dimension * 0.7} height={props.dimension * 0.7} />
+                        <Skeleton circle={true} className="icon" width={props.dimension * 0.7} height={props.dimension * 0.7} />
+                    </>
+                    : <></>
+                }
+                {(!props.firstAccess && (icons && icons.length > 0))
                     ? <>
                         {icons.map((icon, i) => {
                             return icon.link
@@ -168,6 +177,7 @@ export default function PersonalArea() {
     const [userProcessing, setUserProcessing] = useState(true);
     const [assetsProcessing, setAssetsProcessing] = useState(true);
     const [transactionsProcessing, setTransactionsProcessing] = useState(false);
+    const theme = useContext(ThemeContext);
 
     const data = {
         user: user,
@@ -184,14 +194,13 @@ export default function PersonalArea() {
     const controllers = {
         userController: new UserController(data),
         assetsController: new AssetsController(data),
-        transactionsController: new AssetsController(data)
+        transactionsController: new TransactionsController(data)
     } as ControllersContext;
 
     const navigate = useNavigate();
     const auth = getAuth(app);
 
-    useEffect (() => {
-        console.log("AAA");
+    useEffect(() => {
         setPage(titleCase(location.pathname.split("/")[1]));
     }, [location]);
 
@@ -235,7 +244,7 @@ export default function PersonalArea() {
                 const retrievedAssets = await controllers.assetsController.GetUserAssets();
                 console.log("Assets retrieved");
                 setAssets(retrievedAssets || []);
-            } 
+            }
             catch (error) {
                 console.error("An error occurred while retrieving the assets:", error);
             }
@@ -258,24 +267,50 @@ export default function PersonalArea() {
 
     return (
         <>
-            <div className='personal-area page'>
-                {(userProcessing || assetsProcessing || transactionsProcessing)
-                    ? <><Skeleton width={250} style={{marginTop: 3, height: 27}}/><TopRightButtons type="skeleton" dimension={35} /></>
-                    : (
-                        <>
-                            <TopRightButtons
-                                page={page}
-                                uid={user.uid}
-                                firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)}
-                                dimension={35}
-                                hiddenBalance={user.hiddenBalance}
-                                handleHiddenBalance={handleHiddenBalance}
-                            />
-                            <Outlet context={{ data, controllers }} />
-                        </>
-                    )}
-                <NavigationBar active={page} handler={changePageHandler} />
-            </div>
+            <SkeletonTheme
+                baseColor={(theme === 'light') ? '#ebebeb' : '#4a4a4a'}
+                highlightColor={(theme === 'light') ? '#f5f5f5' : '#5a5a5a'}
+            >
+                <div className='personal-area page'>
+                    {(userProcessing || assetsProcessing || transactionsProcessing)
+                        ? (
+                            <>
+                                <TopRightButtons type="skeleton" dimension={35} />
+                                <div style={{height: 'calc(100% - 90px)', overflow: 'hidden'}}>
+                                    <Skeleton width={150} style={{ marginTop: 3, height: 27 }} />
+                                    <Skeleton width={'100%'} style={{ marginTop: '1.5rem', height: 75 }} />
+                                    <Skeleton width={100} style={{ marginTop: 25, height: 20 }} />
+                                    <div className="d-flex gap-3 w-100">
+                                        <Skeleton containerClassName="w-50" style={{ marginTop: 15, height: 120 }} />
+                                        <Skeleton containerClassName="w-50" style={{ marginTop: 15, height: 120 }} />
+                                    </div>
+                                    <Skeleton width={100} style={{ marginTop: 25, marginBottom: 12, height: 20 }} />
+                                    <div className="d-flex flex-column gap-1 w-100">
+                                        <Skeleton containerClassName="w-100" style={{ height: 60 }} />
+                                        <Skeleton containerClassName="w-100" style={{ height: 60 }} />
+                                        <Skeleton containerClassName="w-100" style={{ height: 60 }} />
+                                        <Skeleton containerClassName="w-100" style={{ height: 60 }} />
+                                        <Skeleton containerClassName="w-100" style={{ height: 60 }} />
+                                    </div>
+                                </div>
+                            </>
+                        )
+                        : (
+                            <>
+                                <TopRightButtons
+                                    page={page}
+                                    user={user}
+                                    dimension={35}
+                                    hiddenBalance={user.hiddenBalance}
+                                    firstAccess={user.firstAccess}
+                                    handleHiddenBalance={handleHiddenBalance}
+                                />
+                                <Outlet context={{ data, controllers }} />
+                            </>
+                        )}
+                    <NavigationBar active={page} handler={changePageHandler} />
+                </div>
+            </SkeletonTheme>
         </>
     );
 }

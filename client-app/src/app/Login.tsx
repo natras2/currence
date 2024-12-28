@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { encryptPassword } from "../assets/libraries/Utils";
 import Loader from "../assets/components/Loader";
 import InputField from "../assets/components/InputField";
 import { SignInWithEmail, SignOut } from "../assets/controllers/Auth";
+import { ThemeContext } from "../App";
 
 export function PasswordForgotten() {
     return <></>;
 }
 
 export function Logout() {
+    const theme = useContext(ThemeContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,7 +22,7 @@ export function Logout() {
         logoutUser();
     }, [navigate]);
 
-    return <Loader selector='login'/>;
+    return <Loader theme={theme} selector='login'/>;
     
 }
 
@@ -30,6 +32,7 @@ export default function Login() {
         password: '',
     });
     const [processing, setProcessing] = useState(false);
+    const theme = useContext(ThemeContext);
 
     const navigate = useNavigate();
 
@@ -101,7 +104,7 @@ export default function Login() {
                 </form>
             </div>
             {processing && 
-            <Loader selector='login'/>
+            <Loader theme={theme} selector='login'/>
             }
         </>
     );;

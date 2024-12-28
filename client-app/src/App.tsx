@@ -15,6 +15,7 @@ import Wallet from './app/PersonalArea/Wallet';
 import Evener from './app/PersonalArea/Evener';
 import Stats from './app/PersonalArea/Stats';
 import { createContext, useEffect, useState } from 'react';
+import AddTransaction from './app/PersonalArea/Transactions/AddTransaction';
 
 export const ThemeContext = createContext('light');
 
@@ -90,7 +91,10 @@ function App() {
 
                     <Route element={<PersonalArea />} >
                         <Route path='dashboard' element={<Dashboard />} />
-                        <Route path='transactions' element={<Transactions />} />
+                        <Route path='transactions'>
+                            <Route index element={<Transactions />} />
+                            <Route path='create' element={<AddTransaction />} />
+                        </Route> 
                         <Route path='wallet'>
                             <Route index element={<Wallet />} />
                             <Route path='create' element={<AddAsset />} />

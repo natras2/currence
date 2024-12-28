@@ -1,63 +1,30 @@
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { PersonalAreaContext } from "../../PersonalArea";
+import { useContext, useState } from "react";
+import { ThemeContext } from "../../../App";
+import { capitalize } from "../../../assets/libraries/Utils";
+import Transaction, { Category, TransactionType } from "../../../assets/model/Transaction";
+import User from "../../../assets/model/User";
 import CurrencyInput from "react-currency-input-field";
 import { BackButton } from "../../../assets/components/Utils";
-import { useNavigate, useOutletContext } from "react-router-dom";
-import { useContext, useState } from "react";
-import Asset from "../../../assets/model/Asset";
 import InputField from "../../../assets/components/InputField";
-import { capitalize } from "../../../assets/libraries/Utils";
 import Loader from "../../../assets/components/Loader";
-import { PersonalAreaContext } from "../../PersonalArea";
-import User from "../../../assets/model/User";
-import { ThemeContext } from "../../../App";
 
-/*
-const NumericInputWithDotAsComma = () => {
-    const [value, setValue] = useState('');
-
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === '.') {
-            if (!value.includes(","))
-                setValue(value + ",");
-        }
-    };
-
-    return (
-        <CurrencyInput
-            className="currency-input"
-            id="new-asset-balance"
-            autoComplete="off"
-            name="new-asset-balance"
-            placeholder="€ 0,00"
-            prefix="€ "
-            required
-            value={ }
-            decimalsLimit={2}
-            decimalSeparator=","
-            groupSeparator="."
-            allowNegativeValue={false}
-            disableAbbreviations={true}
-            onKeyDown={(e) => handleKeyDown(e)} // Intercept keypress events
-            onValueChange={(value) => { setValue((value as unknown) as string) }}
-        />
-    );
-};
-*/
-
-
-/* eslint-disable */
-export default function AddAsset() {
+export default function AddTransaction() {
     const { data, controllers } = useOutletContext<PersonalAreaContext>();
+    const theme = useContext(ThemeContext);
+    const [processing, setProcessing] = useState(false);
+
+    const [formData, setFormData] = useState({
+        "new-transaction-type": TransactionType.EXPENCE,
+        "new-transaction-category": {name: ''} as Category,
+        "new-transaction-name": '',
+        "new-transaction-description": '',
+        "new-transaction-amount": '',
+        "new-transaction-date": undefined,
+    });
 
     const user: User = data.user;
-    const [processing, setProcessing] = useState(false);
-    const [formData, setFormData] = useState({
-        "new-asset-name": '',
-        "new-asset-description": '',
-        "new-asset-balance": ''
-    });
-    const theme = useContext(ThemeContext);
-    //const [char, setChar] = useState<any>(null);
-
     const navigate = useNavigate();
 
     const backHandler = () => {
@@ -72,9 +39,6 @@ export default function AddAsset() {
                 [name]: value
             }));
         }
-
-        //if (value && name == "new-asset-balance") console.log(parseFloat(value.replace(',', '.')));
-        
     }
 
     const handleSubmit = async (e: any) => {
@@ -86,26 +50,32 @@ export default function AddAsset() {
         // Set the name data field
         setFormData(prevState => ({
             ...prevState,
-            "new-asset-name": capitalize(formData["new-asset-name"].trim())
+            "new-transaction-name": capitalize(formData["new-transaction-name"].trim())
         }));
 
         // Check if any of the required field is empty
-        if (!formData["new-asset-name"] || !formData["new-asset-balance"]) {
+        if (!formData["new-transaction-name"] || !formData["new-transaction-amount"]) {
             setProcessing(false);
             console.error("Empty required fields");
             return;
         }
 
-        const asset = new Asset(user.uid, formData["new-asset-name"], formData["new-asset-description"], (parseFloat(formData["new-asset-balance"].replace(',', '.'))));
+        const transaction = new Transaction(
+            user.uid, 
+            formData["new-transaction-date"], 
+            formData["new-transaction-description"], 
+            formData["new-transaction-type"], 
+            formData["new-transaction-category"], 
+            (parseFloat(formData["new-transaction-amount"].replace(',', '.'))));
 
-        // Add the new asset to Firestore
-        var result = await controllers.assetsController.CreateAsset(asset);
+        // Add the new transaction to Firestore
+        var result = await controllers.transactionsController.CreateTransaction(transaction);
         if (result) {
             navigate(-1)
         }
         else {
             setProcessing(false);
-            console.error("Error while creating the asset");
+            console.error("Error while creating the transaction");
             return;
             //error handling
         }
@@ -114,20 +84,20 @@ export default function AddAsset() {
     const handleKeyDown = (event: React.KeyboardEvent) => {
         //setChar(event.key + " - " + event.code + " | " + event.altKey + " - " + event.ctrlKey + " - " + event.metaKey + " | " + event.which);
         if (event.key === '.' || event.key == "Unidentified") {
-            if (formData["new-asset-balance"] && !formData["new-asset-balance"].includes(",")) {
+            if (formData["new-transaction-amount"] && !formData["new-transaction-amount"].includes(",")) {
                 setFormData(prevState => ({
                     ...prevState,
-                    "new-asset-balance": formData["new-asset-balance"] + ","
+                    "new-transaction-amount": formData["new-transaction-amount"] + ","
                 }));
             }
         }
     };
 
     const handleOnBlur = (event: React.FocusEvent) => {
-        if (formData["new-asset-balance"] && formData["new-asset-balance"].charAt(formData["new-asset-balance"].length - 1) === ",") {
+        if (formData["new-transaction-amount"] && formData["new-transaction-amount"].charAt(formData["new-transaction-amount"].length - 1) === ",") {
             setFormData(prevState => ({
                 ...prevState,
-                "new-asset-balance": formData["new-asset-balance"] + "00"
+                "new-transaction-amount": formData["new-transaction-amount"] + "00"
             }));
         }
 
@@ -136,23 +106,23 @@ export default function AddAsset() {
 
     return (
         <>
-            <div id="add-asset" className="callout page">
+            <div id="add-transaction" className="callout page">
                 <form onSubmit={handleSubmit} className="h-100 d-flex flex-column justify-content-between">
                     <div>
                         <div className="d-flex gap-3 mb-5">
                             <BackButton handler={backHandler} />
-                            <div className="page-title" style={{ marginTop: -.5 }}>New asset</div>
+                            <div className="page-title" style={{ marginTop: -.5 }}>New transaction</div>
                         </div>
                         {/*<div>Here: {char}</div>*/}
                         <CurrencyInput
                             className="currency-input"
-                            id="new-asset-balance"
+                            id="new-transaction-amount"
                             autoComplete="off"
-                            name="new-asset-balance"
+                            name="new-transaction-amount"
                             placeholder="€ 0,00"
                             prefix="€ "
                             required
-                            value={formData["new-asset-balance"]}
+                            value={formData["new-transaction-amount"]}
                             decimalsLimit={2}
                             decimalSeparator=","
                             groupSeparator="."
@@ -160,18 +130,18 @@ export default function AddAsset() {
                             disableAbbreviations={true}
                             onKeyDown={(e) => handleKeyDown(e)} // Intercept keypress events
                             onBlur={(e) => handleOnBlur(e)}
-                            onValueChange={(value) => { handleChange({ target: { value: (value as unknown) as string, name: "new-asset-balance" } }) }}
+                            onValueChange={(value) => { handleChange({ target: { value: (value as unknown) as string, name: "new-transaction-amount" } }) }}
                         />
                     </div>
                     <div>
                         <div className="mb-3">
                             <label className="form-label">Asset name</label>
-                            <InputField type="text" placeholder='e.g. "Revolut"' name="new-asset-name" handleChange={handleChange} isRegistering='false' value={formData["new-asset-name"]} />
-                            {/*<input type="text" className="form-control" name="new-asset-name" placeholder={'e.g. "Revolut"'} autoComplete="off" required />*/}
+                            <InputField type="text" placeholder='e.g. "Revolut"' name="new-transaction-name" handleChange={handleChange} isRegistering='false' value={formData["new-transaction-name"]} />
+                            {/*<input type="text" className="form-control" name="new-transaction-name" placeholder={'e.g. "Revolut"'} autoComplete="off" required />*/}
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Description</label>
-                            <textarea className="form-control" name="new-asset-description" rows={3} placeholder="Optional" onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={formData["new-asset-description"]}></textarea>
+                            <textarea className="form-control" name="new-transaction-description" rows={3} placeholder="Optional" onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={formData["new-transaction-description"]}></textarea>
                         </div>
                         <button type='submit' className="btn w-100 border fw-bold text-center btn-primary rounded-pill shadow-sm align-items-center" style={{ padding: "1rem 0" }}>
                             Create

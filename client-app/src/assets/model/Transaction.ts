@@ -150,17 +150,17 @@ export default class Transaction {
     toAssetId?: string[];
     associatedPendingsId?: string[];
 
-    constructor(uid: string, date = new Date(), description: string, type: TransactionType, category: Category, amount: number, creationTime: number = new Date().getTime(), fromAssetId?: string[], toAssetId?: string[], associatedPendingsId?: string[]) {
+    constructor(uid: string, date = new Date(), description: string, type: TransactionType, category: Category, amount: number, fromAssetId?: string[], toAssetId?: string[], associatedPendingsId?: string[], creationTime: number = new Date().getTime()) {
         this.uid = uid;
         this.date = date;
         this.description = description;
         this.type = type;
         this.category = category;
         this.amount = amount;
-        this.creationTime = creationTime;
         this.fromAssetId = fromAssetId;
         this.toAssetId = toAssetId;
         this.associatedPendingsId = associatedPendingsId
+        this.creationTime = creationTime;
     }
 }
 
@@ -174,15 +174,15 @@ export const transactionConverter = {
             type: transaction.type,
             category: transaction.category,
             amount: transaction.amount,
-            creationTime: transaction.creationTime,
             fromAssetId: transaction.fromAssetId,
             toAssetId: transaction.toAssetId,
-            associatedPendingsId: transaction.associatedPendingsId
+            associatedPendingsId: transaction.associatedPendingsId,
+            creationTime: transaction.creationTime
         };
     },
     fromFirestore: (snapshot: any, options: any) => {
         const data = snapshot.data(options);
-        const transaction = new Transaction(data.uid, data.date, data.description, data.type, data.category, data.amount, data.creationTime, data.fromAssetId, data.toAssetId, data.associatedPendingsId);
+        const transaction = new Transaction(data.uid, data.date, data.description, data.type, data.category, data.amount, data.fromAssetId, data.toAssetId, data.associatedPendingsId, data.creationTime);
         transaction.id = snapshot.id;
         return transaction;
     }

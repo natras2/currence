@@ -29,9 +29,9 @@ export default function Settings(props: any) {
                     : (
                         <>
                             <div className="settings-header">
-                                <ProfileImage uid={user.uid} firstLetters={user.fullName.charAt(0) + user.fullName.split(" ")[1].charAt(0)} dimension="115" />
+                                <ProfileImage user={user} dimension="115" />
                                 <h1>{user.fullName}</h1>
-                                <div className="text-secondary fw-normal fs-5 mb-4" style={{marginTop: -20}}>{user.email}</div>
+                                <div className={`${(theme === "dark") ? "text-white-50" : "text-secondary"} fw-normal fs-5 mb-4`} style={{marginTop: -20}}>{user.email}</div>
                             </div>
                             <>{(theme === "dark")
                                 ? <div className="btn w-100 btn-lg btn-light" onClick={() => props.changeTheme(true)}><small><BiSun /> Light theme</small></div>

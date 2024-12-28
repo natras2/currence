@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import InputField from '../assets/components/InputField';
 import { capitalize, checkPassword, encryptPassword } from '../assets/libraries/Utils';
 import Loader from '../assets/components/Loader';
-import { CreateNewUser } from '../assets/controllers/Users';
+import { CreateNewUser } from '../assets/controllers/UserController';
+import { ThemeContext } from '../App';
 
 function Header(props: any) {
     return (
@@ -66,6 +67,7 @@ export default function Signup() {
     });
     const [step, setStep] = useState(1);
     const [processing, setProcessing] = useState(false);
+    const theme = useContext(ThemeContext);
 
     const navigate = useNavigate();
     
@@ -143,7 +145,7 @@ export default function Signup() {
                     }
                 </form>
             </div>
-            {processing && <Loader selector="login" />}
+            {processing && <Loader theme={theme} selector="login" />}
         </>
     );
 }

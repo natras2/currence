@@ -130,7 +130,7 @@ function LandingPage() {
                 </div>
             </div>
             {processing &&
-                <Loader selector='app' />
+                <Loader theme={theme} selector='app' />
             }
         </>
     );

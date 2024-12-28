@@ -105,13 +105,10 @@ export default function Wallet() {
                                     <div className="assets-list">
                                         <div className="label">My assets</div>
                                         <div className="items">
-                                            {(processing)
-                                                ? <><Skeleton /><Skeleton /></>
-                                                : <>{
-                                                    assets.map((asset, i) => {
-                                                        return <AssetListItem key={i} data={data} controllers={controllers} asset={asset} />;
-                                                    })
-                                                }</>
+                                            {
+                                                assets.map((asset, i) => {
+                                                    return <AssetListItem key={i} data={data} controllers={controllers} asset={asset} />;
+                                                })
                                             }
                                         </div>
                                     </div>
@@ -122,7 +119,7 @@ export default function Wallet() {
                             <>
                                 <h3 className="page-title">Wallet</h3>
                                 <div className="empty-content mt-5">
-                                    <div className="title fs-1 fw-bolder text-black-50">Hey! It seems like there's nothing to show here</div>
+                                    <div className={`title fs-1 fw-bolder ${(theme === "dark") ? "text-white-50" : "text-black-50" }`}>Hey! It seems like there's nothing to show here</div>
                                     <Link to={"./create"} className="btn border btn-primary rounded-4 shadow-sm btn-lg px-3 py-3 w-100 d-flex gap-3 justify-content-center mt-3">
                                         <FaPlus style={{ marginTop: 3 }} />
                                         <div className='small text-center'>Add your first asset</div>

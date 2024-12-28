@@ -1,9 +1,13 @@
 import illustration from '../../assets/images/illustrations/splash-first-access.svg'
+import darkIllustration from '../../assets/images/illustrations/splash-first-access_dark.svg'
 import { FaPlus } from "react-icons/fa6";
 import Emoji from './Emoji';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { ThemeContext } from '../../App';
 
 export function SplashFirstAccess(props: any) {
+    const theme = useContext(ThemeContext);
     /*const [showAssetPage, setShowAssetPage] = useState(false);
 
     const showNewAssetPage = () => {
@@ -22,7 +26,7 @@ export function SplashFirstAccess(props: any) {
         <>
             <div id="splash-first-access-illustration">
                 <img
-                    src={illustration}
+                    src={(theme === "dark") ? darkIllustration : illustration}
                     className='illustration'
                     alt='welcome to currence'
                     width='100%'
