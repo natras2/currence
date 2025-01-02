@@ -1,6 +1,4 @@
-import { IconType } from "react-icons";
 import { IoIosCash } from "react-icons/io";
-import { JsxElement } from "typescript";
 
 export enum TransactionType {
     EXPENCE = "static.transactiontype.expence",
@@ -12,14 +10,14 @@ export enum TransactionType {
 export type Category = {
     name: string;
     i18n_selector?: string;
-    icon?: IconType;
+    icon?: string;
 }
 
 export const defaultIncomeCategories: Category[] = [
     {
         name: "Salary",
         i18n_selector: "default.incomecategory.salary",
-        icon: IoIosCash
+        icon: IoIosCash.toString()
     },
     {
         name: "Business",
