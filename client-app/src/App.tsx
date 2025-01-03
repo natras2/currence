@@ -16,12 +16,29 @@ import Evener from './app/PersonalArea/Evener';
 import Stats from './app/PersonalArea/Stats';
 import { createContext, useEffect, useState } from 'react';
 import AddTransaction from './app/PersonalArea/Transactions/AddTransaction';
+import { useTranslation } from 'react-i18next';
+import { i18n as I18nType, TFunction } from 'i18next';
+import i18n from './i18nConfig';
 
 export const ThemeContext = createContext('light');
+export const TranslationContext = createContext({} as any);
+
+export interface TranslationContextType {
+    t: any,
+    i18n: any
+}
 
 function App() {
     const [theme, setTheme] = useState<string>('light');
+    const [translationContext, setTranslationContext] = useState<TranslationContextType>();
     const [toggleTheme, setToggleTheme] = useState(false);
+
+    const {t, i18n} = useTranslation();
+
+    useEffect(() => {
+        setTranslationContext({t, i18n});
+    }, [])
+    
 
     useEffect(() => {
         const cachedThemePreference = localStorage.getItem("preferredTheme");
@@ -77,6 +94,7 @@ function App() {
     }
 
     return (
+        <TranslationContext.Provider value={translationContext}>
         <ThemeContext.Provider value={theme}>
             <Router>
                 <Routes>
@@ -110,6 +128,7 @@ function App() {
                 </Routes>
             </Router>
         </ThemeContext.Provider>
+        </TranslationContext.Provider>
     );
 }
 

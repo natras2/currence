@@ -176,7 +176,7 @@ export default function PersonalArea() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [userProcessing, setUserProcessing] = useState(true);
     const [assetsProcessing, setAssetsProcessing] = useState(true);
-    const [transactionsProcessing, setTransactionsProcessing] = useState(false);
+    const [transactionsProcessing, setTransactionsProcessing] = useState(true);
     const theme = useContext(ThemeContext);
 
     const data = {
@@ -251,7 +251,22 @@ export default function PersonalArea() {
         // Cleanup assets listener
         return () => unsubscribeAssets();
     }, [user?.uid]); // Depend only on user.uid
+
+    useEffect(() => {
+        if (!user) return; // Only start listening for transactions when the user is available
     
+        const unsubscribeTransactions = controllers.transactionsController.ListenForTransactionUpdates(
+            user.uid,
+            (updatedTransactions) => {
+                console.log("Updated transactions")
+                setTransactions(updatedTransactions);
+                setTransactionsProcessing(false);
+            }
+        );
+    
+        // Cleanup transactions listener
+        return () => unsubscribeTransactions();
+    }, [user?.uid]); // Depend only on user.uid
 
 
     const changePageHandler = (target: string) => {

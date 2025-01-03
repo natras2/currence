@@ -1,0 +1,13 @@
+{
+    "static": {
+        "assetType": {
+            "cash": "Contanti",
+            "bankaccount": "Conti correnti e depositi bancari",
+            "ewallet": "e-Wallets e metodi di pagamento elettronici",
+            "other": "Altro"
+        },
+        "transactionType": {
+
+        }
+    }
+}
