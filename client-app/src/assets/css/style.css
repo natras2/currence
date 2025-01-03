@@ -5,6 +5,7 @@
     --background: #fdfdfd;
     --highlight-background: #ffffff;
     --text-color: #212529;
+    --highlight-text: #000000;
     --list-background: #ffffff;
     --list-border: #dfdfdf;
     --nav-background: #f5f5f5;
@@ -17,6 +18,7 @@
     --splash-bgcolor-1: #dfffed;
     --splash-bgcolor-2: #c9f0ff;
     --currency-input-color: #000080;
+    --list-dropdown-background: #ffffff; 
 }
 html {
     --background: #ffffff;
@@ -28,6 +30,7 @@ body.dark-mode, body.dark-mode .page {
     --background: #333333;
     --highlight-background: #212529;
     --text-color: #d8d8d8;
+    --highlight-text: #ffffff;
     --list-background: #2b2b2b;
     --list-border: #444444;
     --nav-background: #242424;
@@ -39,6 +42,7 @@ body.dark-mode, body.dark-mode .page {
     --splash-bgcolor-1: #006930;
     --splash-bgcolor-2: #001b7b;
     --currency-input-color: #d8d8d8;
+    --list-dropdown-background: #000000; 
 }
 
 html,
@@ -413,9 +417,10 @@ input.currency-input:focus-visible::placeholder {
     color: var(--currency-input-color) !important;
 }
 
-#add-asset form label {
+#add-asset form label,
+#add-transaction form label {
     font-size: 14px;
-    margin-bottom: 4px;
+    margin-bottom: .3rem;
 }
 
 body.dark-mode input.currency-input::placeholder {
@@ -691,7 +696,45 @@ body.dark-mode .btn-outline-danger {
 #add-transaction .date-picker-button > * {
     transform: scale(1.2);
 }
-#add-transaction .form-label {
-    margin-bottom: .3rem;
-    font-size: 15px;
+
+
+mark, .mark {
+    font-weight: 700;
+    color: var(--highlight-text);
+    padding: unset;
+    background: unset;
+}
+.rbt-input-hint {
+    color: var(--highlight-text) !important;
+}
+#add-asset .asset-name-autocomplete-image {
+    background: #ffffff;
+    border-radius: 50%;
+    padding: 3px;
+    height: 32px;
+    width: 32px;
+    margin-right: 10px
+}
+#add-asset .rbt > input.form-control {
+    position: relative;
+    z-index: 40;
+}
+#add-asset #asset-name-autocomplete {
+    margin-top: -8px;
+    padding-top: calc(0.5rem + 8px);
+    z-index: 30;
+    background-color: var(--list-dropdown-background);
+}
+#add-asset #asset-name-autocomplete:not(:has(> a[id^="asset-name-autocomplete-item"])) {
+    display: none !important;
+}
+#add-asset .asset-type-detail {
+    background-color: #ffd81854;
+    border-radius: var(--bs-border-radius);
+}
+#add-asset .asset-type-detail .rbt > .selected.asset-name-autocomplete-image {
+    position: absolute;
+    right:0;
+    top:10px;
+    z-index: 50;
 }

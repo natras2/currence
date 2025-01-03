@@ -1,3 +1,10 @@
+export enum AssetType {
+    CASH = "static.assetType.cash",
+    BANKACCOUNT = "static.assetType.bankaccount",
+    EWALLET = "static.assetType.ewallet",
+    OTHER = "static.assetType.other",
+}
+
 export default class Asset {
     id?: string;
     uid: string;
