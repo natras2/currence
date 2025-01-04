@@ -1,7 +1,7 @@
 {
     "static": {
         "assetType": {
-            "cash": "Contanti",
+            "cash": "Contanti e metodi di pagamento tradizionali",
             "bankaccount": "Conti correnti e depositi bancari",
             "ewallet": "e-Wallets e metodi di pagamento elettronici",
             "other": "Altro"

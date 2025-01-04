@@ -5,19 +5,27 @@ export enum AssetType {
     OTHER = "static.assetType.other",
 }
 
+export interface AssetAttributes {
+    sourceName: string,
+    type: AssetType,
+    logo: string
+}
+
 export default class Asset {
     id?: string;
     uid: string;
     name: string;
+    attributes: AssetAttributes;
     description: string;
     starred: boolean;
     balance: number;
     hiddenFromTotal: boolean;
     creationTime: number;
     
-    constructor(uid: string, name:string, description: string, balance: number, starred: boolean = false, hiddenFromTotal: boolean = false, creationTime: number = new Date().getTime()) {
+    constructor(uid: string, name:string, attributes: AssetAttributes, description: string, balance: number, starred: boolean = false, hiddenFromTotal: boolean = false, creationTime: number = new Date().getTime()) {
         this.uid = uid;
         this.name = name;
+        this.attributes = attributes;
         this.description = description;
         this.starred = starred;
         this.balance = balance;
@@ -31,6 +39,7 @@ export const assetConverter = {
         return {
             uid: asset.uid,
             name: asset.name,
+            attributes: asset.attributes,
             description: asset.description,
             starred: asset.starred,
             balance: asset.balance,
@@ -40,7 +49,7 @@ export const assetConverter = {
     },
     fromFirestore: (snapshot: any, options: any) => {
         const data = snapshot.data(options);
-        const asset = new Asset(data.uid, data.name, data.description, data.balance, data.starred, data.hiddenFromTotal, data.creationTime);
+        const asset = new Asset(data.uid, data.name, data.attributes, data.description, data.balance, data.starred, data.hiddenFromTotal, data.creationTime);
         asset.id = snapshot.id;
         return asset;
     }

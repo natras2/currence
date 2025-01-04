@@ -1,8 +1,8 @@
 import CurrencyInput from "react-currency-input-field";
 import { BackButton } from "../../../assets/components/Utils";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { ChangeEvent, useContext, useState } from "react";
-import Asset, { AssetType } from "../../../assets/model/Asset";
+import { ChangeEvent, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import Asset, { AssetAttributes, AssetType } from "../../../assets/model/Asset";
 import InputField from "../../../assets/components/InputField";
 import { capitalize } from "../../../assets/libraries/Utils";
 import Loader from "../../../assets/components/Loader";
@@ -13,6 +13,12 @@ import { Highlighter, Typeahead } from "react-bootstrap-typeahead";
 import italianBanks from "../../../assets/libraries/italianBanks.json"
 import { FilterByCallback, LabelKey, SelectHint } from "react-bootstrap-typeahead/types/types";
 import { IoClose } from "react-icons/io5";
+import { HiMiniBanknotes } from "react-icons/hi2";
+import { GrMoney } from "react-icons/gr";
+import { BsCashCoin } from "react-icons/bs";
+import { MdOutlinePayments } from "react-icons/md";
+import { RiSecurePaymentFill } from "react-icons/ri";
+
 
 /*
 const NumericInputWithDotAsComma = () => {
@@ -47,6 +53,94 @@ const NumericInputWithDotAsComma = () => {
 };
 */
 
+interface Option {
+    name: string;
+    fullname?: string;
+    country?: string;
+    abi?: string;
+    logo?: string;
+    type: string;
+}
+
+function AssetTypeSelector({ setAssetType, setIsSelectingAssetType, setDisplayAssetTypeSelector }: {
+    setAssetType: Dispatch<SetStateAction<Option | undefined>>
+    setIsSelectingAssetType: Dispatch<SetStateAction<boolean>>
+    setDisplayAssetTypeSelector: Dispatch<SetStateAction<boolean>>
+}) {
+    const [selectedType, setSelectedType] = useState<Option>();
+    const i18n: TranslationContextType = useContext(TranslationContext);
+
+    const backHandler = () => {
+        setIsSelectingAssetType(false);
+    }
+
+    const types = [
+        {
+            id: 0,
+            selector: AssetType.BANKACCOUNT,
+            icon: <RiSecurePaymentFill />
+        },
+        {
+            id: 1,
+            selector: AssetType.CASH,
+            icon: <BsCashCoin />
+        },
+        {
+            id: 2,
+            selector: AssetType.EWALLET,
+            icon: <MdOutlinePayments />
+        },
+        {
+            id: 3,
+            selector: AssetType.OTHER,
+            icon: <GrMoney />
+        }
+    ]
+
+    const handleSelectType = (selector: AssetType, icon: any) => {
+        setSelectedType({
+            name: "",
+            type: selector,
+            logo: icon
+        } as Option)
+    }
+
+    const handleConfirmType = (event: any) => {
+        if (selectedType) {
+            setAssetType(selectedType)
+            setIsSelectingAssetType(false);
+            setDisplayAssetTypeSelector(false);
+        }
+    }
+
+    return (
+        <>
+            <div id="select-asset-type" className="callout page sub">
+                <div className="h-100 d-flex flex-column">
+                    <div className="d-flex justify-content-between">
+                        <BackButton close handler={backHandler} />
+                        <div className="page-title" style={{ marginTop: 1 }}>Select asset type</div>
+                        <div style={{ width: "31px" }}></div>
+                    </div>
+                    <div className="body">
+                        <div className={`asset-type-list ${(selectedType) ? "selected" : ""}`}>
+                            {(types.map(type => {
+                                return <div key={type.id} onClick={() => handleSelectType(type.selector, type.icon)} className={`asset-type ${(selectedType?.type === type.selector) ? "active" : ""}`}>
+                                    <div className="asset-type-icon">{type.icon}</div>
+                                    <div className="asset-type-name">{i18n.t(type.selector)}</div>
+                                </div>
+                            }))}
+                        </div>
+                    </div>
+                </div>
+                <button className={`btn w-100 fw-bold text-center rounded-pill btn-outline-warning shadow-sm align-items-center ${(!selectedType) ? " disabled": ""}`} onClick={handleConfirmType} style={{ padding: "1rem 0" }}>
+                    Confirm
+                </button>
+            </div>
+        </>
+    );
+}
+
 /* eslint-disable */
 export default function AddAsset() {
     const { data, controllers } = useOutletContext<PersonalAreaContext>();
@@ -60,17 +154,12 @@ export default function AddAsset() {
         "new-asset-balance": ''
     });
     const [assetType, setAssetType] = useState<Option>();
+    const [assetFocus, setAssetFocus] = useState(false);
+    const [displayAssetTypeSelector, setDisplayAssetTypeSelector] = useState(true);
+    const [isSelectingAssetType, setIsSelectingAssetType] = useState(false);
     const theme = useContext(ThemeContext);
     //const [char, setChar] = useState<any>(null);
 
-    interface Option {
-        name: string;
-        fullname?: string;
-        country: string;
-        abi?: string;
-        logo?: string;
-        type: string;
-    }
     const options: Option[] = italianBanks.filter((opt) => !!opt.fullname);
 
     const navigate = useNavigate();
@@ -99,8 +188,36 @@ export default function AddAsset() {
     const handleAssetNameSelection = (selected: Option[]) => {
         if (selected.length !== 0) {
             setAssetType(selected[0]);
+            setDisplayAssetTypeSelector(false);
         }
     }
+
+    function handleAssetNameBlur(event: any): void {
+        setAssetFocus(false);
+        setDisplayAssetTypeSelector((!assetType));
+    }
+
+    useEffect(() => {
+        if (!assetType)
+            setDisplayAssetTypeSelector(true);
+    }, [assetType])
+
+    useEffect(() => {
+        if (assetFocus) {
+            const assetTypeSelectorRef = document.getElementById("asset-type-selector");
+            const assetTypeSelectorTitleRef = document.getElementById("asset-type-selector-title");
+            setTimeout(() => {
+                if (assetTypeSelectorRef && assetTypeSelectorTitleRef) {
+                    assetTypeSelectorRef.style.width = "32px"
+                    assetTypeSelectorTitleRef.style.opacity = "0"
+                    setTimeout(() => {
+                        assetTypeSelectorTitleRef.style.display = "none"
+                    }, 800)
+                }
+            }, 500);
+        }
+
+    }, [assetFocus])
 
     const handleSubmit = async (e: any) => {
         setProcessing(true);
@@ -115,13 +232,20 @@ export default function AddAsset() {
         }));
 
         // Check if any of the required field is empty
-        if (!formData["new-asset-name"] || !formData["new-asset-balance"]) {
+        if (!assetType || !assetType.logo || !formData["new-asset-name"] || !formData["new-asset-balance"]) {
             setProcessing(false);
             console.error("Empty required fields");
             return;
         }
 
-        const asset = new Asset(user.uid, formData["new-asset-name"], formData["new-asset-description"], (parseFloat(formData["new-asset-balance"].replace(',', '.'))));
+        //Set the attributes of the asset
+        const attributes = {
+            sourceName: assetType.name,
+            type: assetType.type,
+            logo: assetType.logo
+        } as AssetAttributes;
+
+        const asset = new Asset(user.uid, formData["new-asset-name"], attributes, formData["new-asset-description"], (parseFloat(formData["new-asset-balance"].replace(',', '.'))));
 
         // Add the new asset to Firestore
         var result = await controllers.assetsController.CreateAsset(asset);
@@ -158,7 +282,6 @@ export default function AddAsset() {
 
     };
 
-
     return (
         <>
             <div id="add-asset" className="callout page">
@@ -166,7 +289,7 @@ export default function AddAsset() {
                     <div>
                         <div className="d-flex gap-3 mb-5">
                             <BackButton handler={backHandler} />
-                            <div className="page-title" style={{ marginTop: -.5 }}>New asset</div>
+                            <div className="page-title" style={{ marginTop: 1 }}>New asset</div>
                             <div style={{ width: "31px" }}></div>
                         </div>
                         {/*<div>Here: {char}</div>*/}
@@ -203,8 +326,11 @@ export default function AddAsset() {
                                     minLength={3}
                                     maxResults={2}
                                     maxHeight="220px"
-                                    open={(!assetType)}
+                                    align={"left"}
+                                    open={(!assetType) && assetFocus}
                                     onInputChange={handleAssetNameChange}
+                                    onBlur={handleAssetNameBlur}
+                                    onFocus={() => setAssetFocus(true)}
                                     renderMenuItemChildren={((option: Option, props: any) => (
                                         <div className="d-flex align-items-center">
                                             {option.logo && <img
@@ -215,7 +341,7 @@ export default function AddAsset() {
                                             }
                                             <div>
                                                 <Highlighter search={props.text}>{option.name}</Highlighter>
-                                                <div style={{fontSize: 13, marginTop: -3, fontWeight: 300}}>{i18n.t(option.type)}</div>
+                                                <div style={{ fontSize: 13, marginTop: -3, fontWeight: 300 }}>{i18n.t(option.type)}</div>
                                             </div>
                                         </div>
                                     )) as any}
@@ -246,22 +372,29 @@ export default function AddAsset() {
                                                 }}
                                                 value={formData["new-asset-name"]}
                                             />
-                                            {(assetType && assetType.logo) && <img
+                                            {(assetType && assetType.name.length > 0 && assetType.logo) && <img
                                                 alt={assetType.name}
                                                 src={assetType.logo}
                                                 className="asset-name-autocomplete-image selected"
                                             />
                                             }
+                                            {(assetType && assetType.name.length === 0 && assetType.logo) && <div id="asset-type-selector" className="selected">
+                                                <div id="asset-type-selector-icon">{assetType.logo}</div>
+                                            </div>}
                                         </>
                                     )}
                                     onChange={(handleAssetNameSelection as any)}
                                 />
                                 {assetType && <div className="py-1 px-3 d-flex justify-content-between align-items-center">
                                     <div>
-                                        <div className="pe-3" style={{ fontWeight: 700, marginBottom: -3 }}>{assetType.name}</div>
+                                        {(assetType.name && assetType.name.length > 0) && <div className="pe-3" style={{ fontWeight: 700, marginBottom: -3 }}>{assetType.name}</div>}
                                         <div className="small">{i18n.t(assetType.type)}</div>
                                     </div>
-                                    <IoClose style={{fontSize: 22, background: "#534b00", padding: 2, borderRadius: "50%", cursor: "pointer"}} onClick={() => setAssetType(undefined)}/>
+                                    <IoClose style={{ fontSize: 22, background: "#534b00", padding: 2, borderRadius: "50%", cursor: "pointer" }} onClick={() => setAssetType(undefined)} />
+                                </div>}
+                                {displayAssetTypeSelector && <div id="asset-type-selector" onClick={() => setIsSelectingAssetType(true)}>
+                                    <div id="asset-type-selector-title"><div style={{ textOverflow: "ellipsis" }}>Select asset type</div></div>
+                                    <div id="asset-type-selector-icon"><HiMiniBanknotes /></div>
                                 </div>}
                             </div>
                         </div>
@@ -274,6 +407,7 @@ export default function AddAsset() {
                         </button>
                     </div>
                 </form>
+                {isSelectingAssetType && <AssetTypeSelector setAssetType={setAssetType} setIsSelectingAssetType={setIsSelectingAssetType} setDisplayAssetTypeSelector={setDisplayAssetTypeSelector}/>}
             </div>
             {processing && <Loader theme={theme} selector="login" />}
         </>

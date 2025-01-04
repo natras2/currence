@@ -5,6 +5,7 @@
     --background: #fdfdfd;
     --highlight-background: #ffffff;
     --text-color: #212529;
+    --inverse-text-color: #d8d8d8;
     --highlight-text: #000000;
     --list-background: #ffffff;
     --list-border: #dfdfdf;
@@ -30,6 +31,7 @@ body.dark-mode, body.dark-mode .page {
     --background: #333333;
     --highlight-background: #212529;
     --text-color: #d8d8d8;
+    --inverse-text-color: #212529;
     --highlight-text: #ffffff;
     --list-background: #2b2b2b;
     --list-border: #444444;
@@ -79,6 +81,21 @@ body {
     height: 100%;
 }
 
+.callout.page {
+    position: absolute;
+    width: 100%;
+    padding-top: 2rem;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+.callout.page.sub {
+    z-index: 2000;
+}
+.callout.page.subsub {
+    z-index: 3000;
+}
+
 .divider {
     position: relative;
     margin: 1rem 0;
@@ -120,15 +137,6 @@ form .input-guide {
     color: #d1a164;
     font-size: .9rem;
     margin-top: -3px;
-}
-
-.callout.page {
-    position: absolute;
-    width: 100%;
-    padding-top: 2rem;
-    top: 0;
-    left: 0;
-    z-index: 1000;
 }
 
 /********* NAVIGATION BAR **********/
@@ -713,7 +721,8 @@ mark, .mark {
     padding: 3px;
     height: 32px;
     width: 32px;
-    margin-right: 10px
+    margin-right: 10px;
+    object-fit: contain;
 }
 #add-asset .rbt > input.form-control {
     position: relative;
@@ -731,10 +740,120 @@ mark, .mark {
 #add-asset .asset-type-detail {
     background-color: #ffd81854;
     border-radius: var(--bs-border-radius);
+    position: relative;
 }
 #add-asset .asset-type-detail .rbt > .selected.asset-name-autocomplete-image {
     position: absolute;
     right:0;
     top:10px;
     z-index: 50;
+}
+
+#add-asset .asset-type-detail #asset-type-selector {
+    position: absolute;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    height: 32px;
+    padding: 3px 7px 3px 10px;
+    background: var(--palette-blue-1);
+    border-radius: 50px;
+    right: 13px;
+    top: 9px;
+    width: 144px;
+    justify-content: flex-end;
+    gap: 8px;
+    cursor: pointer;
+    transition: width ease-out .8s;
+    color: var(--inverse-text-color);
+}
+#add-asset .asset-type-detail #asset-type-selector.selected {
+    width:32px;
+    background: #ffd81854;
+    color: var(--text-color);
+}
+#add-asset .asset-type-detail #asset-type-selector > #asset-type-selector-title {
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 13px;
+    transition: opacity .8s;
+}
+#add-asset .asset-type-detail #asset-type-selector > #asset-type-selector-icon {
+    margin-top: -1px;
+    font-size: 18px;
+    flex: 0 0 auto;
+}
+
+body.dark-mode .btn-outline-warning {
+    --bs-btn-color: #c19100;
+    --bs-btn-border-color: #c19100;
+    --bs-btn-hover-color: #f3f3f3;
+    --bs-btn-hover-bg: #9a7300;
+    --bs-btn-hover-border-color: #9a7300;   
+    --bs-btn-focus-shadow-rgb: 255, 193, 7;
+    --bs-btn-active-color: #f3f3f3;
+    --bs-btn-active-bg: #9a7300;
+    --bs-btn-active-border-color: #9a7300;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #c19100;
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: #c19100;
+    --bs-gradient: none;
+}
+#add-asset #select-asset-type .asset-type-list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+#add-asset #select-asset-type .asset-type-list > .asset-type {
+    padding: 0 1.2rem 0 0;
+    background-color: var(--list-background);
+    display: flex;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 5px;
+    height: 57px;
+    gap:15px;
+    margin-left: 20px;
+    border-right-color: var(--list-background);
+    border-right-style: solid;
+    border-right-width: 5px;
+    transition: border-right-color .5s, background-color .5s;
+}
+#add-asset #select-asset-type .asset-type-list.selected > .asset-type.active {
+    border-right-color: #9a7300;
+    background-color: #474747;
+}
+
+#add-asset #select-asset-type .asset-type-list.selected > .asset-type:not(.active) > .asset-type-icon {
+    background-color: #1f1f1f;
+}
+#add-asset #select-asset-type .asset-type-list > .asset-type > .asset-type-name {
+    font-size: 15px;
+    line-height: 18px;
+    transition: font-weight .2s;
+}
+#add-asset #select-asset-type .asset-type-list > .asset-type.active > .asset-type-name {
+    font-weight: 600;
+}
+#add-asset #select-asset-type .asset-type-list > .asset-type > .asset-type-icon {
+    font-size: 25px;
+    background-color: #9a7300;
+    height: 62px;
+    width: 62px;
+    border-radius: 50%;
+    margin-left: -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    transition: background-color .2s;
+}
+#add-asset #select-asset-type .asset-type-list > .asset-type.active > .asset-type-icon {
+    background-color: #9a7300;
+}
+#add-asset #select-asset-type .asset-type-list > .asset-type:hover > .asset-type-icon {
+    background-color: #9a7300;
 }

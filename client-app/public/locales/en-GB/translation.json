@@ -1,9 +1,9 @@
 {
     "static": {
         "assetType": {
-            "cash": "Cash",
+            "cash": "Cash and traditional payment methods",
             "bankaccount": "Bank accounts and deposits",
-            "ewallet": "e-Wallets and electronic payment methods",
+            "ewallet": "Apps and digital payment methods",
             "other": "Other"
         },
         "transactionType": {
