@@ -1,0 +1,51 @@
+{
+    "static": {
+        "assetType": {
+            "cash": "Cash and traditional payment methods",
+            "bankaccount": "Bank accounts and deposits",
+            "ewallet": "Apps and digital payment methods",
+            "other": "General"
+        },
+        "transactiontype": {
+            "expence": "Expence",
+            "income": "Income",
+            "transfer": "Transfer",
+            "manageassets": "Manage assets"
+        }
+    },
+    "default": {
+        "incomecategory": {
+            "salary": "",
+            "business": "",
+            "investment": "",
+            "freelance": "",
+            "rent": "",
+            "dividend": "",
+            "interest": "",
+            "scholarship": "",
+            "refund": "",
+            "gift": "",
+            "benefit": "",
+            "creditmanagement": "",
+            "other": ""
+        },
+        "expensecategory": {
+            "housing": "",
+            "foodanddrink": "",
+            "transportation": "",
+            "insuranceandhealthcare": "",
+            "entertainmentandleisure": "",
+            "financial": "",
+            "education": "",
+            "personal": "",
+            "savingsandinvestments": "",
+            "childcareandfamily": "",
+            "professional": "",
+            "travelandvacations": "",
+            "subscriptionsandmemberships": "",
+            "giftsanddonations": "",
+            "debtmanagement": "",
+            "other": ""
+        }
+    }
+}
