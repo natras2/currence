@@ -1,7 +1,7 @@
 import CurrencyInput from "react-currency-input-field";
-import { BackButton } from "../../../assets/components/Utils";
+import GetIcon, { BackButton } from "../../../assets/components/Utils";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { ChangeEvent, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, ReactElement, SetStateAction, useContext, useEffect, useState } from "react";
 import Asset, { AssetAttributes, AssetType } from "../../../assets/model/Asset";
 import InputField from "../../../assets/components/InputField";
 import { capitalize } from "../../../assets/libraries/Utils";
@@ -18,6 +18,7 @@ import { GrMoney } from "react-icons/gr";
 import { BsCashCoin } from "react-icons/bs";
 import { MdOutlinePayments } from "react-icons/md";
 import { RiSecurePaymentFill } from "react-icons/ri";
+import { IconType } from "react-icons";
 
 
 /*
@@ -78,22 +79,38 @@ function AssetTypeSelector({ setAssetType, setIsSelectingAssetType, setDisplayAs
         {
             id: 0,
             selector: AssetType.BANKACCOUNT,
-            icon: <RiSecurePaymentFill />
+            icon: { 
+                jsx: <RiSecurePaymentFill />,
+                name: "RiSecurePaymentFill",
+                lib: "ri"
+            }
         },
         {
             id: 1,
             selector: AssetType.CASH,
-            icon: <BsCashCoin />
+            icon: { 
+                jsx: <BsCashCoin />,
+                name: "BsCashCoin",
+                lib: "bs"
+            }
         },
         {
             id: 2,
             selector: AssetType.EWALLET,
-            icon: <MdOutlinePayments />
+            icon: { 
+                jsx: <MdOutlinePayments />,
+                name: "MdOutlinePayments",
+                lib: "md"
+            }
         },
         {
             id: 3,
             selector: AssetType.OTHER,
-            icon: <GrMoney />
+            icon: { 
+                jsx: <GrMoney />,
+                name: "GrMoney",
+                lib: "gr"
+            }
         }
     ]
 
@@ -101,7 +118,7 @@ function AssetTypeSelector({ setAssetType, setIsSelectingAssetType, setDisplayAs
         setSelectedType({
             name: "",
             type: selector,
-            logo: icon
+            logo: JSON.stringify({name: icon.name, lib: icon.lib})
         } as Option)
     }
 
@@ -126,7 +143,7 @@ function AssetTypeSelector({ setAssetType, setIsSelectingAssetType, setDisplayAs
                         <div className={`asset-type-list ${(selectedType) ? "selected" : ""}`}>
                             {(types.map(type => {
                                 return <div key={type.id} onClick={() => handleSelectType(type.selector, type.icon)} className={`asset-type ${(selectedType?.type === type.selector) ? "active" : ""}`}>
-                                    <div className="asset-type-icon">{type.icon}</div>
+                                    <div className="asset-type-icon">{type.icon.jsx}</div>
                                     <div className="asset-type-name">{i18n.t(type.selector)}</div>
                                 </div>
                             }))}
@@ -142,7 +159,7 @@ function AssetTypeSelector({ setAssetType, setIsSelectingAssetType, setDisplayAs
 }
 
 /* eslint-disable */
-export default function AddAsset() {
+export default function AddAsset(props: any) {
     const { data, controllers } = useOutletContext<PersonalAreaContext>();
     const i18n: TranslationContextType = useContext(TranslationContext);
 
@@ -156,7 +173,7 @@ export default function AddAsset() {
     const [assetType, setAssetType] = useState<Option>();
     const [assetFocus, setAssetFocus] = useState(false);
     const [displayAssetTypeSelector, setDisplayAssetTypeSelector] = useState(true);
-    const [isSelectingAssetType, setIsSelectingAssetType] = useState(false);
+    const [isSelectingAssetType, setIsSelectingAssetType] = useState((props.selectAssetType));
     const theme = useContext(ThemeContext);
     //const [char, setChar] = useState<any>(null);
 
@@ -379,7 +396,7 @@ export default function AddAsset() {
                                             />
                                             }
                                             {(assetType && assetType.name.length === 0 && assetType.logo) && <div id="asset-type-selector" className="selected">
-                                                <div id="asset-type-selector-icon">{assetType.logo}</div>
+                                                <div id="asset-type-selector-icon">{<GetIcon lib={JSON.parse(assetType.logo).lib} name={JSON.parse(assetType.logo).name} />}</div>
                                             </div>}
                                         </>
                                     )}

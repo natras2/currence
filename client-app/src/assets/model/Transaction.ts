@@ -44,10 +44,6 @@ export const defaultIncomeCategories: Category[] = [
         i18n_selector: "default.incomecategory.interest"
     },
     {
-        name: "Bonus",
-        i18n_selector: "default.incomecategory.bonus"
-    },
-    {
         name: "Scholarship",
         i18n_selector: "default.incomecategory.scholarship"
     },

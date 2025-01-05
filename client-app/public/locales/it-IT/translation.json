@@ -3,11 +3,49 @@
         "assetType": {
             "cash": "Contanti e metodi di pagamento tradizionali",
             "bankaccount": "Conti correnti e depositi bancari",
-            "ewallet": "e-Wallets e metodi di pagamento elettronici",
-            "other": "Altro"
+            "ewallet": "App e metodi di pagamento digitali",
+            "other": "Generale"
         },
-        "transactionType": {
-
+        "transactiontype": {
+            "expence": "Spesa",
+            "income": "Entrata",
+            "transfer": "Trasferimento",
+            "manageassets": "Gestione asset"
+        }
+    },
+    "default": {
+        "incomecategory": {
+            "salary": "",
+            "business": "",
+            "investment": "",
+            "freelance": "",
+            "rent": "",
+            "dividend": "",
+            "interest": "",
+            "scholarship": "",
+            "refund": "",
+            "gift": "",
+            "benefit": "",
+            "creditmanagement": "",
+            "other": ""
+        },
+        "expensecategory": {
+            "housing": "",
+            "foodanddrink": "",
+            "transportation": "",
+            "insuranceandhealthcare": "",
+            "entertainmentandleisure": "",
+            "financial": "",
+            "education": "",
+            "personal": "",
+            "savingsandinvestments": "",
+            "childcareandfamily": "",
+            "professional": "",
+            "travelandvacations": "",
+            "subscriptionsandmemberships": "",
+            "giftsanddonations": "",
+            "debtmanagement": "",
+            "other": ""
         }
     }
 }

@@ -9,7 +9,9 @@ import Skeleton from "react-loading-skeleton";
 import { LuEyeOff } from "react-icons/lu";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { ControllersContext, DataContext, PersonalAreaContext } from "../PersonalArea";
-import { ThemeContext } from "../../App";
+import { ThemeContext, TranslationContext } from "../../App";
+import { IconType } from "react-icons";
+import GetIcon from "../../assets/components/Utils";
 
 interface AssetItemType {
     data: DataContext,
@@ -17,8 +19,9 @@ interface AssetItemType {
     asset: Asset
 }
 
-function AssetListItem({ data, controllers, asset } : AssetItemType) {
+function AssetListItem({ data, controllers, asset }: AssetItemType) {
     const navigate = useNavigate();
+    const i18n = useContext(TranslationContext);
 
     const onLongPressOnAsset = (assetId: string) => {
         alert(assetId);
@@ -26,12 +29,20 @@ function AssetListItem({ data, controllers, asset } : AssetItemType) {
     const onClickOnAsset = (assetId: string) => {
         navigate("/wallet/" + assetId);
     }
-    const longPressOnAsset = useLongPress(onLongPressOnAsset, onClickOnAsset, {delay: 500}, asset.id);
+    const longPressOnAsset = useLongPress(onLongPressOnAsset, onClickOnAsset, { delay: 500 }, asset.id);
 
     return (
         <span className="asset-wrapper">
             <div {...longPressOnAsset} className="asset">
-                <div className="asset-name">{asset.name}</div>
+                <div className="d-flex align-items-center">
+                    {!!asset.attributes && <div className="asset-logo">
+                        {(asset.attributes.sourceName !== "")
+                            ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
+                            : <div className="type-icon">{<GetIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
+                        }
+                    </div>}
+                    <div className="asset-name">{asset.name}</div>
+                </div>
                 <div className="d-flex gap-2">
                     <div className="asset-hidden-selector">{(asset.hiddenFromTotal) ? <LuEyeOff /> : ""}</div>
                     {/*<div className="asset-favorite-selector">{(asset.starred) ? <FaStar onClick={(e) => handlerFavourite(asset)} /> : <FaRegStar onClick={(e) => handlerFavourite(asset)} />}</div>*/}
@@ -58,6 +69,7 @@ export default function Wallet() {
                 const starredAssets = assets.filter(asset => asset.starred);
                 setStarred(starredAssets);
             }
+            assets.sort((a, b) => b.balance - a.balance)
             setProcessing(false);
         }
         initialize();
@@ -81,7 +93,7 @@ export default function Wallet() {
                                                     ? <><span>
                                                         <div className="no-favorites">
                                                             <img
-                                                                src={(theme === "dark") ? darkIllustration : illustration }
+                                                                src={(theme === "dark") ? darkIllustration : illustration}
                                                                 alt='add favorite'
                                                                 className='no-favorites-image'
                                                             />
@@ -92,7 +104,18 @@ export default function Wallet() {
                                                         {starred.map((asset, i) => {
                                                             return (
                                                                 <span key={i}>
-                                                                    <Link to={"./" + asset.id} style={{ textDecoration: 'none' }} className="favorite">{asset.name}</Link>
+                                                                    <Link to={"./" + asset.id} style={{ textDecoration: 'none' }} className="favorite">
+                                                                        <div>
+                                                                            {!!asset.attributes && <div className="asset-logo rounded-tab">
+                                                                                {(asset.attributes.sourceName !== "")
+                                                                                    ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
+                                                                                    : <div className="type-icon">{<GetIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
+                                                                                }
+                                                                            </div>}
+                                                                            <div className="asset-name">{asset.name}</div>
+                                                                        </div>
+                                                                        <div className="asset-balance">{currencyFormat(asset.balance)}</div>
+                                                                    </Link>
                                                                 </span>
                                                             )
                                                         })}
@@ -116,7 +139,7 @@ export default function Wallet() {
                             <>
                                 <h3 className="page-title">Wallet</h3>
                                 <div className="empty-content mt-5">
-                                    <div className={`title fs-1 fw-bolder ${(theme === "dark") ? "text-white-50" : "text-black-50" }`}>Hey! It seems like there's nothing to show here</div>
+                                    <div className={`title fs-1 fw-bolder ${(theme === "dark") ? "text-white-50" : "text-black-50"}`}>Hey! It seems like there's nothing to show here</div>
                                     <Link to={"./create"} className="btn border btn-primary rounded-4 shadow-sm btn-lg px-3 py-3 w-100 d-flex gap-3 justify-content-center mt-4">
                                         <FaPlus style={{ marginTop: 3 }} />
                                         <div className='small text-center'>Add your first asset</div>

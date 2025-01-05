@@ -19,15 +19,19 @@
     --splash-bgcolor-1: #dfffed;
     --splash-bgcolor-2: #c9f0ff;
     --currency-input-color: #000080;
-    --list-dropdown-background: #ffffff; 
+    --list-dropdown-background: #ffffff;
 }
+
 html {
     --background: #ffffff;
 }
+
 html.dark-mode {
     --background: #202020;
 }
-body.dark-mode, body.dark-mode .page {
+
+body.dark-mode,
+body.dark-mode .page {
     --background: #333333;
     --highlight-background: #212529;
     --text-color: #d8d8d8;
@@ -44,7 +48,7 @@ body.dark-mode, body.dark-mode .page {
     --splash-bgcolor-1: #006930;
     --splash-bgcolor-2: #001b7b;
     --currency-input-color: #d8d8d8;
-    --list-dropdown-background: #000000; 
+    --list-dropdown-background: #000000;
 }
 
 html,
@@ -89,9 +93,11 @@ body {
     left: 0;
     z-index: 1000;
 }
+
 .callout.page.sub {
     z-index: 2000;
 }
+
 .callout.page.subsub {
     z-index: 3000;
 }
@@ -311,10 +317,12 @@ form .input-guide {
     margin-top: 1.5rem;
     font-weight: 600;
 }
+
 .personal-area.page #dashboard .total-balance .label {
     font-weight: 300;
     font-size: 15px;
 }
+
 .personal-area.page #dashboard .total-balance .icon {
     font-size: 28px;
     margin-right: 10px;
@@ -479,12 +487,14 @@ body.dark-mode input.currency-input::placeholder {
     overflow: hidden;
     width: 103% !important;
 }
+
 #wallet .starred .cards>*>.no-favorites>.no-favorites-image {
     margin: -1rem;
     margin-left: -40px;
     margin-top: 2.3rem;
     height: 280px;
 }
+
 #wallet .starred .cards>*>.no-favorites>.no-favorites-label {
     position: relative;
     left: -20px;
@@ -494,10 +504,14 @@ body.dark-mode input.currency-input::placeholder {
 }
 
 #wallet .starred .cards>*>.favorite {
-    padding: .8rem .6rem;
+    padding: .8rem 1.2rem 1rem .6rem;
     border-radius: 0.25rem;
-    background-color: var(--palette-blue-2);
+    background: linear-gradient(0.4turn, var(--palette-blue-3), var(--palette-blue-2));
     color: #F5F5F5;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
 }
 
 #wallet .label {
@@ -519,10 +533,12 @@ body.dark-mode input.currency-input::placeholder {
 #wallet .assets-list .items::-webkit-scrollbar {
     display: none;
 }
-#wallet .assets-list .items.edit > .asset-wrapper {
+
+#wallet .assets-list .items.edit>.asset-wrapper {
     animation: shake 1s;
     animation-iteration-count: infinite;
 }
+
 #wallet .assets-list .items>*>* {
     height: 60px;
     line-height: unset;
@@ -534,7 +550,7 @@ body.dark-mode input.currency-input::placeholder {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color:inherit;
+    color: inherit;
     text-decoration: none;
     cursor: pointer;
     border-radius: 5px;
@@ -553,6 +569,104 @@ body.dark-mode input.currency-input::placeholder {
     cursor: pointer;
 }
 
+#wallet .starred .cards>*>.favorite .asset-logo,
+#wallet .assets-list .items>*>.asset .asset-logo {
+    flex-shrink: 0;
+}
+
+#wallet .starred .cards>*>.favorite .asset-logo>*,
+#wallet .assets-list .items>*>.asset .asset-logo>* {
+    border-radius: 50%;
+    padding: 6px;
+    height: 42px;
+    width: 42px;
+    margin-right: 10px;
+    margin-left: -10px;
+}
+
+#wallet .starred .cards>*>.favorite .asset-logo .type-icon,
+#wallet .assets-list .items>*>.asset .asset-logo .type-icon {
+    display: flex;
+    background: #9a7300;
+    color: #ebebeb;
+    font-size: 18px;
+    align-items: center;
+    justify-content: center;
+}
+
+#wallet .starred .cards>*>.favorite .asset-logo .source-logo,
+#wallet .assets-list .items>*>.asset .asset-logo .source-logo {
+    background: #ffffff;
+    object-fit: contain;
+}
+
+#wallet .starred .cards>*>.favorite .asset-logo {
+    position: relative;
+    text-align: center;
+    margin: -.8rem -.6rem;
+    --r: 25px;
+    transform: scale(1, -1);
+    line-height: 1.8;
+    padding-inline: .5em;
+    border-right: var(--r) solid #0000;
+    border-radius: var(--r) calc(2.4* var(--r)) 0 0 / var(--r);
+    mask: radial-gradient(var(--r) at 100% 0, #0000 98%, #000 101%) 100% 100% / var(--r) var(--r) no-repeat, conic-gradient(#000 0 0) padding-box;
+    background: border-box;
+    width: fit-content;
+}
+/*
+#wallet .starred .cards>*>.favorite .asset-logo {
+    position: relative;
+    text-align: center;
+    margin: -.8rem -.6rem;
+    --r: 25px;
+    transform: scale(1, -1);
+  
+    line-height: 1.8;
+    padding-inline: .5em;
+    border-inline: var(--r) solid #0000;
+    border-radius: calc(2*var(--r)) calc(2*var(--r)) 0 0/var(--r);
+    mask: 
+      radial-gradient(var(--r) at var(--r) 0,#0000 98%,#000 101%)
+        calc(-1*var(--r)) 100%/100% var(--r) repeat-x,
+      conic-gradient(#000 0 0) padding-box;
+    background: #bd5532 border-box;
+    width: fit-content;
+}*/
+#wallet .starred .cards>*>.favorite .asset-logo:has(> .source-logo) {
+    background-color: #ffffff;
+}
+#wallet .starred .cards>*>.favorite .asset-logo:has(> .type-icon) {
+    background-color: #b39a00;
+}
+
+#wallet .starred .cards>*>.favorite .asset-logo .source-logo,
+#wallet .starred .cards>*>.favorite .asset-logo .type-icon {
+    -moz-transform: scale(1, -1);
+    -webkit-transform: scale(1, -1);
+    -o-transform: scale(1, -1);
+    -ms-transform: scale(1, -1);
+    transform: scale(1, -1);
+    margin: 0;
+    height: 35px;
+    border-radius: 0;
+    width: 60px !important;
+    padding: 3px 6px
+}
+#wallet .starred .cards>*>.favorite .asset-logo .type-icon {
+    background-color: #b39a00;
+}
+
+#wallet .starred .cards>*>.favorite .asset-name {
+    margin-top: 28px;
+    font-weight: 600;
+}
+
+#wallet .starred .cards>*>.favorite .asset-balance {
+    text-align: right;
+    font-size: 17px;
+}
+
 .personal-area.page #asset-detail {
     display: flex;
     justify-content: space-between;
@@ -567,26 +681,30 @@ body.dark-mode input.currency-input::placeholder {
     font-size: 22px;
     font-weight: 600;
 }
-.personal-area.page #asset-detail .asset-balance > .asset-balance-wrapper {
+
+.personal-area.page #asset-detail .asset-balance>.asset-balance-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.personal-area.page #asset-detail .asset-balance > .asset-balance-wrapper .label {
+
+.personal-area.page #asset-detail .asset-balance>.asset-balance-wrapper .label {
     font-weight: 300;
     font-size: 15px;
 }
-.personal-area.page #asset-detail .asset-balance > .asset-balance-wrapper .icon {
+
+.personal-area.page #asset-detail .asset-balance>.asset-balance-wrapper .icon {
     font-size: 28px;
     margin-right: 10px;
 }
+
 .personal-area.page #asset-detail .asset-actions {
     display: flex;
     gap: 10px;
     margin-top: 10px;
 }
 
-.personal-area.page #asset-detail .asset-actions > * {
+.personal-area.page #asset-detail .asset-actions>* {
     flex: 1 0;
     display: flex;
     gap: 8px;
@@ -595,24 +713,25 @@ body.dark-mode input.currency-input::placeholder {
     border-radius: 5px;
     /* box-shadow: 2px 2px 4px 0px rgb(0 0 0 / 25%); */
     border: 1px solid #c4c4c4;
-    cursor:pointer;
+    cursor: pointer;
 }
 
-.personal-area.page #asset-detail .asset-actions > * > .icon {
-    margin-top:-3px
+.personal-area.page #asset-detail .asset-actions>*>.icon {
+    margin-top: -3px
 }
-.personal-area.page #asset-detail .asset-actions > * > .label {
+
+.personal-area.page #asset-detail .asset-actions>*>.label {
     font-size: 14px;
 }
 
-.personal-area.page #asset-detail .asset-actions > .set-starred.is-starred {
+.personal-area.page #asset-detail .asset-actions>.set-starred.is-starred {
     border-color: #cb9800;
     background-color: #cb9800;
     color: #fff5d8;
     font-weight: 500;
 }
 
-.personal-area.page #asset-detail .asset-actions > .set-hidden-from-total.is-hidden {
+.personal-area.page #asset-detail .asset-actions>.set-hidden-from-total.is-hidden {
     border-color: #b11818;
     background-color: #b11818;
     color: #ffe2e2;
@@ -625,6 +744,7 @@ body.dark-mode input.currency-input::placeholder {
         margin-top: 1.5rem;
     }
 }
+
 @media screen and (max-width: 380px) {
     #wallet .starred .cards>*>.no-favorites>.no-favorites-image {
         height: 60vw;
@@ -674,7 +794,8 @@ body.dark-mode .btn-outline-danger {
     margin-top: -5px;
     margin-left: -.4rem;
 }
-#add-transaction .type-selector > .selector {
+
+#add-transaction .type-selector>.selector {
     flex: 1 0 33.33%;
     border-radius: 50px;
     height: 30px;
@@ -684,10 +805,12 @@ body.dark-mode .btn-outline-danger {
     font-size: 15px;
     cursor: pointer;
 }
-#add-transaction .type-selector > .selector.active {
+
+#add-transaction .type-selector>.selector.active {
     background-color: var(--palette-blue-3);
     font-weight: 600;
 }
+
 #add-transaction .date-picker-button {
     height: 50px;
     width: 50px;
@@ -698,23 +821,27 @@ body.dark-mode .btn-outline-danger {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; 
+    justify-content: center;
     cursor: pointer;
 }
-#add-transaction .date-picker-button > * {
+
+#add-transaction .date-picker-button>* {
     transform: scale(1.2);
 }
 
 
-mark, .mark {
+mark,
+.mark {
     font-weight: 700;
     color: var(--highlight-text);
     padding: unset;
     background: unset;
 }
+
 .rbt-input-hint {
     color: var(--highlight-text) !important;
 }
+
 #add-asset .asset-name-autocomplete-image {
     background: #ffffff;
     border-radius: 50%;
@@ -724,28 +851,33 @@ mark, .mark {
     margin-right: 10px;
     object-fit: contain;
 }
-#add-asset .rbt > input.form-control {
+
+#add-asset .rbt>input.form-control {
     position: relative;
     z-index: 40;
 }
+
 #add-asset #asset-name-autocomplete {
     margin-top: -8px;
     padding-top: calc(0.5rem + 8px);
     z-index: 30;
     background-color: var(--list-dropdown-background);
 }
+
 #add-asset #asset-name-autocomplete:not(:has(> a[id^="asset-name-autocomplete-item"])) {
     display: none !important;
 }
+
 #add-asset .asset-type-detail {
     background-color: #ffd81854;
     border-radius: var(--bs-border-radius);
     position: relative;
 }
-#add-asset .asset-type-detail .rbt > .selected.asset-name-autocomplete-image {
+
+#add-asset .asset-type-detail .rbt>.selected.asset-name-autocomplete-image {
     position: absolute;
-    right:0;
-    top:10px;
+    right: 0;
+    top: 10px;
     z-index: 50;
 }
 
@@ -767,18 +899,21 @@ mark, .mark {
     transition: width ease-out .8s;
     color: var(--inverse-text-color);
 }
+
 #add-asset .asset-type-detail #asset-type-selector.selected {
-    width:32px;
+    width: 32px;
     background: #ffd81854;
     color: var(--text-color);
 }
-#add-asset .asset-type-detail #asset-type-selector > #asset-type-selector-title {
+
+#add-asset .asset-type-detail #asset-type-selector>#asset-type-selector-title {
     overflow: hidden;
     white-space: nowrap;
     font-size: 13px;
     transition: opacity .8s;
 }
-#add-asset .asset-type-detail #asset-type-selector > #asset-type-selector-icon {
+
+#add-asset .asset-type-detail #asset-type-selector>#asset-type-selector-icon {
     margin-top: -1px;
     font-size: 18px;
     flex: 0 0 auto;
@@ -789,7 +924,7 @@ body.dark-mode .btn-outline-warning {
     --bs-btn-border-color: #c19100;
     --bs-btn-hover-color: #f3f3f3;
     --bs-btn-hover-bg: #9a7300;
-    --bs-btn-hover-border-color: #9a7300;   
+    --bs-btn-hover-border-color: #9a7300;
     --bs-btn-focus-shadow-rgb: 255, 193, 7;
     --bs-btn-active-color: #f3f3f3;
     --bs-btn-active-bg: #9a7300;
@@ -800,12 +935,14 @@ body.dark-mode .btn-outline-warning {
     --bs-btn-disabled-border-color: #c19100;
     --bs-gradient: none;
 }
+
 #add-asset #select-asset-type .asset-type-list {
     display: flex;
     flex-direction: column;
     row-gap: 10px;
 }
-#add-asset #select-asset-type .asset-type-list > .asset-type {
+
+#add-asset #select-asset-type .asset-type-list>.asset-type {
     padding: 0 1.2rem 0 0;
     background-color: var(--list-background);
     display: flex;
@@ -815,30 +952,34 @@ body.dark-mode .btn-outline-warning {
     cursor: pointer;
     border-radius: 5px;
     height: 57px;
-    gap:15px;
+    gap: 15px;
     margin-left: 20px;
     border-right-color: var(--list-background);
     border-right-style: solid;
     border-right-width: 5px;
     transition: border-right-color .5s, background-color .5s;
 }
-#add-asset #select-asset-type .asset-type-list.selected > .asset-type.active {
+
+#add-asset #select-asset-type .asset-type-list.selected>.asset-type.active {
     border-right-color: #9a7300;
     background-color: #474747;
 }
 
-#add-asset #select-asset-type .asset-type-list.selected > .asset-type:not(.active) > .asset-type-icon {
+#add-asset #select-asset-type .asset-type-list.selected>.asset-type:not(.active)>.asset-type-icon {
     background-color: #1f1f1f;
 }
-#add-asset #select-asset-type .asset-type-list > .asset-type > .asset-type-name {
+
+#add-asset #select-asset-type .asset-type-list>.asset-type>.asset-type-name {
     font-size: 15px;
     line-height: 18px;
     transition: font-weight .2s;
 }
-#add-asset #select-asset-type .asset-type-list > .asset-type.active > .asset-type-name {
+
+#add-asset #select-asset-type .asset-type-list>.asset-type.active>.asset-type-name {
     font-weight: 600;
 }
-#add-asset #select-asset-type .asset-type-list > .asset-type > .asset-type-icon {
+
+#add-asset #select-asset-type .asset-type-list>.asset-type>.asset-type-icon {
     font-size: 25px;
     background-color: #9a7300;
     height: 62px;
@@ -851,9 +992,11 @@ body.dark-mode .btn-outline-warning {
     flex-shrink: 0;
     transition: background-color .2s;
 }
-#add-asset #select-asset-type .asset-type-list > .asset-type.active > .asset-type-icon {
+
+#add-asset #select-asset-type .asset-type-list>.asset-type.active>.asset-type-icon {
     background-color: #9a7300;
 }
-#add-asset #select-asset-type .asset-type-list > .asset-type:hover > .asset-type-icon {
+
+#add-asset #select-asset-type .asset-type-list>.asset-type:hover>.asset-type-icon {
     background-color: #9a7300;
 }

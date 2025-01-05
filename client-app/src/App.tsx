@@ -115,7 +115,10 @@ function App() {
                         </Route> 
                         <Route path='wallet'>
                             <Route index element={<Wallet />} />
-                            <Route path='create' element={<AddAsset />} />
+                            <Route path='create'>
+                                <Route index element={<AddAsset />} />
+                                <Route path='select-type' element={<AddAsset selectAssetType />} />
+                            </Route> 
                             <Route path=':id' element={<AssetDetail />} />
                         </Route>
                         <Route path='evener' element={<Evener />} />

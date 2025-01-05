@@ -1,7 +1,7 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { PersonalAreaContext } from "../../PersonalArea";
 import { useContext, useState } from "react";
-import { ThemeContext } from "../../../App";
+import { ThemeContext, TranslationContext } from "../../../App";
 import { capitalize } from "../../../assets/libraries/Utils";
 import Transaction, { Category, TransactionType } from "../../../assets/model/Transaction";
 import User from "../../../assets/model/User";
@@ -14,6 +14,8 @@ import { BiCalendar } from "react-icons/bi";
 export default function AddTransaction() {
     const { data, controllers } = useOutletContext<PersonalAreaContext>();
     const theme = useContext(ThemeContext);
+    const i18n = useContext(TranslationContext);
+
     const [processing, setProcessing] = useState(false);
 
     const [formData, setFormData] = useState({
@@ -117,9 +119,9 @@ export default function AddTransaction() {
                             <div style={{width: "31px"}}></div>
                         </div>
                         <div className="type-selector" style={{marginBottom: "1.5rem"}}>
-                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "active" : ""}`} onClick={() => handleChange({target: {name: "new-transaction-type", value: TransactionType.EXPENCE}})}>Expense</div>
-                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.INCOME) ? "active" : ""}`} onClick={() => handleChange({target: {name: "new-transaction-type", value: TransactionType.INCOME}})}>Income</div>
-                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.TRANSFER) ? "active" : ""}`} onClick={() => handleChange({target: {name: "new-transaction-type", value: TransactionType.TRANSFER}})}>Transfer</div>
+                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "active" : ""}`} onClick={() => handleChange({target: {name: "new-transaction-type", value: TransactionType.EXPENCE}})}>{i18n.t(TransactionType.EXPENCE)}</div>
+                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.INCOME) ? "active" : ""}`} onClick={() => handleChange({target: {name: "new-transaction-type", value: TransactionType.INCOME}})}>{i18n.t(TransactionType.INCOME)}</div>
+                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.TRANSFER) ? "active" : ""}`} onClick={() => handleChange({target: {name: "new-transaction-type", value: TransactionType.TRANSFER}})}>{i18n.t(TransactionType.TRANSFER)}</div>
                         </div>
                         <CurrencyInput
                             className="currency-input"
