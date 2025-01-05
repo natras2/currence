@@ -80,7 +80,7 @@ interface GetIconProps {
 }
 
 const GetIcon: React.FC<GetIconProps> = ({ lib, name }) => {
-    console.log("Invoked GetIcon. Params: ["+ lib +", " + name + "]");
+    //console.log("Invoked GetIcon. Params: ["+ lib +", " + name + "]");
     const lib_ = libs[lib];
     if (!lib_) throw new Error(`Library "${lib}" not found`);
 

@@ -512,6 +512,7 @@ body.dark-mode input.currency-input::placeholder {
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
+    position: relative;
 }
 
 #wallet .label {
@@ -578,8 +579,8 @@ body.dark-mode input.currency-input::placeholder {
 #wallet .assets-list .items>*>.asset .asset-logo>* {
     border-radius: 50%;
     padding: 6px;
-    height: 42px;
-    width: 42px;
+    height: 34px;
+    width: 34px;
     margin-right: 10px;
     margin-left: -10px;
 }
@@ -589,7 +590,7 @@ body.dark-mode input.currency-input::placeholder {
     display: flex;
     background: #9a7300;
     color: #ebebeb;
-    font-size: 18px;
+    font-size: 16px;
     align-items: center;
     justify-content: center;
 }
@@ -602,8 +603,8 @@ body.dark-mode input.currency-input::placeholder {
 
 #wallet .starred .cards>*>.favorite .asset-logo {
     position: relative;
-    text-align: center;
-    margin: -.8rem -.6rem;
+    margin: 0;
+    /*
     --r: 25px;
     transform: scale(1, -1);
     line-height: 1.8;
@@ -613,52 +614,36 @@ body.dark-mode input.currency-input::placeholder {
     mask: radial-gradient(var(--r) at 100% 0, #0000 98%, #000 101%) 100% 100% / var(--r) var(--r) no-repeat, conic-gradient(#000 0 0) padding-box;
     background: border-box;
     width: fit-content;
+    */
 }
 /*
-#wallet .starred .cards>*>.favorite .asset-logo {
-    position: relative;
-    text-align: center;
-    margin: -.8rem -.6rem;
-    --r: 25px;
-    transform: scale(1, -1);
-  
-    line-height: 1.8;
-    padding-inline: .5em;
-    border-inline: var(--r) solid #0000;
-    border-radius: calc(2*var(--r)) calc(2*var(--r)) 0 0/var(--r);
-    mask: 
-      radial-gradient(var(--r) at var(--r) 0,#0000 98%,#000 101%)
-        calc(-1*var(--r)) 100%/100% var(--r) repeat-x,
-      conic-gradient(#000 0 0) padding-box;
-    background: #bd5532 border-box;
-    width: fit-content;
-}*/
 #wallet .starred .cards>*>.favorite .asset-logo:has(> .source-logo) {
     background-color: #ffffff;
 }
 #wallet .starred .cards>*>.favorite .asset-logo:has(> .type-icon) {
     background-color: #b39a00;
 }
-
+*/
 #wallet .starred .cards>*>.favorite .asset-logo .source-logo,
 #wallet .starred .cards>*>.favorite .asset-logo .type-icon {
+    /*
     -moz-transform: scale(1, -1);
     -webkit-transform: scale(1, -1);
     -o-transform: scale(1, -1);
     -ms-transform: scale(1, -1);
     transform: scale(1, -1);
+    */
     margin: 0;
-    height: 35px;
-    border-radius: 0;
-    width: 60px !important;
-    padding: 3px 6px
+    height: 42px;
+    width: 42px;
 }
 #wallet .starred .cards>*>.favorite .asset-logo .type-icon {
     background-color: #b39a00;
+    font-size: 18px;
 }
 
 #wallet .starred .cards>*>.favorite .asset-name {
-    margin-top: 28px;
+    margin-top: 4px;
     font-weight: 600;
 }
 

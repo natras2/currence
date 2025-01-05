@@ -106,7 +106,7 @@ export default function Wallet() {
                                                                 <span key={i}>
                                                                     <Link to={"./" + asset.id} style={{ textDecoration: 'none' }} className="favorite">
                                                                         <div>
-                                                                            {!!asset.attributes && <div className="asset-logo rounded-tab">
+                                                                            {!!asset.attributes && <div className="asset-logo">
                                                                                 {(asset.attributes.sourceName !== "")
                                                                                     ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
                                                                                     : <div className="type-icon">{<GetIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
