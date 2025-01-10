@@ -10,7 +10,6 @@ import { LuEyeOff } from "react-icons/lu";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { ControllersContext, DataContext, PersonalAreaContext } from "../PersonalArea";
 import { ThemeContext, TranslationContext } from "../../App";
-import { IconType } from "react-icons";
 import GetIcon from "../../assets/components/Utils";
 
 interface AssetItemType {

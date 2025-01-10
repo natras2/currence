@@ -17,7 +17,7 @@ export const defaultIncomeCategories: Category[] = [
     {
         name: "Salary",
         i18n_selector: "default.incomecategory.salary",
-        icon: IoIosCash.toString()
+        icon: JSON.stringify({lib: "io", name: "IoIosCash"})
     },
     {
         name: "Business",

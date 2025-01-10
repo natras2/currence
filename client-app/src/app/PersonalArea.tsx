@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from "react";
-import UserController, { GetUser } from "../assets/controllers/UserController";
+import UserController from "../assets/controllers/UserController";
 import { getAuth } from "firebase/auth";
 import { app } from "../firebase/firebaseConfig";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -218,7 +218,7 @@ export default function PersonalArea() {
                 navigate("/");
                 return;
             }
-    
+
             const unsubscribeUser = controllers.userController.ListenForUserUpdates(
                 loggedUser.uid,
                 (updatedUser) => {
@@ -227,18 +227,18 @@ export default function PersonalArea() {
                     setUserProcessing(false);
                 }
             );
-    
+
             // Cleanup user listener
             return () => unsubscribeUser();
         });
-    
+
         // Cleanup auth listener
         return () => unsubscribeAuth();
     }, []);
-    
+
     useEffect(() => {
         if (!user) return; // Only start listening for assets when the user is available
-    
+
         const unsubscribeAssets = controllers.assetsController.ListenForAssetUpdates(
             user.uid,
             (updatedAssets) => {
@@ -247,14 +247,14 @@ export default function PersonalArea() {
                 setAssetsProcessing(false);
             }
         );
-    
+
         // Cleanup assets listener
         return () => unsubscribeAssets();
     }, [user?.uid]); // Depend only on user.uid
 
     useEffect(() => {
         if (!user) return; // Only start listening for transactions when the user is available
-    
+
         const unsubscribeTransactions = controllers.transactionsController.ListenForTransactionUpdates(
             user.uid,
             (updatedTransactions) => {
@@ -263,10 +263,28 @@ export default function PersonalArea() {
                 setTransactionsProcessing(false);
             }
         );
-    
+
         // Cleanup transactions listener
         return () => unsubscribeTransactions();
     }, [user?.uid]); // Depend only on user.uid
+
+    useEffect(() => {
+        if (!user) return;
+        if (!assets) return; // Only start listening for assets when the user is available
+
+        if (assets.length > 0) {
+            const contributingAssets = assets.filter(asset => !asset.hiddenFromTotal);
+            var updatedTotalBalance = 0;
+            if (contributingAssets.length > 0) {
+                updatedTotalBalance = contributingAssets.reduce((accumulator, asset) => accumulator + asset.balance, 0);
+            }
+            if (updatedTotalBalance !== user.totalBalance) {
+                console.log("Updated total balance");
+                controllers.userController.UpdateTotalBalance(updatedTotalBalance);
+            }
+        }
+
+    }, [assets]);
 
 
     const changePageHandler = (target: string) => {

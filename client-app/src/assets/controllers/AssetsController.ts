@@ -74,19 +74,21 @@ export default class AssetsController extends Controller {
         try {
             const assetCollectionRef = collection(db, 'Users', asset.uid, "Assets").withConverter(assetConverter);
             
-            await addDoc(assetCollectionRef, asset);
+            const addedDoc = await addDoc(assetCollectionRef, asset);
 
             // update user setting first access to false
             await updateDoc(doc(db, "Users", asset.uid), {
                 firstAccess: false,
-                totalBalance: increment((!asset.hiddenFromTotal) ? asset.balance : 0)
+                //totalBalance: increment((!asset.hiddenFromTotal) ? asset.balance : 0)
             });
 
-            return true;
+            const createdAsset = await getDoc(addedDoc);
+
+            return (createdAsset) ? createdAsset.data()! : null;
         }
         catch (error) {
             console.error("Error creating a new asset:", error);
-            return false;
+            return null;
         }
     }
 
@@ -105,10 +107,8 @@ export default class AssetsController extends Controller {
                 return false;
 
             const assetRef = doc(db, 'Users', this.user.uid, "Assets", assetId).withConverter(assetConverter);
-            const assetBalance = asset.balance;
 
             await deleteDoc(assetRef);
-            await this.userController?.UpdateTotalBalance(assetBalance * -1, true);
 
             return true;
         }

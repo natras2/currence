@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, getDocs, collection, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, setDoc, getDocs, collection, onSnapshot, addDoc, updateDoc, increment } from "firebase/firestore";
 import { app, db } from "../../firebase/firebaseConfig";
 import Transaction, { transactionConverter, TransactionType } from "../model/Transaction";
 import { getAuth } from "firebase/auth";
@@ -33,7 +33,33 @@ export default class TransactionsController extends Controller {
     }
     
     async CreateTransaction (transaction: Transaction) {
-        return true;
+        try {
+            const transactionCollectionRef = collection(db, 'Users', transaction.uid, "Transactions").withConverter(transactionConverter);
+
+            const addedDoc = await addDoc(transactionCollectionRef, transaction);
+
+            // IMPLEMENT
+            // update involved asset 
+            switch(transaction.type) {
+                case TransactionType.EXPENCE: 
+                    //
+                    break;
+                case TransactionType.INCOME: 
+                    //
+                    break;
+                case TransactionType.TRANSFER: 
+                    //
+                    break;
+            }
+
+            const createdTransaction = await getDoc(addedDoc);
+
+            return (createdTransaction) ? createdTransaction.data()! : null;
+        }
+        catch (error) {
+            console.error("Error creating a new transaction:", error);
+            return null;
+        }
     }
     
     async UpdateTransaction (updatedTransaction: Transaction) {
