@@ -4,8 +4,9 @@ import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { BackButton } from "../assets/components/Utils";
 import { PersonalAreaContext } from "./PersonalArea";
 import User from "../assets/model/User";
-import { BiMoon, BiSun } from "react-icons/bi";
 import { ThemeContext } from "../App";
+
+import { BiMoon, BiSun } from "react-icons/bi";
 
 export default function Settings(props: any) {
     const theme = useContext(ThemeContext);

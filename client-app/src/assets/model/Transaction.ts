@@ -1,5 +1,3 @@
-import { IoIosCash } from "react-icons/io";
-
 export enum TransactionType {
     EXPENCE = "static.transactiontype.expence",
     INCOME = "static.transactiontype.income",
@@ -7,7 +5,12 @@ export enum TransactionType {
     MANAGEASSETS = "static.transactiontype.manageassets"
 }
 
-export type Category = {
+export interface AssetAllocation {
+    assetId: string;
+    amount: number;
+}
+
+export interface Category {
     name: string;
     i18n_selector?: string;
     icon?: string;
@@ -146,20 +149,20 @@ export default class Transaction {
     category: Category;
     amount: number;
     creationTime: number;
-    fromAssetId?: string[];
-    toAssetId?: string[];
+    fromAssets?: AssetAllocation[];
+    toAssets?: AssetAllocation[];
     associatedPendingsId?: string[];
     notes?: string;
 
-    constructor(uid: string, date = new Date(), description: string, type: TransactionType, category: Category, amount: number, fromAssetId?: string[], toAssetId?: string[], associatedPendingsId?: string[], notes?: string, creationTime: number = new Date().getTime()) {
+    constructor(uid: string, date = new Date(), description: string, type: TransactionType, category: Category, amount: number, fromAssets?: AssetAllocation[], toAssets?: AssetAllocation[], associatedPendingsId?: string[], notes?: string, creationTime: number = new Date().getTime()) {
         this.uid = uid;
         this.date = date;
         this.description = description;
         this.type = type;
         this.category = category;
         this.amount = amount;
-        this.fromAssetId = fromAssetId;
-        this.toAssetId = toAssetId;
+        this.fromAssets = fromAssets;
+        this.toAssets = toAssets;
         this.associatedPendingsId = associatedPendingsId;
         this.notes = notes;
         this.creationTime = creationTime;
@@ -176,8 +179,8 @@ export const transactionConverter = {
             type: transaction.type,
             category: transaction.category,
             amount: transaction.amount,
-            fromAssetId: transaction.fromAssetId,
-            toAssetId: transaction.toAssetId,
+            fromAssets: transaction.fromAssets,
+            toAssets: transaction.toAssets,
             associatedPendingsId: transaction.associatedPendingsId,
             notes: transaction.notes,
             creationTime: transaction.creationTime
@@ -185,7 +188,7 @@ export const transactionConverter = {
     },
     fromFirestore: (snapshot: any, options: any) => {
         const data = snapshot.data(options);
-        const transaction = new Transaction(data.uid, data.date, data.description, data.type, data.category, data.amount, data.fromAssetId, data.toAssetId, data.associatedPendingsId, data.notes, data.creationTime);
+        const transaction = new Transaction(data.uid, data.date, data.description, data.type, data.category, data.amount, data.fromAssets, data.toAssets, data.associatedPendingsId, data.notes, data.creationTime);
         transaction.id = snapshot.id;
         return transaction;
     }

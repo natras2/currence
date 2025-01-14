@@ -14,19 +14,30 @@ export default class AssetsController extends Controller {
         super(context);
     };
 
+    async UpdateBalance(assetId: string, amount: number, isIncremental: boolean = true) {
+        try {
+            const assetRef = doc(db, 'Users', this.user.uid, "Assets", assetId).withConverter(assetConverter);
+
+            // update asset balance
+            await updateDoc(assetRef, {
+                balance: (isIncremental) ? increment(amount) : amount
+            });
+
+            return true;
+        }
+        catch (error) {
+            console.error("An error occurred while updating the asset balance: ", error);
+            return false;
+        }
+    }
     async UpdateHiddenFromTotal(assetId: string, updatedHiddenFromTotal: boolean) {
         try {
             const assetRef = doc(db, 'Users', this.user.uid, "Assets", assetId).withConverter(assetConverter);
 
-            // update starred reference
+            // update hidden from total selector
             await updateDoc(assetRef, {
                 hiddenFromTotal: updatedHiddenFromTotal
             });
-
-            const updatedAsset = this.assets.find(asset => (asset.id === assetId))!
-            const balanceDelta = (updatedHiddenFromTotal) ? updatedAsset.balance * -1  : updatedAsset.balance;
-
-            await this.userController?.UpdateTotalBalance(balanceDelta, true);
 
             return true;
         }
@@ -78,8 +89,7 @@ export default class AssetsController extends Controller {
 
             // update user setting first access to false
             await updateDoc(doc(db, "Users", asset.uid), {
-                firstAccess: false,
-                //totalBalance: increment((!asset.hiddenFromTotal) ? asset.balance : 0)
+                firstAccess: false
             });
 
             const createdAsset = await getDoc(addedDoc);
@@ -99,8 +109,8 @@ export default class AssetsController extends Controller {
                 throw new Error("The asset targeted for deletion doesn't exist");
 
             const transactionsList = this.transactions.filter((transaction) => {
-                ((transaction.fromAssetId && transaction.fromAssetId.includes(assetId))
-                    || (transaction.toAssetId && transaction.toAssetId.includes(assetId)))
+                ((transaction.fromAssets && transaction.fromAssets.find((el) => el.assetId === assetId))
+                    || (transaction.toAssets && transaction.toAssets.find((el) => el.assetId === assetId)))
             })
 
             if (transactionsList && transactionsList.length > 0)

@@ -4,11 +4,12 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { ControllersContext, DataContext, PersonalAreaContext } from "../../PersonalArea";
 import ErrorPage from "../../../Error";
 import { currencyFormat } from "../../../assets/libraries/Utils";
-import { FaRegStar, FaStar } from "react-icons/fa6";
-import { LuEye, LuEyeOff } from "react-icons/lu";
 import { useContext, useState } from "react";
 import Loader from "../../../assets/components/Loader";
 import { ThemeContext } from "../../../App";
+
+import { FaRegStar, FaStar } from "react-icons/fa6";
+import { LuEye, LuEyeOff } from "react-icons/lu";
 
 interface DisplayAssetDetailType {
     data: DataContext,

@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
 import User from "../../assets/model/User";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import { currencyFormat } from "../../assets/libraries/Utils";
-import { BsCashCoin } from "react-icons/bs";
 import { PersonalAreaContext } from "../PersonalArea";
 import { useOutletContext } from "react-router-dom";
+
+import { BsCashCoin } from "react-icons/bs";
 
 export default function Dashboard() {
     const { data, controllers } = useOutletContext<PersonalAreaContext>();

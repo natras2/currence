@@ -1,9 +1,8 @@
 import CurrencyInput from "react-currency-input-field";
-import GetIcon, { BackButton } from "../../../assets/components/Utils";
+import { DynamicIcon, BackButton} from "../../../assets/components/Utils";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { ChangeEvent, Dispatch, ReactElement, SetStateAction, useContext, useEffect, useState } from "react";
 import Asset, { AssetAttributes, AssetType } from "../../../assets/model/Asset";
-import InputField from "../../../assets/components/InputField";
 import { capitalize } from "../../../assets/libraries/Utils";
 import Loader from "../../../assets/components/Loader";
 import { PersonalAreaContext } from "../../PersonalArea";
@@ -11,15 +10,14 @@ import User from "../../../assets/model/User";
 import { ThemeContext, TranslationContext, TranslationContextType } from "../../../App";
 import { Highlighter, Typeahead } from "react-bootstrap-typeahead";
 import italianBanks from "../../../assets/libraries/italianBanks.json"
-import { FilterByCallback, LabelKey, SelectHint } from "react-bootstrap-typeahead/types/types";
+import { FilterByCallback } from "react-bootstrap-typeahead/types/types";
+
 import { IoClose } from "react-icons/io5";
 import { HiMiniBanknotes } from "react-icons/hi2";
 import { GrMoney } from "react-icons/gr";
 import { BsCashCoin } from "react-icons/bs";
 import { MdOutlinePayments } from "react-icons/md";
 import { RiSecurePaymentFill } from "react-icons/ri";
-import { IconType } from "react-icons";
-
 
 /*
 const NumericInputWithDotAsComma = () => {
@@ -396,7 +394,7 @@ export default function AddAsset(props: any) {
                                             />
                                             }
                                             {(assetType && assetType.name.length === 0 && assetType.logo) && <div id="asset-type-selector" className="selected">
-                                                <div id="asset-type-selector-icon">{<GetIcon lib={JSON.parse(assetType.logo).lib} name={JSON.parse(assetType.logo).name} />}</div>
+                                                <div id="asset-type-selector-icon">{<DynamicIcon lib={JSON.parse(assetType.logo).lib} name={JSON.parse(assetType.logo).name} />}</div>
                                             </div>}
                                         </>
                                     )}

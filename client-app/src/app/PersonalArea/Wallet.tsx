@@ -1,16 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import illustration from '../../assets/images/illustrations/favorite.svg'
 import darkIllustration from '../../assets/images/illustrations/favorite_dark.svg'
-import { FaPlus } from "react-icons/fa";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import Asset from "../../assets/model/Asset";
 import useLongPress, { currencyFormat } from "../../assets/libraries/Utils";
 import Skeleton from "react-loading-skeleton";
-import { LuEyeOff } from "react-icons/lu";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { ControllersContext, DataContext, PersonalAreaContext } from "../PersonalArea";
 import { ThemeContext, TranslationContext } from "../../App";
-import GetIcon from "../../assets/components/Utils";
+import { DynamicIcon } from "../../assets/components/Utils";
+
+import { LuEyeOff } from "react-icons/lu";
+import { LuPlus } from "react-icons/lu";
 
 interface AssetItemType {
     data: DataContext,
@@ -37,7 +38,7 @@ function AssetListItem({ data, controllers, asset }: AssetItemType) {
                     {!!asset.attributes && <div className="asset-logo">
                         {(asset.attributes.sourceName !== "")
                             ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
-                            : <div className="type-icon">{<GetIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
+                            : <div className="type-icon">{<DynamicIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
                         }
                     </div>}
                     <div className="asset-name">{asset.name}</div>
@@ -108,7 +109,7 @@ export default function Wallet() {
                                                                             {!!asset.attributes && <div className="asset-logo">
                                                                                 {(asset.attributes.sourceName !== "")
                                                                                     ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
-                                                                                    : <div className="type-icon">{<GetIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
+                                                                                    : <div className="type-icon">{<DynamicIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name}/>}</div>
                                                                                 }
                                                                             </div>}
                                                                             <div className="asset-name">{asset.name}</div>
@@ -140,7 +141,7 @@ export default function Wallet() {
                                 <div className="empty-content mt-5">
                                     <div className={`title fs-1 fw-bolder ${(theme === "dark") ? "text-white-50" : "text-black-50"}`}>Hey! It seems like there's nothing to show here</div>
                                     <Link to={"./create"} className="btn border btn-primary rounded-4 shadow-sm btn-lg px-3 py-3 w-100 d-flex gap-3 justify-content-center mt-4">
-                                        <FaPlus style={{ marginTop: 3 }} />
+                                        <LuPlus style={{ marginTop: 3 }} />
                                         <div className='small text-center'>Add your first asset</div>
                                     </Link>
                                 </div>

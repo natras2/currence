@@ -9,6 +9,7 @@ import CurrencyInput from "react-currency-input-field";
 import { BackButton } from "../../../assets/components/Utils";
 import InputField from "../../../assets/components/InputField";
 import Loader from "../../../assets/components/Loader";
+
 import { BiCalendar } from "react-icons/bi";
 
 export default function AddTransaction() {

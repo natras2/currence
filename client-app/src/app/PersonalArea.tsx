@@ -3,17 +3,6 @@ import UserController from "../assets/controllers/UserController";
 import { getAuth } from "firebase/auth";
 import { app } from "../firebase/firebaseConfig";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { BiSolidDashboard } from "react-icons/bi";
-import { IoIosWallet } from "react-icons/io";
-import { GrList } from "react-icons/gr";
-import { PiHandCoinsFill } from "react-icons/pi";
-import { FaChartSimple } from "react-icons/fa6";
-import { IoSearchSharp } from "react-icons/io5";
-import { LuEye } from "react-icons/lu";
-import { LuEyeOff } from "react-icons/lu";
-import { MdGroupAdd } from "react-icons/md";
-import { MdPersonAddAlt1 } from "react-icons/md";
-import { FaPlus } from "react-icons/fa6";
 import ProfileImage from "../assets/components/ProfileImage";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -24,6 +13,18 @@ import AssetsController from "../assets/controllers/AssetsController";
 import { titleCase } from "../assets/libraries/Utils";
 import { ThemeContext } from "../App";
 import TransactionsController from "../assets/controllers/TransactionsController";
+
+import { BiSolidDashboard } from "react-icons/bi";
+import { IoIosWallet } from "react-icons/io";
+import { GrList } from "react-icons/gr";
+import { PiHandCoinsFill } from "react-icons/pi";
+import { FaChartSimple } from "react-icons/fa6";
+import { IoSearchSharp } from "react-icons/io5";
+import { LuEye } from "react-icons/lu";
+import { LuEyeOff } from "react-icons/lu";
+import { LuPlus } from "react-icons/lu";
+import { MdGroupAdd } from "react-icons/md";
+import { MdPersonAddAlt1 } from "react-icons/md";
 
 export interface PersonalAreaContext {
     data: DataContext,
@@ -115,7 +116,7 @@ function TopRightButtons(props: any) {
         {
             id: "addAsset",
             page: ["Wallet"],
-            icon: <FaPlus />,
+            icon: <LuPlus />,
             link: "/wallet/create",
             index: 5
         },

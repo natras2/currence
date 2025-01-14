@@ -5,13 +5,14 @@ import illustration from '../assets/images/illustrations/home.svg'
 import darkIllustration from '../assets/images/illustrations/home_dark.svg'
 import { Typewriter } from 'react-simple-typewriter'
 import { Link, useNavigate } from 'react-router-dom';
-import { FcGoogle } from "react-icons/fc";
-import { BsAt } from "react-icons/bs";
 import { CheckRedirectSignIn, SignInWithGoogleAuth } from '../assets/controllers/Auth';
 import Loader from '../assets/components/Loader';
 import { getAuth } from 'firebase/auth';
 import { app } from '../firebase/firebaseConfig';
 import { ThemeContext } from '../App';
+
+import { FcGoogle } from "react-icons/fc";
+import { BsAt } from "react-icons/bs";
 
 function LandingPage() {
     const refTitle = useRef(null);

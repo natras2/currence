@@ -1,10 +1,11 @@
 import illustration from '../../assets/images/illustrations/splash-first-access.svg'
 import darkIllustration from '../../assets/images/illustrations/splash-first-access_dark.svg'
-import { FaPlus } from "react-icons/fa6";
 import Emoji from './Emoji';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { ThemeContext } from '../../App';
+
+import { LuPlus } from "react-icons/lu";
 
 export function SplashFirstAccess(props: any) {
     const theme = useContext(ThemeContext);
@@ -44,7 +45,7 @@ export function SplashFirstAccess(props: any) {
                 </div>
                 <div>
                     <Link to={"/wallet/create"} className="btn border btn-primary rounded-4 shadow-sm btn-lg px-3 py-3 w-100 d-flex gap-3 justify-content-center border-0">
-                        <FaPlus style={{ marginTop: 3 }} />
+                        <LuPlus style={{ marginTop: 3 }} />
                         <div className='small text-center'>Add your first asset</div>
                     </Link>
                 </div>
