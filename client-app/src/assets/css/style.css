@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-    --background: #fdfdfd;
+    --background: #ececec;
     --highlight-background: #ffffff;
     --text-color: #212529;
     --inverse-text-color: #d8d8d8;
@@ -22,8 +22,8 @@
     --list-dropdown-background: #ffffff;
 }
 
-html {
-    --background: #ffffff;
+html:not(.dark-mode) {
+    background: #e8eaed;
 }
 
 html.dark-mode {
@@ -172,14 +172,19 @@ form .input-guide {
 
 #navigation-bar .nav-btn .icon {
     font-size: 1.6rem;
+    transition: color .1s, transform .1s, margin .1s;
 }
 
 #navigation-bar .nav-btn .name {
     font-size: .7rem;
+    transition: color .1s, font-weight .1s;
 }
 
 #navigation-bar .nav-btn.active .icon {
     color: var(--palette-blue-2);
+    margin-top: -2px;
+    margin-bottom: 2px;
+    transform: scale(1.1);
 }
 
 #navigation-bar .nav-btn.active .name {

@@ -28,7 +28,7 @@ export default class TransactionsController extends Controller {
         return unsubscribe;
     }
 
-    CheckTransaction (transaction: Transaction, callbackErrorList: (errorsList : string[]) => void): boolean {
+    CheckTransaction (transaction: Transaction, errorMonitor?: (errorsList : string[]) => void): boolean {
         let result = true;
         let errorList: string[] = [];
 
@@ -120,6 +120,9 @@ export default class TransactionsController extends Controller {
                 break;
         }
 
+        if (!result && errorMonitor) 
+            errorMonitor(errorList);
+        
         return result;
     }
     
