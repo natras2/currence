@@ -272,17 +272,16 @@ export default function PersonalArea() {
     useEffect(() => {
         if (!user) return;
         if (!assets) return; // Only start listening for assets when the user is available
-
+        var updatedTotalBalance = 0;
         if (assets.length > 0) {
             const contributingAssets = assets.filter(asset => !asset.hiddenFromTotal);
-            var updatedTotalBalance = 0;
             if (contributingAssets.length > 0) {
                 updatedTotalBalance = contributingAssets.reduce((accumulator, asset) => accumulator + asset.balance, 0);
             }
-            if (updatedTotalBalance !== user.totalBalance) {
-                console.log("Updated total balance");
-                controllers.userController.UpdateTotalBalance(updatedTotalBalance);
-            }
+        }
+        if (updatedTotalBalance !== user.totalBalance) {
+            console.log("Updated total balance");
+             controllers.userController.UpdateTotalBalance(updatedTotalBalance);
         }
 
     }, [assets]);
