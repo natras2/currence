@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-    --background: #ececec;
+    --background: #f1f3f6;
     --highlight-background: #ffffff;
     --text-color: #212529;
     --inverse-text-color: #d8d8d8;
@@ -23,7 +23,7 @@
 }
 
 html:not(.dark-mode) {
-    background: #e8eaed;
+    background: #fafafa;
 }
 
 html.dark-mode {
