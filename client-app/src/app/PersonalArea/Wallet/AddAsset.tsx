@@ -174,9 +174,6 @@ export default function AddAsset(props: any) {
     const [assetFocus, setAssetFocus] = useState(false);
     const [displayAssetTypeSelector, setDisplayAssetTypeSelector] = useState(true);
     const theme = useContext(ThemeContext);
-    const [isSelectingAssetType, setIsSelectingAssetType] = useState((!!location.pathname.split("/")[3] && location.pathname.split("/")[3] === "select-type"));
-
-    //const [char, setChar] = useState<any>(null);
 
     const options: Option[] = italianBanks.filter((opt) => !!opt.fullname);
 
@@ -187,11 +184,6 @@ export default function AddAsset(props: any) {
         setDisplayAssetTypeSelector: setDisplayAssetTypeSelector
     } as AddAssetContext;
 
-
-    useEffect(() => {
-        setIsSelectingAssetType((!!location.pathname.split("/")[3] && location.pathname.split("/")[3] === "select-type"));
-    }, [location]);
-
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         if (formData.hasOwnProperty(name)) {
@@ -200,9 +192,6 @@ export default function AddAsset(props: any) {
                 [name]: value
             }));
         }
-
-        //if (value && name == "new-asset-balance") console.log(parseFloat(value.replace(',', '.')));
-
     }
 
     const handleAssetNameChange = (text: string, event: ChangeEvent<HTMLInputElement>) => {
@@ -316,7 +305,6 @@ export default function AddAsset(props: any) {
                             <div className="page-title" style={{ marginTop: 1 }}>New asset</div>
                             <div style={{ width: "31px" }}></div>
                         </div>
-                        {/*<div>Here: {char}</div>*/}
                         <CurrencyInput
                             className="currency-input"
                             id="new-asset-balance"
@@ -431,7 +419,7 @@ export default function AddAsset(props: any) {
                         </button>
                     </div>
                 </form>
-                {isSelectingAssetType && <Outlet context={context}/>}
+                <Outlet context={context}/>
             </div>
             {processing && <Loader theme={theme} selector="login" />}
         </>

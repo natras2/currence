@@ -7,7 +7,8 @@
             "bankaccountshort": "Bank accounts and deposits",
             "ewallet": "Apps and digital payment methods",
             "ewalletshort": "Apps and digital wallets",
-            "other": "General"
+            "other": "General",
+            "othershort": "General"
         },
         "transactiontype": {
             "expence": "Expence",
