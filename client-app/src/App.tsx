@@ -7,7 +7,7 @@ import LandingPage from './app/LandingPage';
 import Signup from './app/Signup';
 import PersonalArea from './app/PersonalArea';
 import Settings from './app/Settings';
-import AddAsset from './app/PersonalArea/Wallet/AddAsset';
+import AddAsset, { AssetTypeSelector } from './app/PersonalArea/Wallet/AddAsset';
 import AssetDetail from './app/PersonalArea/Wallet/AssetDetail';
 import Dashboard from './app/PersonalArea/Dashboard';
 import Transactions from './app/PersonalArea/Transactions';
@@ -33,12 +33,12 @@ function App() {
     const [translationContext, setTranslationContext] = useState<TranslationContextType>();
     const [toggleTheme, setToggleTheme] = useState(false);
 
-    const {t, i18n} = useTranslation();
+    const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        setTranslationContext({t, i18n});
+        setTranslationContext({ t, i18n });
     }, [])
-    
+
 
     useEffect(() => {
         const cachedThemePreference = localStorage.getItem("preferredTheme");
@@ -95,42 +95,41 @@ function App() {
 
     return (
         <TranslationContext.Provider value={translationContext}>
-        <ThemeContext.Provider value={theme}>
-            <Router>
-                <Routes>
-                    {/* Customer routes */}
-                    <Route index element={<LandingPage />} />
-                    <Route path='signup' element={<Signup />} />
-                    <Route path='logout' element={<Logout />} />
-                    <Route path='login'>
-                        <Route index element={<Login />} />
-                        <Route path='recover' element={<PasswordForgotten />} />
-                    </Route>
-
-                    <Route element={<PersonalArea />} >
-                        <Route path='dashboard' element={<Dashboard />} />
-                        <Route path='transactions'>
-                            <Route index element={<Transactions />} />
-                            <Route path='create' element={<AddTransaction />} />
-                        </Route> 
-                        <Route path='wallet'>
-                            <Route index element={<Wallet />} />
-                            <Route path='create'>
-                                <Route index element={<AddAsset />} />
-                                <Route path='select-type' element={<AddAsset selectAssetType />} />
-                            </Route> 
-                            <Route path=':id' element={<AssetDetail />} />
+            <ThemeContext.Provider value={theme}>
+                <Router>
+                    <Routes>
+                        {/* Customer routes */}
+                        <Route index element={<LandingPage />} />
+                        <Route path='signup' element={<Signup />} />
+                        <Route path='logout' element={<Logout />} />
+                        <Route path='login'>
+                            <Route index element={<Login />} />
+                            <Route path='recover' element={<PasswordForgotten />} />
                         </Route>
-                        <Route path='evener' element={<Evener />} />
-                        <Route path='stats' element={<Stats />} />
-                        <Route path='settings' element={<Settings changeTheme={setToggleTheme}/>} />
-                    </Route>
 
-                    {/* Fallback error route */}
-                    <Route path='*' element={<Error />} />
-                </Routes>
-            </Router>
-        </ThemeContext.Provider>
+                        <Route element={<PersonalArea />} >
+                            <Route path='dashboard' element={<Dashboard />} />
+                            <Route path='transactions'>
+                                <Route index element={<Transactions />} />
+                                <Route path='create' element={<AddTransaction />} />
+                            </Route>
+                            <Route path='wallet'>
+                                <Route index element={<Wallet />} />
+                                <Route path='create' element={<AddAsset />}>
+                                    <Route path='select-type' element={<AssetTypeSelector />} />
+                                </Route>
+                                <Route path=':id' element={<AssetDetail />} />
+                            </Route>
+                            <Route path='evener' element={<Evener />} />
+                            <Route path='stats' element={<Stats />} />
+                            <Route path='settings' element={<Settings changeTheme={setToggleTheme} />} />
+                        </Route>
+
+                        {/* Fallback error route */}
+                        <Route path='*' element={<Error />} />
+                    </Routes>
+                </Router>
+            </ThemeContext.Provider>
         </TranslationContext.Provider>
     );
 }

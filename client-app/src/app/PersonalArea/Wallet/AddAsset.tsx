@@ -1,7 +1,7 @@
 import CurrencyInput from "react-currency-input-field";
 import { DynamicIcon, BackButton} from "../../../assets/components/Utils";
-import { useNavigate, useOutletContext } from "react-router-dom";
-import { ChangeEvent, Dispatch, ReactElement, SetStateAction, useContext, useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import { ChangeEvent, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import Asset, { AssetAttributes, AssetType } from "../../../assets/model/Asset";
 import { capitalize } from "../../../assets/libraries/Utils";
 import Loader from "../../../assets/components/Loader";
@@ -60,18 +60,18 @@ interface Option {
     logo?: string;
     type: string;
 }
+interface AddAssetContext {
+    setAssetType: Dispatch<SetStateAction<Option | undefined>>;
+    setDisplayAssetTypeSelector: Dispatch<SetStateAction<boolean>>;
+}
 
-function AssetTypeSelector({ setAssetType, setIsSelectingAssetType, setDisplayAssetTypeSelector }: {
-    setAssetType: Dispatch<SetStateAction<Option | undefined>>
-    setIsSelectingAssetType: Dispatch<SetStateAction<boolean>>
-    setDisplayAssetTypeSelector: Dispatch<SetStateAction<boolean>>
-}) {
+export function AssetTypeSelector() {
     const [selectedType, setSelectedType] = useState<Option>();
     const i18n: TranslationContextType = useContext(TranslationContext);
 
-    const backHandler = () => {
-        setIsSelectingAssetType(false);
-    }
+    const navigate = useNavigate();
+
+    const { setAssetType, setDisplayAssetTypeSelector } = useOutletContext() as AddAssetContext;
 
     const types = [
         {
@@ -123,8 +123,8 @@ function AssetTypeSelector({ setAssetType, setIsSelectingAssetType, setDisplayAs
     const handleConfirmType = (event: any) => {
         if (selectedType) {
             setAssetType(selectedType)
-            setIsSelectingAssetType(false);
             setDisplayAssetTypeSelector(false);
+            navigate("..")
         }
     }
 
@@ -133,7 +133,7 @@ function AssetTypeSelector({ setAssetType, setIsSelectingAssetType, setDisplayAs
             <div id="select-asset-type" className="callout page sub">
                 <div className="h-100 d-flex flex-column">
                     <div className="d-flex justify-content-between">
-                        <BackButton close handler={backHandler} />
+                        <BackButton close link=".." />
                         <div className="page-title" style={{ marginTop: 1 }}>Select asset type</div>
                         <div style={{ width: "31px" }}></div>
                     </div>
@@ -158,6 +158,8 @@ function AssetTypeSelector({ setAssetType, setIsSelectingAssetType, setDisplayAs
 
 /* eslint-disable */
 export default function AddAsset(props: any) {
+    const location = useLocation();
+
     const { data, controllers } = useOutletContext<PersonalAreaContext>();
     const i18n: TranslationContextType = useContext(TranslationContext);
 
@@ -171,17 +173,24 @@ export default function AddAsset(props: any) {
     const [assetType, setAssetType] = useState<Option>();
     const [assetFocus, setAssetFocus] = useState(false);
     const [displayAssetTypeSelector, setDisplayAssetTypeSelector] = useState(true);
-    const [isSelectingAssetType, setIsSelectingAssetType] = useState((props.selectAssetType));
     const theme = useContext(ThemeContext);
+    const [isSelectingAssetType, setIsSelectingAssetType] = useState((!!location.pathname.split("/")[3] && location.pathname.split("/")[3] === "select-type"));
+
     //const [char, setChar] = useState<any>(null);
 
     const options: Option[] = italianBanks.filter((opt) => !!opt.fullname);
 
     const navigate = useNavigate();
 
-    const backHandler = () => {
-        navigate(-1);
-    }
+    const context = {
+        setAssetType: setAssetType,
+        setDisplayAssetTypeSelector: setDisplayAssetTypeSelector
+    } as AddAssetContext;
+
+
+    useEffect(() => {
+        setIsSelectingAssetType((!!location.pathname.split("/")[3] && location.pathname.split("/")[3] === "select-type"));
+    }, [location]);
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -265,7 +274,7 @@ export default function AddAsset(props: any) {
         // Add the new asset to Firestore
         var result = await controllers.assetsController.CreateAsset(asset);
         if (result) {
-            navigate(-1)
+            navigate("..")
         }
         else {
             setProcessing(false);
@@ -303,7 +312,7 @@ export default function AddAsset(props: any) {
                 <form onSubmit={handleSubmit} className="h-100 d-flex flex-column justify-content-between">
                     <div>
                         <div className="d-flex gap-3 mb-5">
-                            <BackButton handler={backHandler} />
+                            <BackButton link={".."} />
                             <div className="page-title" style={{ marginTop: 1 }}>New asset</div>
                             <div style={{ width: "31px" }}></div>
                         </div>
@@ -407,7 +416,7 @@ export default function AddAsset(props: any) {
                                     </div>
                                     <IoClose style={{ fontSize: 22, background: "#534b00", padding: 2, borderRadius: "50%", cursor: "pointer" }} onClick={() => setAssetType(undefined)} />
                                 </div>}
-                                {displayAssetTypeSelector && <div id="asset-type-selector" onClick={() => setIsSelectingAssetType(true)}>
+                                {displayAssetTypeSelector && <div id="asset-type-selector" onClick={() => navigate("./select-type")}>
                                     <div id="asset-type-selector-title"><div style={{ textOverflow: "ellipsis" }}>Select asset type</div></div>
                                     <div id="asset-type-selector-icon"><HiMiniBanknotes /></div>
                                 </div>}
@@ -422,7 +431,7 @@ export default function AddAsset(props: any) {
                         </button>
                     </div>
                 </form>
-                {isSelectingAssetType && <AssetTypeSelector setAssetType={setAssetType} setIsSelectingAssetType={setIsSelectingAssetType} setDisplayAssetTypeSelector={setDisplayAssetTypeSelector}/>}
+                {isSelectingAssetType && <Outlet context={context}/>}
             </div>
             {processing && <Loader theme={theme} selector="login" />}
         </>
