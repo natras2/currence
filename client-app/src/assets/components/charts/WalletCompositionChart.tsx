@@ -1,7 +1,7 @@
 import { PieChart } from "@mui/x-charts"
 import { ChartData } from "../../../app/PersonalArea/Stats"
 
-export default function ExpenceCategoriesChart(data: ChartData[]) {
+export default function WalletCompositionChart(data: ChartData[]) {
     return (
         <PieChart
             series={[

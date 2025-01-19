@@ -19,6 +19,7 @@ import AddTransaction from './app/PersonalArea/Transactions/AddTransaction';
 import { useTranslation } from 'react-i18next';
 import { i18n as I18nType, TFunction } from 'i18next';
 import i18n from './i18nConfig';
+import WalletComposition from './app/PersonalArea/Stats/WalletComposition';
 
 export const ThemeContext = createContext('light');
 export const TranslationContext = createContext({} as any);
@@ -121,7 +122,10 @@ function App() {
                                 <Route path=':id' element={<AssetDetail />} />
                             </Route>
                             <Route path='evener' element={<Evener />} />
-                            <Route path='stats' element={<Stats />} />
+                            <Route path='stats' >
+                                <Route index element={<Stats />} />
+                                <Route path='wallet-composition' element={<WalletComposition />} />
+                            </Route>
                             <Route path='settings' element={<Settings changeTheme={setToggleTheme} />} />
                         </Route>
 
