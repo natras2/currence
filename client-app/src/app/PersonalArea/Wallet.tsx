@@ -21,7 +21,6 @@ interface AssetItemType {
 
 function AssetListItem({ data, controllers, asset }: AssetItemType) {
     const navigate = useNavigate();
-    const i18n = useContext(TranslationContext);
 
     const onLongPressOnAsset = (assetId: string) => {
         alert(assetId);
@@ -56,6 +55,8 @@ function AssetListItem({ data, controllers, asset }: AssetItemType) {
 export default function Wallet() {
     const theme = useContext(ThemeContext);
     const { data, controllers } = useOutletContext<PersonalAreaContext>();
+
+    const i18n = useContext(TranslationContext);
 
     const user = data.user;
     const assets = data.assets;
@@ -105,14 +106,17 @@ export default function Wallet() {
                                                             return (
                                                                 <span key={i}>
                                                                     <Link to={"./" + asset.id} style={{ textDecoration: 'none' }} className="favorite">
-                                                                        <div>
+                                                                        <div className="d-flex align-items-center gap-2">
                                                                             {!!asset.attributes && <div className="asset-logo">
                                                                                 {(asset.attributes.sourceName !== "")
                                                                                     ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
                                                                                     : <div className="type-icon">{<DynamicIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name}/>}</div>
                                                                                 }
                                                                             </div>}
-                                                                            <div className="asset-name">{asset.name}</div>
+                                                                            <div>
+                                                                                <div className="asset-name">{asset.name}</div>
+                                                                                <div className="asset-type">{!!asset.attributes && i18n.t(asset.attributes.type + "short")}</div>
+                                                                            </div>
                                                                         </div>
                                                                         <div className="asset-balance">{currencyFormat(asset.balance)}</div>
                                                                     </Link>

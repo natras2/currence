@@ -400,7 +400,8 @@ form .input-guide {
 }
 
 #home.page .typewriter-wrapper {
-    font-family: 'Baloo Da 2';
+    font-family: "Baloo Da 2", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
     color: var(--palette-blue-2);
     font-weight: 800;
     font-size: 55px;
@@ -471,15 +472,15 @@ body.dark-mode input.currency-input::placeholder {
 }
 
 #wallet .starred .cards>* {
-    flex: 0 0 210px;
+    flex: 0 0 auto;
     height: 130px
 }
 
 #wallet .starred .cards>*>* {
-    width: 210px !important;
     height: 130px !important;
     line-height: unset;
     display: block;
+    min-width: 210px;
 }
 
 #wallet .starred .cards>*>.no-favorites {
@@ -509,8 +510,8 @@ body.dark-mode input.currency-input::placeholder {
 }
 
 #wallet .starred .cards>*>.favorite {
-    padding: .8rem 1.2rem 1rem .6rem;
-    border-radius: 0.25rem;
+    padding: .8rem .9rem 1rem .6rem;
+    border-radius: .85rem;
     background: linear-gradient(0.4turn, var(--palette-blue-3), var(--palette-blue-2));
     color: #F5F5F5;
     display: flex;
@@ -650,11 +651,23 @@ body.dark-mode input.currency-input::placeholder {
 #wallet .starred .cards>*>.favorite .asset-name {
     margin-top: 4px;
     font-weight: 600;
+    font-size: 17px;
+}
+#wallet .starred .cards>*>.favorite .asset-type {
+    margin: -2px 0 3px;
+    font-weight: 300;
+    font-size: 13px;
 }
 
 #wallet .starred .cards>*>.favorite .asset-balance {
     text-align: right;
-    font-size: 17px;
+    font-size: 19px;
+    font-weight: 600;
+    padding: .4rem .7rem;
+    background: #00000020;
+    border-radius: 9px;
+    margin: 0 -.3rem -.4rem auto;
+    width: fit-content;
 }
 
 .personal-area.page #asset-detail {

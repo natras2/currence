@@ -2,8 +2,11 @@
     "static": {
         "assetType": {
             "cash": "Cash and traditional payment methods",
+            "cashshort": "Traditional methods",
             "bankaccount": "Bank accounts and deposits",
+            "bankaccountshort": "Bank accounts and deposits",
             "ewallet": "Apps and digital payment methods",
+            "ewalletshort": "Apps and digital wallets",
             "other": "General"
         },
         "transactiontype": {
