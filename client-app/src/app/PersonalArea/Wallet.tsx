@@ -118,7 +118,7 @@ export default function Wallet() {
                                                                                 <div className="asset-type">{!!asset.attributes && i18n.t(asset.attributes.type + "short")}</div>
                                                                             </div>
                                                                         </div>
-                                                                        <div className="asset-balance">{currencyFormat(asset.balance)}</div>
+                                                                        <div className="asset-balance">{(data.user.hiddenBalance) ? <span style={{ filter: "blur(4px)" }}>{currencyFormat(919)}</span> : currencyFormat(asset.balance)}</div>
                                                                     </Link>
                                                                 </span>
                                                             )
