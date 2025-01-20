@@ -161,8 +161,8 @@ export const DynamicIcon: React.FC<IProps> = ({ lib, name, ...props }) => {
     const Icon = React.lazy(async () => {
         try {
             const module = await loadIcon();
-            const {default: any, ...rest} = module;
-            const iconArray = rest as {[key: string]: IconType};
+            const { default: any, ...rest } = module;
+            const iconArray = rest as { [key: string]: IconType };
             const IconComponent = iconArray[name];
             if (!IconComponent) {
                 throw new Error(`Icon "${name}" not found in library "${lib}".`);
@@ -267,13 +267,15 @@ export const DynamicIcon = loadable(({ lib, name }: {lib: string, name: string})
 */
 export function BackButton(props: any) {
     return (
-        <Link to={props.link} id="back-arrow" onClick={(props.handler) ? props.handler : ""} style={{ textDecoration: "none", position: "relative", top: "-1rem" }}>
-            <span style={{ fontSize: "40px", marginLeft: -9 }}>
-                {(props.close)
-                    ? <IoClose style={{ fontSize: 30, marginRight: 10 }} />
-                    : <TiArrowLeft />
-                }
-            </span>
+        <Link to={props.link} id="back-arrow" replace={(!!props.link && !!props.replace)} onClick={(props.handler) ? props.handler : ""} style={{ textDecoration: "none", position: "relative", top: "-1rem" }}>
+            {(props.close)
+                ? (<span style={{ fontSize: "40px", marginLeft: -7 }}>
+                    <IoClose style={{ fontSize: 30, marginRight: 8 }} />
+                </span>)
+                : (<span style={{ fontSize: "40px", marginLeft: -9 }}>
+                    <TiArrowLeft />
+                </span>)
+            }
         </Link>
     );
 }

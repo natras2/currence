@@ -299,8 +299,8 @@ export default function PersonalArea() {
     return (
         <>
             <SkeletonTheme
-                baseColor={(theme === 'light') ? '#ebebeb' : '#4a4a4a'}
-                highlightColor={(theme === 'light') ? '#f5f5f5' : '#5a5a5a'}
+                baseColor={(theme === 'light') ? '#ebebeb' : '#383838'}
+                highlightColor={(theme === 'light') ? '#f5f5f5' : '#444444'}
             >
                 <div className='personal-area page'>
                     {(userProcessing || assetsProcessing || transactionsProcessing)

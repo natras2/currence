@@ -124,7 +124,7 @@ export function AssetTypeSelector() {
         if (selectedType) {
             setAssetType(selectedType)
             setDisplayAssetTypeSelector(false);
-            navigate("..")
+            navigate("..", { replace: true })
         }
     }
 
@@ -133,7 +133,7 @@ export function AssetTypeSelector() {
             <div id="select-asset-type" className="callout page sub">
                 <div className="h-100 d-flex flex-column">
                     <div className="d-flex justify-content-between">
-                        <BackButton close link=".." />
+                        <BackButton close link=".." replace />
                         <div className="page-title" style={{ marginTop: 1 }}>Select asset type</div>
                         <div style={{ width: "31px" }}></div>
                     </div>
@@ -158,8 +158,6 @@ export function AssetTypeSelector() {
 
 /* eslint-disable */
 export default function AddAsset(props: any) {
-    const location = useLocation();
-
     const { data, controllers } = useOutletContext<PersonalAreaContext>();
     const i18n: TranslationContextType = useContext(TranslationContext);
 

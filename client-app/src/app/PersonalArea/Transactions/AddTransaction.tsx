@@ -1,6 +1,6 @@
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { Link, Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import { PersonalAreaContext } from "../../PersonalArea";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ThemeContext, TranslationContext } from "../../../App";
 import { capitalize } from "../../../assets/libraries/Utils";
 import Transaction, { Category, TransactionType } from "../../../assets/model/Transaction";
@@ -11,6 +11,83 @@ import InputField from "../../../assets/components/InputField";
 import Loader from "../../../assets/components/Loader";
 
 import { BiCalendar } from "react-icons/bi";
+import { LuPlus } from "react-icons/lu";
+
+interface AddTransactionContext {
+    data: any
+    handleChange: (e: any) => void
+}
+
+export function TransactionCategorySelector() {
+    return (
+        <div id="select-transaction-category" className="callout page sub">
+            <div className="h-100 d-flex flex-column">
+                <div className="d-flex justify-content-between">
+                    <BackButton close link=".." replace />
+                    <div className="page-title" style={{ marginTop: 1 }}>Select category</div>
+                    <div style={{ width: "31px" }}></div>
+                </div>
+                <div className="body"></div>
+            </div>
+        </div>
+    );
+}
+
+export function AddTransactionCategory() {
+    return (
+        <div id="create-transaction-category" className="callout page subsub">
+            <div className="h-100 d-flex flex-column">
+                <div className="d-flex justify-content-between">
+                    <BackButton link=".." replace />
+                    <div className="page-title" style={{ marginTop: 1 }}>Create category</div>
+                    <div style={{ width: "31px" }}></div>
+                </div>
+                <div className="body"></div>
+            </div>
+        </div>
+    );
+}
+
+export function InvolvedAssetsSelector() {
+    return <></>;
+}
+
+export function TransactionDateTimeSelector() {
+    return (
+        <div id="select-transaction-datetime" className="callout page sub">
+            <div className="h-100 d-flex flex-column">
+                <div className="d-flex justify-content-between">
+                    <BackButton close link=".." replace />
+                    <div className="page-title" style={{ marginTop: 1 }}>Transaction date and time</div>
+                    <div style={{ width: "31px" }}></div>
+                </div>
+                <div className="body"></div>
+            </div>
+        </div>
+    );
+}
+
+export function TransactionNotesInput() {
+    const { handleChange, data } = useOutletContext<AddTransactionContext>();
+
+    return (
+        <div id="select-transaction-datetime" className="callout page sub">
+            <div className="h-100 d-flex flex-column">
+                <div className="d-flex justify-content-between">
+                    <BackButton close link=".." replace />
+                    <div className="page-title" style={{ marginTop: 1 }}>Add notes</div>
+                    <div style={{ width: "31px" }}></div>
+                </div>
+                <div className="body">
+                    <div className="">
+                        <label className="form-label">Notes</label>
+                        <textarea className="form-control" name="new-transaction-notes" rows={2} placeholder="Optional" onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={data["new-transaction-notes"]}></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 export default function AddTransaction() {
     const { data, controllers } = useOutletContext<PersonalAreaContext>();
@@ -31,9 +108,24 @@ export default function AddTransaction() {
     const user: User = data.user;
     const navigate = useNavigate();
 
-    const backHandler = () => {
-        navigate(-1);
-    }
+    /*
+    useEffect (() => {
+        if(formData["new-transaction-type"] === TransactionType.TRANSFER) {
+            if(!formData["new-transaction-description"] || formData["new-transaction-description"] === "") {
+                setFormData(prevState => ({
+                    ...prevState,
+                    "new-transaction-description": "Transfer"
+                }));
+            }
+        }
+        else {
+            setFormData(prevState => ({
+                ...prevState,
+                "new-transaction-description": ""
+            }));
+        }
+    }, [formData["new-transaction-type"]])
+    */
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -44,6 +136,11 @@ export default function AddTransaction() {
             }));
         }
     }
+
+    const context = {
+        data,
+        handleChange
+    } as AddTransactionContext;
 
     const handleSubmit = async (e: any) => {
         // Prevent the browser from reloading the page
@@ -115,14 +212,14 @@ export default function AddTransaction() {
                 <form onSubmit={handleSubmit} className="h-100 d-flex flex-column justify-content-between">
                     <div>
                         <div className="d-flex justify-content-between">
-                            <BackButton handler={backHandler} />
+                            <BackButton link={".."} />
                             <div className="page-title" style={{ marginTop: -.5 }}>New transaction</div>
-                            <div style={{width: "31px"}}></div>
+                            <div style={{ width: "31px" }}></div>
                         </div>
-                        <div className="type-selector" style={{marginBottom: "1.5rem"}}>
-                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "active" : ""}`} onClick={() => handleChange({target: {name: "new-transaction-type", value: TransactionType.EXPENCE}})}>{i18n.t(TransactionType.EXPENCE)}</div>
-                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.INCOME) ? "active" : ""}`} onClick={() => handleChange({target: {name: "new-transaction-type", value: TransactionType.INCOME}})}>{i18n.t(TransactionType.INCOME)}</div>
-                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.TRANSFER) ? "active" : ""}`} onClick={() => handleChange({target: {name: "new-transaction-type", value: TransactionType.TRANSFER}})}>{i18n.t(TransactionType.TRANSFER)}</div>
+                        <div className="type-selector" style={{ marginBottom: "1.5rem" }}>
+                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "active" : ""}`} onClick={() => handleChange({ target: { name: "new-transaction-type", value: TransactionType.EXPENCE } })}>{i18n.t(TransactionType.EXPENCE)}</div>
+                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.INCOME) ? "active" : ""}`} onClick={() => handleChange({ target: { name: "new-transaction-type", value: TransactionType.INCOME } })}>{i18n.t(TransactionType.INCOME)}</div>
+                            <div className={`selector ${(formData["new-transaction-type"] === TransactionType.TRANSFER) ? "active" : ""}`} onClick={() => handleChange({ target: { name: "new-transaction-type", value: TransactionType.TRANSFER } })}>{i18n.t(TransactionType.TRANSFER)}</div>
                         </div>
                         <CurrencyInput
                             className="currency-input"
@@ -146,20 +243,27 @@ export default function AddTransaction() {
                     <div>
                         <div className="">
                             <label className="form-label">Description</label>
-                            <InputField type="text" placeholder='e.g. "Monthly rent"' name="new-transaction-description" handleChange={handleChange} isRegistering='false' value={formData["new-transaction-description"]} />
-                            {/*<input type="text" className="form-control" name="new-transaction-name" placeholder={'e.g. "Revolut"'} autoComplete="off" required />*/}
+                            <InputField
+                                type="text"
+                                placeholder={`e.g. "${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "Monthly rent" : ((formData["new-transaction-type"] === TransactionType.INCOME) ? "Salary" : ((formData["new-transaction-type"] === TransactionType.TRANSFER) ? "Transfer" : ""))}"`}
+                                name="new-transaction-description"
+                                handleChange={handleChange}
+                                isRegistering='false'
+                                value={formData["new-transaction-description"]}
+                            />
                         </div>
-                        <div className="">
-                            <label className="form-label">Notes</label>
-                            <textarea className="form-control" name="new-transaction-notes" rows={2} placeholder="Optional" onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={formData["new-transaction-notes"]}></textarea>
-                        </div>
+                        <Link to="./add-notes" className="d-flex align-items-center justify-content-center gap-2 fw-light text-decoration-none">
+                            <LuPlus />
+                            <div>Add notes</div>
+                        </Link>
                         <div className="d-flex mt-4 gap-2">
-                            <div className="date-picker-button"><BiCalendar /></div>
+                            <Link to={"./select-date"} className="date-picker-button"><BiCalendar /></Link>
                             <button type='submit' className="btn w-100 border fw-bold text-center btn-primary rounded-pill shadow-sm" style={{ height: 50 }}>
                                 Create
                             </button>
                         </div>
                     </div>
+                    <Outlet context={context} />
                 </form>
             </div>
             {processing && <Loader theme={theme} selector="login" />}

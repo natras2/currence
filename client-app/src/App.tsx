@@ -15,7 +15,7 @@ import Wallet from './app/PersonalArea/Wallet';
 import Evener from './app/PersonalArea/Evener';
 import Stats from './app/PersonalArea/Stats';
 import { createContext, useEffect, useState } from 'react';
-import AddTransaction from './app/PersonalArea/Transactions/AddTransaction';
+import AddTransaction, { AddTransactionCategory, InvolvedAssetsSelector, TransactionCategorySelector, TransactionDateTimeSelector, TransactionNotesInput } from './app/PersonalArea/Transactions/AddTransaction';
 import { useTranslation } from 'react-i18next';
 import { i18n as I18nType, TFunction } from 'i18next';
 import i18n from './i18nConfig';
@@ -99,7 +99,7 @@ function App() {
             <ThemeContext.Provider value={theme}>
                 <Router>
                     <Routes>
-                        {/* Customer routes */}
+                        {/* App routes */}
                         <Route index element={<LandingPage />} />
                         <Route path='signup' element={<Signup />} />
                         <Route path='logout' element={<Logout />} />
@@ -112,7 +112,20 @@ function App() {
                             <Route path='dashboard' element={<Dashboard />} />
                             <Route path='transactions'>
                                 <Route index element={<Transactions />} />
-                                <Route path='create' element={<AddTransaction />} />
+                                <Route path='create' element={<AddTransaction />} >
+                                    <Route path='select-category' >
+                                        <Route index element={<TransactionCategorySelector />} />
+                                        <Route path='create' element={<AddTransactionCategory />} />
+                                    </Route>
+                                    <Route path='select-asset' >
+                                        <Route index element={<InvolvedAssetsSelector />} />
+                                        <Route path='create' element={<AddAsset />}>
+                                            <Route path='select-type' element={<AssetTypeSelector />} />
+                                        </Route>
+                                    </Route>
+                                    <Route path='select-date' element={<TransactionDateTimeSelector />} />
+                                    <Route path='add-notes' element={<TransactionNotesInput />} />
+                                </Route>
                             </Route>
                             <Route path='wallet'>
                                 <Route index element={<Wallet />} />
