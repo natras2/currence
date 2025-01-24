@@ -1,21 +1,105 @@
 import { Link, Outlet, useNavigate, useOutletContext } from "react-router-dom";
-import { PersonalAreaContext } from "../../PersonalArea";
-import { useContext, useEffect, useState } from "react";
+import { DataContext, PersonalAreaContextInterface, PersonalAreaContext } from "../../PersonalArea";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { ThemeContext, TranslationContext } from "../../../App";
-import { capitalize } from "../../../assets/libraries/Utils";
-import Transaction, { Category, TransactionType } from "../../../assets/model/Transaction";
+import { capitalize, currencyFormat } from "../../../assets/libraries/Utils";
+import Transaction, { AssetAllocation, Category, TransactionType } from "../../../assets/model/Transaction";
 import User from "../../../assets/model/User";
 import CurrencyInput from "react-currency-input-field";
-import { BackButton } from "../../../assets/components/Utils";
+import { BackButton, DynamicIcon } from "../../../assets/components/Utils";
 import InputField from "../../../assets/components/InputField";
 import Loader from "../../../assets/components/Loader";
 
-import { BiCalendar } from "react-icons/bi";
-import { LuPlus } from "react-icons/lu";
+import { BiCalendar, BiPlus } from "react-icons/bi";
+import { PiNotePencilFill } from "react-icons/pi";
+import Asset from "../../../assets/model/Asset";
+
 
 interface AddTransactionContext {
-    data: any
-    handleChange: (e: any) => void
+    data: any,
+    handleChange: (e: any) => void,
+    assetsAllocations: AssetAllocation[],
+    setAssetsAllocations: Dispatch<SetStateAction<AssetAllocation[]>>
+}
+interface AssetItemType {
+    data: DataContext,
+    asset: Asset,
+    addToSelectedAssetsId: (id: string) => void,
+    removeFromSelectedAssetsId: (id: string) => void,
+    remove?: boolean
+}
+
+function AssetListItem({ data, asset, addToSelectedAssetsId, removeFromSelectedAssetsId, remove = false }: AssetItemType) {
+
+    return (
+        <span className="asset-wrapper">
+            <div className="asset" onClick={() => (remove) ? removeFromSelectedAssetsId(asset.id!) : addToSelectedAssetsId(asset.id!)}>
+                <div className="d-flex align-items-center">
+                    {!!asset.attributes && <div className="asset-logo">
+                        {(asset.attributes.sourceName !== "")
+                            ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
+                            : <div className="type-icon">{<DynamicIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
+                        }
+                    </div>}
+                    <div className="asset-name">{asset.name}</div>
+                </div>
+                <div className="d-flex gap-2">
+                    {/*<div className="asset-balance">{(data.user.hiddenBalance) ? <span style={{ filter: "blur(4px)" }}>{currencyFormat(919)}</span> : currencyFormat(asset.balance)}</div>*/}
+                </div>
+            </div>
+        </span>
+    );
+}
+
+function AssetPicker({ assetsAllocations }: { assetsAllocations: AssetAllocation[] }) {
+
+    const PlusButton = () => <Link to={"./select-asset"} className="plus-btn"><BiPlus /></Link>;
+
+    const NoAllocations = () => {
+        return (
+            <Link to={"./select-asset"} className="asset-picker list-0">
+                <div style={{ marginTop: -3, transform: "scale(1.2)" }}><BiPlus /></div>
+                <div>Select one or more assets</div>
+            </Link>
+        );
+    }
+
+    const AssetsAllocations = () => {
+        return (
+            <>
+                <Link to={"./select-asset"} className="asset-picker">
+                    {(assetsAllocations.length === 1)
+                        ? <OneAllocation />
+                        : <MultipleAllocations />
+                    }
+                </Link>
+                <PlusButton />
+            </>
+        );
+    }
+
+    const OneAllocation = () => {
+        return (
+            <>
+                BBBB
+            </>
+        );
+    }
+
+    const MultipleAllocations = () => {
+        return (
+            <>
+                DDDD
+            </>
+        );
+    }
+
+    return (
+        <>
+            {(assetsAllocations.length === 0) && <NoAllocations />}
+            {(assetsAllocations.length > 0) && <div className="d-flex position-relative align-items-center"><AssetsAllocations /></div>}
+        </>
+    )
 }
 
 export function TransactionCategorySelector() {
@@ -24,7 +108,7 @@ export function TransactionCategorySelector() {
             <div className="h-100 d-flex flex-column">
                 <div className="d-flex justify-content-between">
                     <BackButton close link=".." replace />
-                    <div className="page-title" style={{ marginTop: 1 }}>Select category</div>
+                    <div className="page-title" style={{ marginTop: 1 }}>Categories</div>
                     <div style={{ width: "31px" }}></div>
                 </div>
                 <div className="body"></div>
@@ -39,7 +123,7 @@ export function AddTransactionCategory() {
             <div className="h-100 d-flex flex-column">
                 <div className="d-flex justify-content-between">
                     <BackButton link=".." replace />
-                    <div className="page-title" style={{ marginTop: 1 }}>Create category</div>
+                    <div className="page-title" style={{ marginTop: 1 }}>New category</div>
                     <div style={{ width: "31px" }}></div>
                 </div>
                 <div className="body"></div>
@@ -49,7 +133,98 @@ export function AddTransactionCategory() {
 }
 
 export function InvolvedAssetsSelector() {
-    return <></>;
+    const { data } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
+    const { data: formData, assetsAllocations, setAssetsAllocations } = useOutletContext<AddTransactionContext>();
+
+    const navigate = useNavigate();
+
+    const initialSelection: string[] = []
+    assetsAllocations.forEach((allocation) => {
+        initialSelection.push(allocation.assetId)
+    })
+
+    const [selectedAssetsId, setSelectedAssetsId] = useState<string[]>(initialSelection);
+    const addToSelectedAssetsId = (assetId: string) => setSelectedAssetsId(oldArray => [...oldArray, assetId]);
+    const removeFromSelectedAssetsId = (assetIdToRemove: string) => setSelectedAssetsId(selectedAssetsId.filter(assetId => assetId !== assetIdToRemove));
+
+    const handleConfirm = () => {
+        const allocations: AssetAllocation[] = [];
+        if (selectedAssetsId.length > 1) {
+            navigate("./aaaaa");
+        }
+        else {
+            selectedAssetsId.forEach(selected => {
+                allocations.push({ assetId: selected, amount: parseFloat(formData["new-transaction-amount"]) } as AssetAllocation)
+            });
+
+            setAssetsAllocations(allocations);
+
+            navigate("..");
+        }
+    }
+
+    const sortAssetsByName = (a: Asset, b: Asset) => {
+        const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+        const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+        return 0;
+    }
+
+    const SelectedAssets = () => {
+        if (selectedAssetsId.length === 0)
+            return <></>;
+
+        return (
+            <div className="asset-list selected mb-3">
+                {selectedAssetsId.map((assetId, i) => {
+                    return <AssetListItem remove key={i} data={data} asset={data.assets.filter((a) => a.id === assetId)[0]} addToSelectedAssetsId={addToSelectedAssetsId} removeFromSelectedAssetsId={removeFromSelectedAssetsId} />;
+                })}
+            </div>
+        )
+    }
+
+    const UnselectedAssets = () => {
+        if (data.assets.length === 0)
+            return <div className="title fs-1 fw-bolder text-white-50">Hey! It seems like there's nothing to show here</div>;
+
+        var unselectedAssets = data.assets.sort(sortAssetsByName);
+
+        if (selectedAssetsId.length > 0)
+            unselectedAssets = unselectedAssets.filter((a) => selectedAssetsId.indexOf(a.id!) === -1)
+
+        return (
+            <div className="asset-list">
+                {unselectedAssets.map((asset, i) => {
+                    return <AssetListItem key={i} data={data} asset={asset} addToSelectedAssetsId={addToSelectedAssetsId} removeFromSelectedAssetsId={removeFromSelectedAssetsId} />;
+                })}
+            </div>
+        )
+    }
+
+    return (
+        <div id="select-involved-assets" className="callout page sub">
+            <div className="h-100 d-flex flex-column">
+                <div className="d-flex justify-content-between">
+                    <BackButton close link=".." replace />
+                    <div className="page-title" style={{ marginTop: 1 }}>Assets</div>
+                    <div style={{ width: "31px" }}></div>
+                </div>
+                <div className="body h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <SelectedAssets />
+                        <UnselectedAssets />
+                        <Link to="./create" className="add-asset-button"><BiPlus /> Add a new asset</Link>
+                    </div>
+                    <div className="confirm-button btn w-100 border fw-bold text-center btn-primary rounded-pill shadow-sm" style={{ height: 50 }} onClick={handleConfirm}>Confirm</div>
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export function TransactionDateTimeSelector() {
@@ -58,7 +233,7 @@ export function TransactionDateTimeSelector() {
             <div className="h-100 d-flex flex-column">
                 <div className="d-flex justify-content-between">
                     <BackButton close link=".." replace />
-                    <div className="page-title" style={{ marginTop: 1 }}>Transaction date and time</div>
+                    <div className="page-title" style={{ marginTop: 1 }}>Date and time</div>
                     <div style={{ width: "31px" }}></div>
                 </div>
                 <div className="body"></div>
@@ -75,13 +250,13 @@ export function TransactionNotesInput() {
             <div className="h-100 d-flex flex-column">
                 <div className="d-flex justify-content-between">
                     <BackButton close link=".." replace />
-                    <div className="page-title" style={{ marginTop: 1 }}>Add notes</div>
+                    <div className="page-title" style={{ marginTop: 1 }}>Notes</div>
                     <div style={{ width: "31px" }}></div>
                 </div>
                 <div className="body">
                     <div className="">
                         <label className="form-label">Notes</label>
-                        <textarea className="form-control" name="new-transaction-notes" rows={2} placeholder="Optional" onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={data["new-transaction-notes"]}></textarea>
+                        <textarea className="form-control" name="new-transaction-notes" rows={3} placeholder="Optional" onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={data["new-transaction-notes"]}></textarea>
                     </div>
                 </div>
             </div>
@@ -90,7 +265,7 @@ export function TransactionNotesInput() {
 }
 
 export default function AddTransaction() {
-    const { data, controllers } = useOutletContext<PersonalAreaContext>();
+    const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
     const theme = useContext(ThemeContext);
     const i18n = useContext(TranslationContext);
 
@@ -104,6 +279,7 @@ export default function AddTransaction() {
         "new-transaction-date": new Date(),
         "new-transaction-notes": ''
     });
+    const [assetsAllocations, setAssetsAllocations] = useState<AssetAllocation[]>([]);
 
     const user: User = data.user;
     const navigate = useNavigate();
@@ -138,8 +314,10 @@ export default function AddTransaction() {
     }
 
     const context = {
-        data,
-        handleChange
+        data: formData,
+        handleChange: handleChange,
+        assetsAllocations: assetsAllocations,
+        setAssetsAllocations: setAssetsAllocations
     } as AddTransactionContext;
 
     const handleSubmit = async (e: any) => {
@@ -252,19 +430,20 @@ export default function AddTransaction() {
                                 value={formData["new-transaction-description"]}
                             />
                         </div>
-                        <Link to="./add-notes" className="d-flex align-items-center justify-content-center gap-2 fw-light text-decoration-none">
-                            <LuPlus />
-                            <div>Add notes</div>
-                        </Link>
-                        <div className="d-flex mt-4 gap-2">
-                            <Link to={"./select-date"} className="date-picker-button"><BiCalendar /></Link>
+                        <div className="asset-picker-wrapper">
+                            <label className="form-label">Asset(s) involved</label>
+                            <AssetPicker assetsAllocations={assetsAllocations} />
+                        </div>
+                        <div className="d-flex mt-4 gap-1">
+                            <Link to={"./select-date"} className="near-create-button"><BiCalendar /></Link>
+                            <Link to={"./add-notes"} className="near-create-button"><PiNotePencilFill /></Link>
                             <button type='submit' className="btn w-100 border fw-bold text-center btn-primary rounded-pill shadow-sm" style={{ height: 50 }}>
                                 Create
                             </button>
                         </div>
                     </div>
-                    <Outlet context={context} />
                 </form>
+                <Outlet context={context} />
             </div>
             {processing && <Loader theme={theme} selector="login" />}
         </>

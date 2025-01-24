@@ -622,6 +622,7 @@ body.dark-mode input.currency-input::placeholder {
     width: fit-content;
     */
 }
+
 /*
 #wallet .starred .cards>*>.favorite .asset-logo:has(> .source-logo) {
     background-color: #ffffff;
@@ -643,6 +644,7 @@ body.dark-mode input.currency-input::placeholder {
     height: 42px;
     width: 42px;
 }
+
 #wallet .starred .cards>*>.favorite .asset-logo .type-icon {
     background-color: #b39a00;
     font-size: 18px;
@@ -653,6 +655,7 @@ body.dark-mode input.currency-input::placeholder {
     font-weight: 600;
     font-size: 17px;
 }
+
 #wallet .starred .cards>*>.favorite .asset-type {
     margin: -2px 0 3px;
     font-weight: 300;
@@ -786,53 +789,6 @@ body.dark-mode .btn-outline-danger {
     90% { transform: translateY(-1px) rotate(.5deg); }
     100% { transform: translateY(0px) rotate(0deg); }
   }*/
-
-#add-transaction .type-selector {
-    display: flex;
-    padding: 5px;
-    width: calc(100% + .8rem);
-    border: 1px solid var(--list-background);
-    background-color: var(--highlight-background);
-    border-radius: 50px;
-    margin-top: -5px;
-    margin-left: -.4rem;
-}
-
-#add-transaction .type-selector>.selector {
-    flex: 1 0 33.33%;
-    border-radius: 50px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background-color .2s, font-weight .2s;
-}
-
-#add-transaction .type-selector>.selector.active {
-    background-color: var(--palette-blue-3);
-    font-weight: 600;
-}
-
-#add-transaction .date-picker-button {
-    height: 50px;
-    width: 50px;
-    flex: 0 0 auto;
-    background-color: var(--highlight-background);
-    border: 1px solid var(--list-border);
-    border-radius: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: inherit
-}
-
-#add-transaction .date-picker-button>* {
-    transform: scale(1.2);
-}
 
 
 mark,
@@ -1004,4 +960,155 @@ body.dark-mode .btn-outline-warning {
 
 #add-asset #select-asset-type .asset-type-list>.asset-type:hover>.asset-type-icon {
     background-color: #9a7300;
+}
+
+#add-transaction .sub.page .body {
+    margin-top: 0;
+}
+
+#add-transaction .type-selector {
+    display: flex;
+    padding: 5px;
+    width: calc(100% + .8rem);
+    border: 1px solid var(--list-background);
+    background-color: var(--highlight-background);
+    border-radius: 50px;
+    margin-top: -5px;
+    margin-left: -.4rem;
+}
+
+#add-transaction .type-selector>.selector {
+    flex: 1 0 33.33%;
+    border-radius: 50px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color .2s, font-weight .2s;
+}
+
+#add-transaction .type-selector>.selector.active {
+    background-color: var(--palette-blue-3);
+    font-weight: 600;
+}
+
+#add-transaction .type-selector>.selector:hover {
+    background-color: var(--background);
+}
+
+#add-transaction .type-selector>.selector.active:hover {
+    background-color: var(--palette-blue-3);
+}
+
+#add-transaction .near-create-button {
+    height: 50px;
+    width: 50px;
+    flex: 0 0 auto;
+    background-color: var(--highlight-background);
+    border: 1px solid var(--list-border);
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: inherit
+}
+
+#add-transaction .near-create-button>* {
+    transform: scale(1.2);
+}
+
+#add-transaction .asset-picker {
+    background: linear-gradient(0.4turn, var(--palette-blue-3), var(--palette-blue-2));
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    height: 71px;
+    border-radius: 23px;
+    padding: .8rem 1.5rem;
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    width: 95%;
+    color: inherit;
+    text-decoration: inherit;
+}
+
+#add-transaction .asset-picker.list-0 {
+    background: #4b4e51;
+    width: 100%;
+    font-weight: 600;
+    gap: 8px;
+}
+
+#add-transaction .asset-picker+.plus-btn {
+    position: absolute;
+    right: 0;
+    border: 1px solid;
+    border-radius: 20px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    font-size: 25px;
+    justify-content: center;
+    padding-top: 6px;
+    background-color: var(--bs-body-bg);
+}
+
+#add-transaction #select-involved-assets .asset-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-left: -4px;
+    margin-right: -4px;
+}
+
+#add-transaction #select-involved-assets .asset-list .asset {
+    height: 60px;
+    line-height: unset;
+    padding: 0 1.2rem;
+    background-color: var(--list-background);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#add-transaction #select-involved-assets .asset-list .asset .asset-name {
+    font-weight: 500;
+}
+
+#add-transaction #select-involved-assets .asset-list .asset .asset-logo {
+    flex-shrink: 0;
+}
+
+#add-transaction #select-involved-assets .asset-list .asset .asset-logo>* {
+    border-radius: 50%;
+    padding: 6px;
+    height: 34px;
+    width: 34px;
+    margin-right: 10px;
+    margin-left: -10px;
+}
+
+#add-transaction #select-involved-assets .asset-list .asset .asset-logo .type-icon {
+    display: flex;
+    background: #9a7300;
+    color: #ebebeb;
+    font-size: 16px;
+    align-items: center;
+    justify-content: center;
+}
+
+#add-transaction #select-involved-assets .asset-list .asset .asset-logo .source-logo {
+    background: #ffffff;
+    object-fit: contain;
+}
+
+#add-transaction #select-involved-assets .asset-list.selected .asset{
+    background: linear-gradient(0.4turn, var(--palette-blue-3), var(--palette-blue-2));
 }
