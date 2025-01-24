@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import UserController from "../assets/controllers/UserController";
 import { getAuth } from "firebase/auth";
 import { app } from "../firebase/firebaseConfig";
@@ -26,18 +26,17 @@ import { LuPlus } from "react-icons/lu";
 import { MdGroupAdd } from "react-icons/md";
 import { MdPersonAddAlt1 } from "react-icons/md";
 
-export interface PersonalAreaContext {
+export const PersonalAreaContext = createContext<PersonalAreaContextInterface>({} as PersonalAreaContextInterface);
+
+export interface PersonalAreaContextInterface {
     data: DataContext,
     controllers: ControllersContext
 }
 
 export interface DataContext {
     user: User,
-    setUser: React.Dispatch<React.SetStateAction<User>>,
     assets: Asset[],
-    setAssets: React.Dispatch<React.SetStateAction<Asset[]>>,
     transactions: Transaction[],
-    setTransactions: React.Dispatch<React.SetStateAction<Transaction[]>>,
     userProcessing: boolean,
     assetsProcessing: boolean,
     transactionsProcessing: boolean
@@ -182,11 +181,8 @@ export default function PersonalArea() {
 
     const data = {
         user: user,
-        setUser: setUser,
         assets: assets,
-        setAssets: setAssets,
         transactions: transactions,
-        setTransactions: setTransactions,
         userProcessing: userProcessing,
         assetsProcessing: assetsProcessing,
         transactionsProcessing: transactionsProcessing
@@ -336,7 +332,9 @@ export default function PersonalArea() {
                                     firstAccess={user.firstAccess}
                                     handleHiddenBalance={handleHiddenBalance}
                                 />
-                                <Outlet context={{ data, controllers }} />
+                                <PersonalAreaContext.Provider value={{ data, controllers } as PersonalAreaContextInterface} >
+                                    <Outlet />
+                                </PersonalAreaContext.Provider>
                             </>
                         )}
                     <NavigationBar active={page} handler={changePageHandler} />

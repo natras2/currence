@@ -1,7 +1,7 @@
 import Asset from "../../../assets/model/Asset";
 import { BackButton } from "../../../assets/components/Utils";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
-import { ControllersContext, DataContext, PersonalAreaContext } from "../../PersonalArea";
+import { useNavigate, useParams } from "react-router-dom";
+import { ControllersContext, DataContext, PersonalAreaContext, PersonalAreaContextInterface } from "../../PersonalArea";
 import ErrorPage from "../../../Error";
 import { currencyFormat } from "../../../assets/libraries/Utils";
 import { useContext, useState } from "react";
@@ -94,7 +94,7 @@ function DisplayAssetDetail({ data, controllers, asset, setDeleteProcessing }: D
 
 export default function AssetDetail() {
     const [deleteProcessing, setDeleteProcessing] = useState(false);
-    const { data, controllers } = useOutletContext<PersonalAreaContext>();
+    const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
     const { id } = useParams();
 
     const theme = useContext(ThemeContext);

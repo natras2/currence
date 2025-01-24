@@ -5,8 +5,8 @@ import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import Asset from "../../assets/model/Asset";
 import useLongPress, { currencyFormat } from "../../assets/libraries/Utils";
 import Skeleton from "react-loading-skeleton";
-import { Link, useNavigate, useOutletContext } from "react-router-dom";
-import { ControllersContext, DataContext, PersonalAreaContext } from "../PersonalArea";
+import { Link, useNavigate } from "react-router-dom";
+import { ControllersContext, DataContext, PersonalAreaContext, PersonalAreaContextInterface } from "../PersonalArea";
 import { ThemeContext, TranslationContext } from "../../App";
 import { DynamicIcon } from "../../assets/components/Utils";
 
@@ -54,7 +54,7 @@ function AssetListItem({ data, controllers, asset }: AssetItemType) {
 
 export default function Wallet() {
     const theme = useContext(ThemeContext);
-    const { data, controllers } = useOutletContext<PersonalAreaContext>();
+    const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
 
     const i18n = useContext(TranslationContext);
 

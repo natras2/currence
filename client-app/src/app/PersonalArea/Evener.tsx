@@ -1,10 +1,10 @@
-import { useOutletContext } from "react-router-dom";
+import { useContext } from "react";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import User from "../../assets/model/User";
-import { PersonalAreaContext } from "../PersonalArea";
+import { PersonalAreaContext, PersonalAreaContextInterface } from "../PersonalArea";
 
 export default function Evener() {
-    const { data, controllers } = useOutletContext<PersonalAreaContext>();
+    const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
 
     const user: User = data.user;
 

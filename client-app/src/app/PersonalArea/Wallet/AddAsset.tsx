@@ -1,11 +1,11 @@
 import CurrencyInput from "react-currency-input-field";
 import { DynamicIcon, BackButton} from "../../../assets/components/Utils";
-import { Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import { ChangeEvent, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import Asset, { AssetAttributes, AssetType } from "../../../assets/model/Asset";
 import { capitalize } from "../../../assets/libraries/Utils";
 import Loader from "../../../assets/components/Loader";
-import { PersonalAreaContext } from "../../PersonalArea";
+import { PersonalAreaContext, PersonalAreaContextInterface } from "../../PersonalArea";
 import User from "../../../assets/model/User";
 import { ThemeContext, TranslationContext, TranslationContextType } from "../../../App";
 import { Highlighter, Typeahead } from "react-bootstrap-typeahead";
@@ -71,7 +71,7 @@ export function AssetTypeSelector() {
 
     const navigate = useNavigate();
 
-    const { setAssetType, setDisplayAssetTypeSelector } = useOutletContext() as AddAssetContext;
+    const { setAssetType, setDisplayAssetTypeSelector } = useOutletContext<AddAssetContext>();
 
     const types = [
         {
@@ -158,7 +158,7 @@ export function AssetTypeSelector() {
 
 /* eslint-disable */
 export default function AddAsset(props: any) {
-    const { data, controllers } = useOutletContext<PersonalAreaContext>();
+    const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
     const i18n: TranslationContextType = useContext(TranslationContext);
 
     const user: User = data.user;

@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import ProfileImage from "../assets/components/ProfileImage";
-import { Link, useNavigate, useOutletContext } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BackButton } from "../assets/components/Utils";
-import { PersonalAreaContext } from "./PersonalArea";
+import { PersonalAreaContext, PersonalAreaContextInterface } from "./PersonalArea";
 import User from "../assets/model/User";
 import { ThemeContext } from "../App";
 
@@ -10,7 +10,7 @@ import { BiMoon, BiSun } from "react-icons/bi";
 
 export default function Settings(props: any) {
     const theme = useContext(ThemeContext);
-    const { data, controllers } = useOutletContext<PersonalAreaContext>();
+    const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
 
     const user: User = data.user;
     const [processing, setProcessing] = useState(false);

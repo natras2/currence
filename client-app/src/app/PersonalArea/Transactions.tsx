@@ -1,15 +1,15 @@
-import { Link, useOutletContext } from "react-router-dom";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import User from "../../assets/model/User";
-import { PersonalAreaContext } from "../PersonalArea";
+import { PersonalAreaContext, PersonalAreaContextInterface } from "../PersonalArea";
 import Transaction from "../../assets/model/Transaction";
-import { useContext } from "react";
 import { ThemeContext } from "../../App";
 
 import { LuPlus } from "react-icons/lu";
 
 export default function Transactions() {
-    const { data, controllers } = useOutletContext<PersonalAreaContext>();
+    const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
 
     const user: User = data.user;
     const transactions: Transaction[] = data.transactions;

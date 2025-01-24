@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useOutletContext } from "react-router-dom";
-import { PersonalAreaContext } from "../../PersonalArea";
+import { PersonalAreaContext, PersonalAreaContextInterface } from "../../PersonalArea";
 import Asset from "../../../assets/model/Asset";
 import { ChartData } from "../Stats";
 import WalletCompositionChart from "../../../assets/components/charts/WalletCompositionChart";
@@ -13,7 +13,7 @@ import { StyledEngineProvider } from "@mui/material";
 import { BackButton } from "../../../assets/components/Utils";
 
 export default function WalletComposition() {
-    const { data, controllers } = useOutletContext<PersonalAreaContext>();
+    const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
     const i18t = useContext(TranslationContext);
 
     const user: User = data.user;
