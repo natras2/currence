@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate, useOutletContext } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { DataContext, PersonalAreaContextInterface, PersonalAreaContext } from "../../PersonalArea";
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { ThemeContext, TranslationContext } from "../../../App";
@@ -9,31 +9,38 @@ import CurrencyInput from "react-currency-input-field";
 import { BackButton, DynamicIcon } from "../../../assets/components/Utils";
 import InputField from "../../../assets/components/InputField";
 import Loader from "../../../assets/components/Loader";
+import Asset, { AssetAttributes } from "../../../assets/model/Asset";
 
 import { BiCalendar, BiPlus } from "react-icons/bi";
 import { PiNotePencilFill } from "react-icons/pi";
-import Asset from "../../../assets/model/Asset";
+import { MdArrowForward, MdDone } from "react-icons/md";
 
 
 interface AddTransactionContext {
     data: any,
     handleChange: (e: any) => void,
+    isAllocated: boolean,
+    setIsAllocated: Dispatch<SetStateAction<boolean>>,
     assetsAllocations: AssetAllocation[],
     setAssetsAllocations: Dispatch<SetStateAction<AssetAllocation[]>>
 }
 interface AssetItemType {
     data: DataContext,
     asset: Asset,
-    addToSelectedAssetsId: (id: string) => void,
-    removeFromSelectedAssetsId: (id: string) => void,
-    remove?: boolean
+    clickHandler: any
+}
+interface AssetPickerType {
+    data: DataContext,
+    isAllocated: boolean,
+    assetsAllocations: AssetAllocation[],
+    setAssetsAllocations: Dispatch<SetStateAction<AssetAllocation[]>>
 }
 
-function AssetListItem({ data, asset, addToSelectedAssetsId, removeFromSelectedAssetsId, remove = false }: AssetItemType) {
+function AssetListItem({ data, asset, clickHandler }: AssetItemType) {
 
     return (
         <span className="asset-wrapper">
-            <div className="asset" onClick={() => (remove) ? removeFromSelectedAssetsId(asset.id!) : addToSelectedAssetsId(asset.id!)}>
+            <div className="asset" onClick={clickHandler}>
                 <div className="d-flex align-items-center">
                     {!!asset.attributes && <div className="asset-logo">
                         {(asset.attributes.sourceName !== "")
@@ -51,7 +58,20 @@ function AssetListItem({ data, asset, addToSelectedAssetsId, removeFromSelectedA
     );
 }
 
-function AssetPicker({ assetsAllocations }: { assetsAllocations: AssetAllocation[] }) {
+function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAssetsAllocations }: AssetPickerType) {
+    const data: DataContext = dataContext;
+    const location = useLocation();
+
+    /*  This script empties assets allocation collection whether we navigate to the add transaction main page 
+        with more than 1 asset, unless they've been correctly allocated
+    */
+    useEffect(() => {
+        if (location.pathname !== "/transactions/create") return;
+
+        if (!isAllocated && assetsAllocations.length > 1) {
+            setAssetsAllocations([])
+        }
+    }, [location])
 
     const PlusButton = () => <Link to={"./select-asset"} className="plus-btn"><BiPlus /></Link>;
 
@@ -67,29 +87,56 @@ function AssetPicker({ assetsAllocations }: { assetsAllocations: AssetAllocation
     const AssetsAllocations = () => {
         return (
             <>
-                <Link to={"./select-asset"} className="asset-picker">
-                    {(assetsAllocations.length === 1)
-                        ? <OneAllocation />
-                        : <MultipleAllocations />
-                    }
-                </Link>
+                {(assetsAllocations.length === 1)
+                    ? <OneAllocation />
+                    : <MultipleAllocations />
+                }
                 <PlusButton />
             </>
         );
     }
 
     const OneAllocation = () => {
+        const asset = data.assets.find(a => a.id === assetsAllocations[0].assetId)!
         return (
             <>
-                BBBB
+                <Link to={"./select-asset"} className="asset-picker">
+                    <div className="d-flex align-items-center">
+                        {!!asset.attributes && <div className="asset-logo">
+                            {(asset.attributes.sourceName !== "")
+                                ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
+                                : <div className="type-icon">{<DynamicIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
+                            }
+                        </div>}
+                        <div className="asset-name">{asset.name}</div>
+                    </div>
+                </Link>
             </>
         );
     }
 
     const MultipleAllocations = () => {
+        const firstThreeLogos: AssetAttributes[] = []
+        assetsAllocations.map((allocation, i) => {
+            if (i < 3)
+                firstThreeLogos.push(data.assets.find(a => a.id === allocation.assetId)!.attributes);
+            return;
+        })
+        const firstAssetName = data.assets.find(a => a.id === assetsAllocations[0].assetId)!.name
         return (
             <>
-                DDDD
+                <Link to={"./select-asset/assets-allocation"} state={{fromRoot: true}} className="asset-picker">
+                    <div className="d-flex align-items-center">
+                        <div className="multiple asset-logo">
+                            {firstThreeLogos.map((a, i) => {
+                                return (a.sourceName !== "")
+                                    ? <img key={i} src={a.logo} alt={a.sourceName} className="source-logo" />
+                                    : <div key={i} className="type-icon">{<DynamicIcon lib={JSON.parse(a.logo).lib} name={JSON.parse(a.logo).name} />}</div>
+                            })}
+                        </div>
+                        <div className="asset-name">{firstAssetName} +{assetsAllocations.length - 1}</div>
+                    </div>
+                </Link>
             </>
         );
     }
@@ -132,34 +179,41 @@ export function AddTransactionCategory() {
     );
 }
 
+export function AssetsAllocationSetter() {
+    const location = useLocation();
+
+    return (
+        <div id="create-transaction-category" className="callout page subsub">
+            <div className="h-100 d-flex flex-column">
+                <div className="d-flex justify-content-between">
+                    <BackButton link={(location.state && location.state.fromRoot) ? "../.." : ".." } replace close={location.state && location.state.fromRoot}/>
+                    <div className="page-title" style={{ marginTop: 1 }}>Split the balance</div>
+                    <div style={{ width: "31px" }}></div>
+                </div>
+                <div className="body"></div>
+            </div>
+        </div>
+    );
+}
+
 export function InvolvedAssetsSelector() {
     const { data } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
-    const { data: formData, assetsAllocations, setAssetsAllocations } = useOutletContext<AddTransactionContext>();
-
-    const navigate = useNavigate();
+    const { data: formData, isAllocated, setIsAllocated, assetsAllocations, setAssetsAllocations } = useOutletContext<AddTransactionContext>();
 
     const initialSelection: string[] = []
     assetsAllocations.forEach((allocation) => {
         initialSelection.push(allocation.assetId)
     })
 
-    const [selectedAssetsId, setSelectedAssetsId] = useState<string[]>(initialSelection);
-    const addToSelectedAssetsId = (assetId: string) => setSelectedAssetsId(oldArray => [...oldArray, assetId]);
-    const removeFromSelectedAssetsId = (assetIdToRemove: string) => setSelectedAssetsId(selectedAssetsId.filter(assetId => assetId !== assetIdToRemove));
+    const navigate = useNavigate();
 
-    const handleConfirm = () => {
-        const allocations: AssetAllocation[] = [];
-        if (selectedAssetsId.length > 1) {
-            navigate("./aaaaa");
+    const handleAddSelectedAsset = (assetId: string, onAdd: boolean) => {
+        if (onAdd) {
+            setAssetsAllocations(oldArray => [...oldArray, { assetId: assetId, amount: 0 }])
         }
         else {
-            selectedAssetsId.forEach(selected => {
-                allocations.push({ assetId: selected, amount: parseFloat(formData["new-transaction-amount"]) } as AssetAllocation)
-            });
-
-            setAssetsAllocations(allocations);
-
-            navigate("..");
+            const array = assetsAllocations.filter(allocation => allocation.assetId !== assetId)
+            setAssetsAllocations(array);
         }
     }
 
@@ -176,13 +230,13 @@ export function InvolvedAssetsSelector() {
     }
 
     const SelectedAssets = () => {
-        if (selectedAssetsId.length === 0)
+        if (assetsAllocations.length === 0)
             return <></>;
 
         return (
             <div className="asset-list selected mb-3">
-                {selectedAssetsId.map((assetId, i) => {
-                    return <AssetListItem remove key={i} data={data} asset={data.assets.filter((a) => a.id === assetId)[0]} addToSelectedAssetsId={addToSelectedAssetsId} removeFromSelectedAssetsId={removeFromSelectedAssetsId} />;
+                {assetsAllocations.map((allocation, i) => {
+                    return <AssetListItem key={i} data={data} asset={data.assets.filter((a) => a.id === allocation.assetId)[0]} clickHandler={() => handleAddSelectedAsset(data.assets.filter((a) => a.id === allocation.assetId)[0].id!, false)} />;
                 })}
             </div>
         )
@@ -194,13 +248,13 @@ export function InvolvedAssetsSelector() {
 
         var unselectedAssets = data.assets.sort(sortAssetsByName);
 
-        if (selectedAssetsId.length > 0)
-            unselectedAssets = unselectedAssets.filter((a) => selectedAssetsId.indexOf(a.id!) === -1)
+        if (assetsAllocations.length > 0)
+            unselectedAssets = unselectedAssets.filter((a) => assetsAllocations.map(alloc => alloc.assetId).indexOf(a.id!) === -1)
 
         return (
             <div className="asset-list">
                 {unselectedAssets.map((asset, i) => {
-                    return <AssetListItem key={i} data={data} asset={asset} addToSelectedAssetsId={addToSelectedAssetsId} removeFromSelectedAssetsId={removeFromSelectedAssetsId} />;
+                    return <AssetListItem key={i} data={data} asset={asset} clickHandler={() => handleAddSelectedAsset(asset.id!, true)} />;
                 })}
             </div>
         )
@@ -217,10 +271,14 @@ export function InvolvedAssetsSelector() {
                 <div className="body h-100 d-flex flex-column justify-content-between">
                     <div>
                         <SelectedAssets />
+                        {assetsAllocations.length !== data.assets.length && <div className={`mb-2 ${assetsAllocations.length > 0 ? "mt-4" : ""}`}>Select one or more assets:</div>}
                         <UnselectedAssets />
                         <Link to="./create" className="add-asset-button"><BiPlus /> Add a new asset</Link>
                     </div>
-                    <div className="confirm-button btn w-100 border fw-bold text-center btn-primary rounded-pill shadow-sm" style={{ height: 50 }} onClick={handleConfirm}>Confirm</div>
+                    {assetsAllocations.length > 1 && <div className={`confirm-button btn border fw-bold text-center btn-primary rounded-pill shadow-sm p-0 pop-in ${(initialSelection.length === 0) ? "pop-in" : ""}`} style={{ width: "fit-content", marginLeft: "auto" }}>
+                        {/*assetsAllocations.length === 1 && <div className="d-flex align-items-center justify-content-center" style={{ height: 60, width: 60, fontSize: 30 }}><MdDone /></div>*/}
+                        {assetsAllocations.length > 1 && <div className="d-flex align-items-center justify-content-center gap-1" style={{ height: 60, width: 140, paddingLeft: 10 }} onClick={() => navigate("./assets-allocation")}>Continue <MdArrowForward style={{ fontSize: 30 }} /></div>}
+                    </div>}
                 </div>
             </div>
         </div>
@@ -279,6 +337,7 @@ export default function AddTransaction() {
         "new-transaction-date": new Date(),
         "new-transaction-notes": ''
     });
+    const [isAllocated, setIsAllocated] = useState(false);
     const [assetsAllocations, setAssetsAllocations] = useState<AssetAllocation[]>([]);
 
     const user: User = data.user;
@@ -316,6 +375,8 @@ export default function AddTransaction() {
     const context = {
         data: formData,
         handleChange: handleChange,
+        isAllocated: isAllocated,
+        setIsAllocated: setIsAllocated,
         assetsAllocations: assetsAllocations,
         setAssetsAllocations: setAssetsAllocations
     } as AddTransactionContext;
@@ -432,7 +493,7 @@ export default function AddTransaction() {
                         </div>
                         <div className="asset-picker-wrapper">
                             <label className="form-label">Asset(s) involved</label>
-                            <AssetPicker assetsAllocations={assetsAllocations} />
+                            <AssetPicker data={data} isAllocated={isAllocated} assetsAllocations={assetsAllocations} setAssetsAllocations={setAssetsAllocations} />
                         </div>
                         <div className="d-flex mt-4 gap-1">
                             <Link to={"./select-date"} className="near-create-button"><BiCalendar /></Link>

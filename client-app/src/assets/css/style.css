@@ -145,6 +145,72 @@ form .input-guide {
     margin-top: -3px;
 }
 
+.pop-in {
+    -webkit-animation: popin 2s;
+    /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: popin .2s;
+    /* Firefox < 16 */
+    -ms-animation: popin .2s;
+    /* Internet Explorer */
+    -o-animation: popin .2s;
+    /* Opera < 12.1 */
+    animation: popin .2s;
+}
+
+@keyframes popin {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes popin {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes popin {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Internet Explorer */
+@-ms-keyframes popin {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes popin {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
 /********* NAVIGATION BAR **********/
 #navigation-bar {
     position: absolute;
@@ -1082,11 +1148,13 @@ body.dark-mode .btn-outline-warning {
     font-weight: 500;
 }
 
-#add-transaction #select-involved-assets .asset-list .asset .asset-logo {
+#add-transaction #select-involved-assets .asset-list .asset .asset-logo,
+#add-transaction .asset-picker-wrapper .asset-logo {
     flex-shrink: 0;
 }
 
-#add-transaction #select-involved-assets .asset-list .asset .asset-logo>* {
+#add-transaction #select-involved-assets .asset-list .asset .asset-logo>*,
+#add-transaction .asset-picker-wrapper .asset-logo>* {
     border-radius: 50%;
     padding: 6px;
     height: 34px;
@@ -1095,7 +1163,8 @@ body.dark-mode .btn-outline-warning {
     margin-left: -10px;
 }
 
-#add-transaction #select-involved-assets .asset-list .asset .asset-logo .type-icon {
+#add-transaction #select-involved-assets .asset-list .asset .asset-logo .type-icon,
+#add-transaction .asset-picker-wrapper .asset-logo .type-icon {
     display: flex;
     background: #9a7300;
     color: #ebebeb;
@@ -1104,11 +1173,42 @@ body.dark-mode .btn-outline-warning {
     justify-content: center;
 }
 
-#add-transaction #select-involved-assets .asset-list .asset .asset-logo .source-logo {
+#add-transaction #select-involved-assets .asset-list .asset .asset-logo .source-logo,
+#add-transaction .asset-picker-wrapper .asset-logo .source-logo {
     background: #ffffff;
     object-fit: contain;
 }
 
-#add-transaction #select-involved-assets .asset-list.selected .asset{
+#add-transaction #select-involved-assets .asset-list.selected .asset {
     background: linear-gradient(0.4turn, var(--palette-blue-3), var(--palette-blue-2));
+}
+
+#add-transaction #select-involved-assets .add-asset-button {
+    display: flex;
+    text-align: center;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    background: #525252;
+    border: 1px dashed #878787;
+    margin: 10px 25% 0;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 50px;
+    gap: 5px;
+}
+#add-transaction .asset-picker-wrapper .asset-logo {
+    display: flex;
+}
+#add-transaction .asset-picker-wrapper .asset-logo.multiple>* {
+    border: 1px solid var(--palette-blue-3);
+}
+#add-transaction .asset-picker-wrapper .asset-logo>*:not(:first-child) {
+    margin-left: -25px;
+}
+#add-transaction .asset-picker-wrapper .asset-logo>*:not(:last-child) {
+    position: relative;
+}
+#add-transaction .asset-picker-wrapper .asset-logo>*:first-child {
+    z-index: 99;
 }
