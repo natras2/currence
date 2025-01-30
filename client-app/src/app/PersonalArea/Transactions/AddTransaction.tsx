@@ -19,6 +19,7 @@ import { MdArrowForward, MdDone } from "react-icons/md";
 interface AddTransactionContext {
     data: any,
     handleChange: (e: any) => void,
+    isSingularSelect: boolean,
     isAllocated: boolean,
     setIsAllocated: Dispatch<SetStateAction<boolean>>,
     assetsAllocations: AssetAllocation[],
@@ -27,6 +28,7 @@ interface AddTransactionContext {
 interface AssetItemType {
     data: DataContext,
     asset: Asset,
+    active?: boolean,
     clickHandler: any
 }
 interface AssetPickerType {
@@ -36,11 +38,11 @@ interface AssetPickerType {
     setAssetsAllocations: Dispatch<SetStateAction<AssetAllocation[]>>
 }
 
-function AssetListItem({ data, asset, clickHandler }: AssetItemType) {
+function AssetListItem({ data, asset, active = false, clickHandler }: AssetItemType) {
 
     return (
         <span className="asset-wrapper">
-            <div className="asset" onClick={clickHandler}>
+            <div className={`asset ${active ? "active" : ""}`} onClick={clickHandler}>
                 <div className="d-flex align-items-center">
                     {!!asset.attributes && <div className="asset-logo">
                         {(asset.attributes.sourceName !== "")
@@ -77,9 +79,9 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
 
     const NoAllocations = () => {
         return (
-            <Link to={"./select-asset"} className="asset-picker list-0">
+            <Link to={"./select-asset"} state={{ isSingularSelect: true }} className="asset-picker list-0">
                 <div style={{ marginTop: -3, transform: "scale(1.2)" }}><BiPlus /></div>
-                <div>Select one or more assets</div>
+                <div>Select an asset</div>
             </Link>
         );
     }
@@ -100,7 +102,7 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
         const asset = data.assets.find(a => a.id === assetsAllocations[0].assetId)!
         return (
             <>
-                <Link to={"./select-asset"} className="asset-picker">
+                <Link to={"./select-asset"} state={{ isSingularSelect: true }} className="asset-picker">
                     <div className="d-flex align-items-center">
                         {!!asset.attributes && <div className="asset-logo">
                             {(asset.attributes.sourceName !== "")
@@ -125,7 +127,7 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
         const firstAssetName = data.assets.find(a => a.id === assetsAllocations[0].assetId)!.name
         return (
             <>
-                <Link to={"./select-asset/assets-allocation"} state={{fromRoot: true}} className="asset-picker">
+                <Link to={"./select-asset/assets-allocation"} state={{ fromRoot: true }} className="asset-picker">
                     <div className="d-flex align-items-center">
                         <div className="multiple asset-logo">
                             {firstThreeLogos.map((a, i) => {
@@ -166,7 +168,7 @@ export function TransactionCategorySelector() {
 
 export function AddTransactionCategory() {
     return (
-        <div id="create-transaction-category" className="callout page subsub">
+        <div id="create-transaction-category" className="callout page sub subsub">
             <div className="h-100 d-flex flex-column">
                 <div className="d-flex justify-content-between">
                     <BackButton link=".." replace />
@@ -180,17 +182,24 @@ export function AddTransactionCategory() {
 }
 
 export function AssetsAllocationSetter() {
+    const { data: formData, isAllocated, setIsAllocated } = useOutletContext<AddTransactionContext>();
     const location = useLocation();
 
     return (
-        <div id="create-transaction-category" className="callout page subsub">
+        <div id="set-asset-allocations" className="callout page sub">
             <div className="h-100 d-flex flex-column">
                 <div className="d-flex justify-content-between">
-                    <BackButton link={(location.state && location.state.fromRoot) ? "../.." : ".." } replace close={location.state && location.state.fromRoot}/>
+                    <BackButton link={(location.state && location.state.fromRoot) ? "../.." : ".."} replace close={location.state && location.state.fromRoot} />
                     <div className="page-title" style={{ marginTop: 1 }}>Split the balance</div>
                     <div style={{ width: "31px" }}></div>
                 </div>
-                <div className="body"></div>
+                <div className="body h-100 d-flex flex-column justify-content-between">
+                    <div></div>
+                    <div className="d-flex justify-content-between align-items-center bottom-container" style={{}}>
+                        <div className="allocation">Allocated {currencyFormat(0)} of {currencyFormat(parseFloat(formData["new-transaction-amount"]))}</div>
+                        <div className={`d-flex justify-content-center align-items-center btn border fw-bold text-center btn-primary rounded-pill shadow-sm ${(true) ? "disabled" : ""}`} style={{ height: 60, width: 170, padding: "0" }}>Confirm</div>
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -200,16 +209,26 @@ export function InvolvedAssetsSelector() {
     const { data } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
     const { data: formData, isAllocated, setIsAllocated, assetsAllocations, setAssetsAllocations } = useOutletContext<AddTransactionContext>();
 
-    const initialSelection: string[] = []
-    assetsAllocations.forEach((allocation) => {
-        initialSelection.push(allocation.assetId)
-    })
+    const initialSelectionLength = assetsAllocations.length;
 
     const navigate = useNavigate();
+    const location = useLocation();
 
-    const handleAddSelectedAsset = (assetId: string, onAdd: boolean) => {
+    const isSingularSelect: boolean = (location.state && location.state.isSingularSelect);
+
+    const handleAddSelectedAsset = (assetId: string, onAdd?: boolean) => {
+        if (onAdd === undefined) {
+            onAdd = !(assetsAllocations.find(aa => aa.assetId === assetId)) ? true : false;
+        }
+        // checks if the asset is added of removed
         if (onAdd) {
-            setAssetsAllocations(oldArray => [...oldArray, { assetId: assetId, amount: 0 }])
+            if (isSingularSelect) {
+                setAssetsAllocations([{ assetId: assetId, amount: 0 }]);
+                navigate("..");
+            }
+            else {
+                setAssetsAllocations(oldArray => [...oldArray, { assetId: assetId, amount: 0 }]);
+            }
         }
         else {
             const array = assetsAllocations.filter(allocation => allocation.assetId !== assetId)
@@ -260,6 +279,20 @@ export function InvolvedAssetsSelector() {
         )
     }
 
+    const AssetsList = () => {
+        if (data.assets.length === 0)
+            return <div className="title fs-1 fw-bolder text-white-50">Hey! It seems like there's nothing to show here</div>;
+
+        var assets = data.assets.sort(sortAssetsByName);
+        return (
+            <div className="asset-list">
+                {assets.map((asset, i) => {
+                    return <AssetListItem key={i} data={data} asset={asset} active={(assetsAllocations.find(aa => aa.assetId === asset.id)) ? true : false} clickHandler={() => handleAddSelectedAsset(asset.id!)} />;
+                })}
+            </div>
+        )
+    }
+
     return (
         <div id="select-involved-assets" className="callout page sub">
             <div className="h-100 d-flex flex-column">
@@ -270,13 +303,19 @@ export function InvolvedAssetsSelector() {
                 </div>
                 <div className="body h-100 d-flex flex-column justify-content-between">
                     <div>
-                        <SelectedAssets />
-                        {assetsAllocations.length !== data.assets.length && <div className={`mb-2 ${assetsAllocations.length > 0 ? "mt-4" : ""}`}>Select one or more assets:</div>}
-                        <UnselectedAssets />
+                        {!isSingularSelect && <>
+                            <SelectedAssets />
+                            {assetsAllocations.length !== data.assets.length && <div className={`mb-2 ${assetsAllocations.length > 0 ? "mt-4" : ""}`}>Select one or more assets</div>}
+                            <UnselectedAssets />
+                        </>}
+                        {isSingularSelect && <>
+                            <div className="mb-2">Select an asset</div>
+                            <AssetsList />
+                        </>}
                         <Link to="./create" className="add-asset-button"><BiPlus /> Add a new asset</Link>
                     </div>
-                    {assetsAllocations.length > 1 && <div className={`confirm-button btn border fw-bold text-center btn-primary rounded-pill shadow-sm p-0 pop-in ${(initialSelection.length === 0) ? "pop-in" : ""}`} style={{ width: "fit-content", marginLeft: "auto" }}>
-                        {/*assetsAllocations.length === 1 && <div className="d-flex align-items-center justify-content-center" style={{ height: 60, width: 60, fontSize: 30 }}><MdDone /></div>*/}
+                    {assetsAllocations.length > 0 && <div className={`confirm-button btn border fw-bold text-center btn-primary rounded-pill shadow-sm p-0 pop-in ${(initialSelectionLength === 0) ? "pop-in" : ""}`} style={{ width: "fit-content", marginLeft: "auto" }}>
+                        {assetsAllocations.length === 1 && <div className="d-flex align-items-center justify-content-center gap-1" style={{ height: 60, width: 140, paddingLeft: 10 }} onClick={() => navigate("..")}>Confirm <MdDone style={{ fontSize: 25 }} /></div>}
                         {assetsAllocations.length > 1 && <div className="d-flex align-items-center justify-content-center gap-1" style={{ height: 60, width: 140, paddingLeft: 10 }} onClick={() => navigate("./assets-allocation")}>Continue <MdArrowForward style={{ fontSize: 30 }} /></div>}
                     </div>}
                 </div>
