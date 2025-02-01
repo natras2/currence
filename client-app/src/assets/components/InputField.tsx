@@ -1,6 +1,8 @@
 import Select from 'react-select'
 import PasswordStrengthBar from 'react-password-strength-bar';
 import { useState } from 'react';
+import { FaMagnifyingGlass } from 'react-icons/fa6';
+import { GrClose } from 'react-icons/gr';
 
 function TextualField(props: any) {
     const [fieldValue, setFieldValue] = useState(props.value); // Initialize state with prop value
@@ -10,7 +12,7 @@ function TextualField(props: any) {
         props.handleChange(e);
     };
     return (
-        <div className="mb-2">
+        <div className="mb-2 position-relative">
             <input 
                 type={props.type} 
                 className="form-control" 
@@ -19,7 +21,41 @@ function TextualField(props: any) {
                 placeholder={props.placeholder} 
                 name={props.name} 
                 onChange={handleFieldChange} 
+                style={(!!props.contenttype && props.contenttype === 'search') ? {paddingLeft: "2.8rem", marginBottom: 5} : {}}
                 required />
+            {(!!props.contenttype && props.contenttype === 'search') && 
+                <>
+                    <FaMagnifyingGlass 
+                        style={{ 
+                            color: "var(--search-input-icon)",
+                            position: 'absolute',
+                            top: "1.1rem",
+                            left: 17,
+                            fontSize: 18
+
+                        }}
+                    />
+                    {(fieldValue.length > 0) &&
+                        <div style={{ 
+                            color: "var(--inverse-text-color)",
+                            position: 'absolute',
+                            top: "1.1rem",
+                            right: 17,
+                            height: 16,
+                            width: 16,
+                            background: "var(--search-input-icon)",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderRadius: 20,
+                            cursor: "pointer"
+                        }}
+                        onClick={() => handleFieldChange({target: {name: 'search', value: ''}})}>
+                            <GrClose style={{height: 10, width: 10 }}/>
+                        </div>
+                    }
+                </>
+            }
             <div className="invalid-feedback">Please fill out this field.</div>
             {(props.type === 'password' && props.isRegistering === 'true') &&
                 <PasswordStrengthBar 
@@ -128,6 +164,19 @@ export default function InputField(props: any) {
                     handleChange={props.handleChange}
                     isRegistering={props.isRegistering}
                     isAddress={true} />
+            );
+            break;
+        case 'search':
+            field = (
+                <TextualField 
+                    type='text' 
+                    contenttype='search'
+                    name={props.name}
+                    value={props.value}
+                    placeholder={props.placeholder} 
+                    handleChange={props.handleChange} 
+                    isRegistering={props.isRegistering}
+                />
             );
             break;
         default:

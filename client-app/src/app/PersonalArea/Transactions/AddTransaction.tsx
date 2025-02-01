@@ -28,6 +28,7 @@ interface AddTransactionContext {
 interface AssetItemType {
     data: DataContext,
     asset: Asset,
+    searchString?: string,
     active?: boolean,
     clickHandler: any
 }
@@ -38,7 +39,16 @@ interface AssetPickerType {
     setAssetsAllocations: Dispatch<SetStateAction<AssetAllocation[]>>
 }
 
-function AssetListItem({ data, asset, active = false, clickHandler }: AssetItemType) {
+function AssetListItem({ data, asset, searchString, active = false, clickHandler }: AssetItemType) {
+
+    const onSearchAssetName = () => {
+        const searchStringPosInit = asset.name.toLowerCase().indexOf(searchString!.toLowerCase())
+        const searchStringPosEnd = searchStringPosInit + searchString!.length;
+
+        return (searchStringPosInit !== 0)
+            ? <>{asset.name.substring(0, searchStringPosInit)}<strong className="fw-700">{asset.name.substring(searchStringPosInit, searchStringPosEnd)}</strong>{asset.name.substring(searchStringPosEnd)}</>
+            : <><strong className="fw-800">{asset.name.substring(searchStringPosInit, searchStringPosEnd)}</strong>{asset.name.substring(searchStringPosEnd)}</>
+    }
 
     return (
         <span className="asset-wrapper">
@@ -50,7 +60,12 @@ function AssetListItem({ data, asset, active = false, clickHandler }: AssetItemT
                             : <div className="type-icon">{<DynamicIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
                         }
                     </div>}
-                    <div className="asset-name">{asset.name}</div>
+                    <div className="asset-name" style={(!!searchString) ? {fontWeight: 400} : {}}>{
+                        (!!searchString)
+                            ? onSearchAssetName()
+                            : asset.name
+                    }
+                    </div>
                 </div>
                 <div className="d-flex gap-2">
                     {/*<div className="asset-balance">{(data.user.hiddenBalance) ? <span style={{ filter: "blur(4px)" }}>{currencyFormat(919)}</span> : currencyFormat(asset.balance)}</div>*/}
@@ -182,7 +197,7 @@ export function AddTransactionCategory() {
 }
 
 export function AssetsAllocationSetter() {
-    const { data: formData, isAllocated, setIsAllocated } = useOutletContext<AddTransactionContext>();
+    const { data: formData, isAllocated, setIsAllocated, assetsAllocations, setAssetsAllocations } = useOutletContext<AddTransactionContext>();
     const location = useLocation();
 
     return (
@@ -196,7 +211,7 @@ export function AssetsAllocationSetter() {
                 <div className="body h-100 d-flex flex-column justify-content-between">
                     <div></div>
                     <div className="d-flex justify-content-between align-items-center bottom-container" style={{}}>
-                        <div className="allocation">Allocated {currencyFormat(0)} of {currencyFormat(parseFloat(formData["new-transaction-amount"]))}</div>
+                        <div className="allocation">Allocated {currencyFormat(assetsAllocations.reduce((n, { amount }) => n + amount, 0))} of {currencyFormat(parseFloat(formData["new-transaction-amount"].replace(",", ".")))}</div>
                         <div className={`d-flex justify-content-center align-items-center btn border fw-bold text-center btn-primary rounded-pill shadow-sm ${(true) ? "disabled" : ""}`} style={{ height: 60, width: 170, padding: "0" }}>Confirm</div>
                     </div>
                 </div>
@@ -208,6 +223,7 @@ export function AssetsAllocationSetter() {
 export function InvolvedAssetsSelector() {
     const { data } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
     const { data: formData, isAllocated, setIsAllocated, assetsAllocations, setAssetsAllocations } = useOutletContext<AddTransactionContext>();
+    const [searchString, setSearchString] = useState("");
 
     const initialSelectionLength = assetsAllocations.length;
 
@@ -224,7 +240,7 @@ export function InvolvedAssetsSelector() {
         if (onAdd) {
             if (isSingularSelect) {
                 setAssetsAllocations([{ assetId: assetId, amount: 0 }]);
-                navigate("..");
+                navigate("..", { replace: true });
             }
             else {
                 setAssetsAllocations(oldArray => [...oldArray, { assetId: assetId, amount: 0 }]);
@@ -270,12 +286,18 @@ export function InvolvedAssetsSelector() {
         if (assetsAllocations.length > 0)
             unselectedAssets = unselectedAssets.filter((a) => assetsAllocations.map(alloc => alloc.assetId).indexOf(a.id!) === -1)
 
+        if (searchString.length > 0)
+            unselectedAssets = unselectedAssets.filter((a) => a.name.toLowerCase().includes(searchString.toLowerCase()))
+
         return (
-            <div className="asset-list">
-                {unselectedAssets.map((asset, i) => {
-                    return <AssetListItem key={i} data={data} asset={asset} clickHandler={() => handleAddSelectedAsset(asset.id!, true)} />;
-                })}
-            </div>
+            <>
+                {unselectedAssets.length > 0 && <div className={`mb-2 ${assetsAllocations.length > 0 ? "mt-4" : ""}`}>Select one or more assets</div>}
+                <div className="asset-list">
+                    {unselectedAssets.map((asset, i) => {
+                        return <AssetListItem key={i} data={data} asset={asset} searchString={searchString} clickHandler={() => handleAddSelectedAsset(asset.id!, true)} />;
+                    })}
+                </div>
+            </>
         )
     }
 
@@ -284,12 +306,19 @@ export function InvolvedAssetsSelector() {
             return <div className="title fs-1 fw-bolder text-white-50">Hey! It seems like there's nothing to show here</div>;
 
         var assets = data.assets.sort(sortAssetsByName);
+
+        if (searchString.length > 0)
+            assets = assets.filter((a) => a.name.toLowerCase().includes(searchString.toLowerCase()))
+
         return (
-            <div className="asset-list">
-                {assets.map((asset, i) => {
-                    return <AssetListItem key={i} data={data} asset={asset} active={(assetsAllocations.find(aa => aa.assetId === asset.id)) ? true : false} clickHandler={() => handleAddSelectedAsset(asset.id!)} />;
-                })}
-            </div>
+            <>
+                {(assets.length > 0) && <div className="mb-2">Select an asset</div>}
+                <div className="asset-list">
+                    {assets.map((asset, i) => {
+                        return <AssetListItem key={i} data={data} asset={asset} searchString={searchString} active={(assetsAllocations.find(aa => aa.assetId === asset.id)) ? true : false} clickHandler={() => handleAddSelectedAsset(asset.id!)} />;
+                    })}
+                </div>
+            </>
         )
     }
 
@@ -303,19 +332,25 @@ export function InvolvedAssetsSelector() {
                 </div>
                 <div className="body h-100 d-flex flex-column justify-content-between">
                     <div>
+                        <InputField
+                            type="search"
+                            placeholder={"Search your asset"}
+                            name="search"
+                            handleChange={(e: any) => setSearchString(e.target.value)}
+                            isRegistering='false'
+                            value={searchString}
+                        />
                         {!isSingularSelect && <>
                             <SelectedAssets />
-                            {assetsAllocations.length !== data.assets.length && <div className={`mb-2 ${assetsAllocations.length > 0 ? "mt-4" : ""}`}>Select one or more assets</div>}
                             <UnselectedAssets />
                         </>}
                         {isSingularSelect && <>
-                            <div className="mb-2">Select an asset</div>
                             <AssetsList />
                         </>}
                         <Link to="./create" className="add-asset-button"><BiPlus /> Add a new asset</Link>
                     </div>
                     {assetsAllocations.length > 0 && <div className={`confirm-button btn border fw-bold text-center btn-primary rounded-pill shadow-sm p-0 pop-in ${(initialSelectionLength === 0) ? "pop-in" : ""}`} style={{ width: "fit-content", marginLeft: "auto" }}>
-                        {assetsAllocations.length === 1 && <div className="d-flex align-items-center justify-content-center gap-1" style={{ height: 60, width: 140, paddingLeft: 10 }} onClick={() => navigate("..")}>Confirm <MdDone style={{ fontSize: 25 }} /></div>}
+                        {assetsAllocations.length === 1 && <div className="d-flex align-items-center justify-content-center gap-1" style={{ height: 60, width: 140, paddingLeft: 10 }} onClick={() => navigate("..", { replace: true })}>Confirm <MdDone style={{ fontSize: 25 }} /></div>}
                         {assetsAllocations.length > 1 && <div className="d-flex align-items-center justify-content-center gap-1" style={{ height: 60, width: 140, paddingLeft: 10 }} onClick={() => navigate("./assets-allocation")}>Continue <MdArrowForward style={{ fontSize: 30 }} /></div>}
                     </div>}
                 </div>

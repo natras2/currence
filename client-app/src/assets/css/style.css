@@ -20,6 +20,7 @@
     --splash-bgcolor-2: #c9f0ff;
     --currency-input-color: #000080;
     --list-dropdown-background: #ffffff;
+    --search-input-icon:#585c5e;
 }
 
 html:not(.dark-mode) {
@@ -49,6 +50,7 @@ body.dark-mode .page {
     --splash-bgcolor-2: #001b7b;
     --currency-input-color: #d8d8d8;
     --list-dropdown-background: #000000;
+    --search-input-icon:#b0b2b6;
 }
 
 html,
@@ -132,10 +134,10 @@ body {
     margin-top: -3px;
 }
 
-form input[type="text"],
-form input[type="email"],
-form input[type="password"],
-form textarea.form-control {
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea.form-control {
     padding: .8rem 1.5rem;
 }
 
