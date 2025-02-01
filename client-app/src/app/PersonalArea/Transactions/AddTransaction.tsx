@@ -291,7 +291,7 @@ export function InvolvedAssetsSelector() {
 
         return (
             <>
-                {unselectedAssets.length > 0 && <div className={`mb-2 ${assetsAllocations.length > 0 ? "mt-4" : ""}`}>Select one or more assets</div>}
+                {unselectedAssets.length > 0 && <div className="mb-2 mt-4">Select one or more assets</div>}
                 <div className="asset-list">
                     {unselectedAssets.map((asset, i) => {
                         return <AssetListItem key={i} data={data} asset={asset} searchString={searchString} clickHandler={() => handleAddSelectedAsset(asset.id!, true)} />;
@@ -312,7 +312,7 @@ export function InvolvedAssetsSelector() {
 
         return (
             <>
-                {(assets.length > 0) && <div className="mb-2">Select an asset</div>}
+                {(assets.length > 0) && <div className="mb-2 mt-4">Select an asset</div>}
                 <div className="asset-list">
                     {assets.map((asset, i) => {
                         return <AssetListItem key={i} data={data} asset={asset} searchString={searchString} active={(assetsAllocations.find(aa => aa.assetId === asset.id)) ? true : false} clickHandler={() => handleAddSelectedAsset(asset.id!)} />;
