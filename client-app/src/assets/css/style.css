@@ -1098,7 +1098,8 @@ body.dark-mode .btn-outline-warning {
     display: flex;
     align-items: center;
     flex: 0 0 auto;
-    width: 95%;
+    /* width: 95%; */
+    width: 100%;
     color: inherit;
     text-decoration: inherit;
 }

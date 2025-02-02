@@ -108,7 +108,7 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
                     ? <OneAllocation />
                     : <MultipleAllocations />
                 }
-                <PlusButton />
+                {/*<PlusButton />*/}
             </>
         );
     }
@@ -566,7 +566,7 @@ export default function AddTransaction() {
                             />
                         </div>
                         <div className="asset-picker-wrapper">
-                            <label className="form-label">Asset(s) involved</label>
+                            <label className="form-label">Asset</label>
                             <AssetPicker data={data} isAllocated={isAllocated} assetsAllocations={assetsAllocations} setAssetsAllocations={setAssetsAllocations} />
                         </div>
                         <div className="d-flex mt-4 gap-1">
