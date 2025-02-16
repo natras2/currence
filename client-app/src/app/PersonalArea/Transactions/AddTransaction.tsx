@@ -175,7 +175,44 @@ export function TransactionCategorySelector() {
                     <div className="page-title" style={{ marginTop: 1 }}>Categories</div>
                     <div style={{ width: "31px" }}></div>
                 </div>
-                <div className="body"></div>
+                <div className="body">
+                    <div className="category-parent-list">
+                        <div className="category">
+                            <div className="parent">
+                                <div className="logo"><BiCalendar /></div>
+                                <div className="name">Parent category #1</div>
+                            </div>
+                            <div className="category-children-list">
+                                <div className="child">
+                                    <div className="branch"></div>
+                                    <div className="circle"></div>
+                                    <div className="name">Sub-category #1</div>
+                                </div>
+                                <div className="child">
+                                    <div className="branch"></div>
+                                    <div className="circle"></div>
+                                    <div className="name">Sub-category #2</div>
+                                </div>
+                                <div className="child add-button">
+                                    <div className="branch"></div>
+                                    <div className="button btn btn-outline-secondary rounded-pill">Add sub-category</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="category">
+                            <div className="parent">
+                                <div className="logo"><PiNotePencilFill /></div>
+                                <div className="name">Parent category #2</div>
+                            </div>
+                            <div className="category-children-list">
+                                <div className="child add-button">
+                                    <div className="branch"></div>
+                                    <div className="button btn btn-outline-secondary rounded-pill">Add sub-category</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -407,7 +444,7 @@ export default function AddTransaction() {
         "new-transaction-type": TransactionType.EXPENCE,
         "new-transaction-category": { name: '' } as Category,
         "new-transaction-description": '',
-        "new-transaction-amount": '',
+        "new-transaction-amount": '0.00',
         "new-transaction-date": new Date(),
         "new-transaction-notes": ''
     });
@@ -508,7 +545,23 @@ export default function AddTransaction() {
         }
     };
 
-    const handleOnBlur = (event: React.FocusEvent) => {
+    const handleOnFocus = (event: any) => {
+        if (event.target.value === "€ 0,00") {
+            setFormData(prevState => ({
+                ...prevState,
+                "new-transaction-amount": ""
+            }));
+        }
+
+    };
+
+    const handleOnBlur = (event: any) => {
+        if (!event.target.value || event.target.value === "") {
+            setFormData(prevState => ({
+                ...prevState,
+                "new-transaction-amount": "0,00"
+            }));
+        }
         if (formData["new-transaction-amount"] && formData["new-transaction-amount"].charAt(formData["new-transaction-amount"].length - 1) === ",") {
             setFormData(prevState => ({
                 ...prevState,
@@ -550,6 +603,7 @@ export default function AddTransaction() {
                             disableAbbreviations={true}
                             onKeyDown={(e) => handleKeyDown(e)} // Intercept keypress events
                             onBlur={(e) => handleOnBlur(e)}
+                            onFocus={(e) => handleOnFocus(e)}
                             onValueChange={(value) => { handleChange({ target: { value: (value as unknown) as string, name: "new-transaction-amount" } }) }}
                         />
                     </div>
