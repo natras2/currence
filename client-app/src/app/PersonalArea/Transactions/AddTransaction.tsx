@@ -48,6 +48,7 @@ interface SelectedCategoryType {
     name: string,
     icon?: string,
     i18n_selector?: string,
+    progressive?: number,
     parent: SelectedCategoryType | null
 }
 
@@ -89,16 +90,33 @@ function AssetListItem({ data, asset, searchString, active = false, clickHandler
 
 function CategoryPicker({ data, formData, setFormData}: CategoryPickerType) {
     const location = useLocation();
+    const i18n: TranslationContextType = useContext(TranslationContext);
 
-    const category: Category = {name:'', subcategories: null};//formData["new-transaction-category"];
+    const category: SelectedCategoryType = formData["new-transaction-category"];
     const emptyCategory = !category.name; 
+
+    const icon = (emptyCategory) 
+        ? <BiPlus /> 
+        : ((!category.parent) 
+            ? <DynamicIcon lib={JSON.parse(category.icon!).lib} name={JSON.parse(category.icon!).name} />
+            : <DynamicIcon lib={JSON.parse(category.parent.icon!).lib} name={JSON.parse(category.parent.icon!).name} />)
+
+    var name = <></>
+    if (emptyCategory)
+        name = <strong>Select the category</strong>
+    else {
+        if (category.parent) {
+            name = <>{(!category.parent.i18n_selector) ? category.parent.name : i18n.t(category.parent.i18n_selector)} &middot; </>
+        }
+        name = <>{name}<strong>{(!category.i18n_selector) ? category.name : i18n.t(category.i18n_selector)}</strong></>
+    }
 
     return (
         <>
-            <Link to={"./select-category"} className={`category-picker ${emptyCategory ? "empty" : ""}`}>
+            <Link to={"./select-category"} className={`category-picker ${emptyCategory ? "empty" : "category-"+category.progressive}`}>
                 <div className="d-flex align-items-center gap-2">
-                    <div className="circle">{emptyCategory ? <BiPlus /> : <DynamicIcon lib={JSON.parse(category.icon!).lib} name={JSON.parse(category.icon!).name} />}</div>
-                    <div className="category-name">{emptyCategory ? "Select the category" : category.name}</div>
+                    <div className="circle">{icon}</div>
+                    <div className="category-name">{name}</div>
                 </div>
             </Link>
         </>
@@ -197,18 +215,44 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
 }
 
 export function TransactionCategorySelector() {
-    const { data } = useOutletContext<AddTransactionContext>();
+    const { data, handleChange } = useOutletContext<AddTransactionContext>();
     const i18n: TranslationContextType = useContext(TranslationContext);
+    const navigate = useNavigate();
 
     const isExpense = (data["new-transaction-type"] as TransactionType) === TransactionType.EXPENCE;
     const categoryList = isExpense ? defaultExpenseCategories : defaultIncomeCategories;
 
-    const [selectedCategory, setSelectedCategory] = useState<SelectedCategoryType>();
+    const [selected, setSelected] = useState<SelectedCategoryType>(data["new-transaction-category"]);
     const [openSubcategoryOf, setOpenSubcategoryOf] = useState("");
 
     const onClickParent = (parentName: string, isLogo = false) => { 
         console.log("triggered")
         setOpenSubcategoryOf((isLogo && openSubcategoryOf === parentName) ? "" : parentName);
+    }
+
+    const selectCategory = (category: Category, subcategory: Category | null, progressive: number) => {
+        const selectedCategory: SelectedCategoryType = (!subcategory) 
+            ? {
+                name: category.name,
+                icon: category.icon,
+                i18n_selector: category.i18n_selector,
+                progressive: progressive,
+                parent: null
+            }
+            : {
+                name: subcategory.name,
+                i18n_selector: subcategory.i18n_selector,
+                progressive: progressive,
+                parent: {
+                    name: category.name,
+                    icon: category.icon,
+                    i18n_selector: category.i18n_selector,
+                    parent: null
+                }
+            }
+        setSelected(selectedCategory);
+        handleChange({target: { name: "new-transaction-category", value: selectedCategory}})
+        navigate(-1);
     }
 
     return (
@@ -224,9 +268,9 @@ export function TransactionCategorySelector() {
                         {categoryList.map((category, i) => {
                             const subcategories = (category.subcategories === null) 
                                 ? <></> 
-                                : category.subcategories.map((sub, i) => {
+                                : category.subcategories.map((sub, j) => {
                                     return (
-                                        <div key={i} className="child">
+                                        <div key={j} className="child" onClick={() => selectCategory(category, sub, i+1)}>
                                             <div className="branch"></div>
                                             <div className="circle"></div>
                                             <div className="name">{!sub.i18n_selector ? sub.name : i18n.t(sub.i18n_selector)}</div>
@@ -246,7 +290,7 @@ export function TransactionCategorySelector() {
                                         transition={{ duration: 0.3, ease: "easeInOut" }}
                                     >
                                         {subcategories}
-                                        <div key={i} className="child no-sub">
+                                        <div key={i} className="child no-sub" onClick={() => selectCategory(category, null, i+1)}>
                                             <div className="branch"></div>
                                             <div className="circle"></div>
                                             <div className="name">{i18n.t("default.glossary.general")}</div>
