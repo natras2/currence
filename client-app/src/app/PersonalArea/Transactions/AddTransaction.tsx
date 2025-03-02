@@ -226,7 +226,6 @@ export function TransactionCategorySelector() {
     const [openSubcategoryOf, setOpenSubcategoryOf] = useState("");
 
     const onClickParent = (parentName: string, isLogo = false) => { 
-        console.log("triggered")
         setOpenSubcategoryOf((isLogo && openSubcategoryOf === parentName) ? "" : parentName);
     }
 
@@ -281,7 +280,10 @@ export function TransactionCategorySelector() {
                                 <div key={i} className={`category ${openSubcategoryOf ? (openSubcategoryOf === category.name ? "active" : "blurred") : ""}`}>
                                     <div className="parent">
                                         <div className="logo" onClick={() => onClickParent(category.name, true)}>{openSubcategoryOf === category.name ? <MdClose /> : <DynamicIcon lib={JSON.parse(category.icon!).lib} name={JSON.parse(category.icon!).name} />}</div>
-                                        <div className="name" onClick={() => onClickParent(category.name)}>{!category.i18n_selector ? category.name : i18n.t(category.i18n_selector)}</div>
+                                        <div className="name-wrapper">
+                                            <div className="name" onClick={() => onClickParent(category.name)}>{!category.i18n_selector ? category.name : i18n.t(category.i18n_selector)}</div>
+                                            {openSubcategoryOf === category.name && <div className="no-sub" onClick={() => selectCategory(category, null, i+1)}>Use this as category</div>}
+                                        </div>
                                     </div>
                                     <motion.div 
                                         className="category-children-list"
@@ -290,14 +292,9 @@ export function TransactionCategorySelector() {
                                         transition={{ duration: 0.3, ease: "easeInOut" }}
                                     >
                                         {subcategories}
-                                        <div key={i} className="child no-sub" onClick={() => selectCategory(category, null, i+1)}>
-                                            <div className="branch"></div>
-                                            <div className="circle"></div>
-                                            <div className="name">{i18n.t("default.glossary.general")}</div>
-                                        </div>
                                         <div className="child add-button">
                                             <div className="branch"></div>
-                                            <div className="button btn btn-outline-secondary rounded-pill">Add sub-category</div>
+                                            <div className="button btn btn-outline-dark rounded-pill" onClick={() => navigate("./create")}>Add sub-category</div>
                                         </div>
                                     </motion.div>
                                 </div>
