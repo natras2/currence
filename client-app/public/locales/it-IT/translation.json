@@ -18,38 +18,99 @@
         }
     },
     "default": {
-        "incomecategory": {
-            "salary": "",
-            "business": "",
-            "investment": "",
-            "freelance": "",
-            "rent": "",
-            "dividend": "",
-            "interest": "",
-            "scholarship": "",
-            "refund": "",
-            "gift": "",
-            "benefit": "",
-            "creditmanagement": "",
-            "other": ""
+        "glossary": {
+            "general": "Generale"
         },
-        "expensecategory": {
-            "housing": "",
-            "foodanddrink": "",
-            "transportation": "",
-            "insuranceandhealthcare": "",
-            "entertainmentandleisure": "",
-            "financial": "",
-            "education": "",
-            "personal": "",
-            "savingsandinvestments": "",
-            "childcareandfamily": "",
-            "professional": "",
-            "travelandvacations": "",
-            "subscriptionsandmemberships": "",
-            "giftsanddonations": "",
-            "debtmanagement": "",
-            "other": ""
+        "incomecategory": {
+            "salary": {
+                "name": "Stipendio e bonus",
+                "sub": {
+                    "wage": "Salario",
+                    "pension": "Pensione",
+                    "freelance": "Guadagni da lavoro autonomo"
+                }
+            },
+            "investments": {
+                "name": "Investimenti e dividendi",
+                "sub": {
+                    "stockdividends": "Dividendi azionari",
+                    "savingsinterest": "Interessi dai risparmi",
+                    "realestate": "Reddito immobiliare"
+                }
+            },
+            "business": {
+                "name": "Vendite e affari",
+                "sub": {
+                    "sales": "Vendite",
+                    "consulting": "Consulenza"
+                }
+            },
+            "government": {
+                "name": "Benefici sociali",
+                "sub": {
+                    "unemployment": "Sussidio di disoccupazione"
+                }
+            },
+            "gifts": {
+                "name": "Regali e donazioni"
+            },
+            "other": {
+                "name": "Altri redditi"
+            }
+        },
+        "outcomecategory": {
+            "housing": {
+                "name": "Abitazione e utenze",
+                "sub": {
+                    "rent": "Affitto",
+                    "mortgage": "Mutuo",
+                    "internetphone": "Internet e telefono"
+                }
+            },
+            "food": {
+                "name": "Cibo e spesa",
+                "sub": {
+                    "supermarket": "Supermercato",
+                    "restaurants": "Ristoranti",
+                    "takeawaydelivery": "Asporto e consegna a domicilio"
+                }
+            },
+            "transportation": {
+                "name": "Trasporti",
+                "sub": {
+                    "fuel": "Carburante",
+                    "publictransport": "Trasporto pubblico",
+                    "maintenance": "Manutenzione auto",
+                    "bikeshare": "Car sharing e bike sharing"
+                }
+            },
+            "health": {
+                "name": "Salute e assicurazioni",
+                "sub": {
+                    "insurance": "Assicurazione sanitaria",
+                    "doctorvisits": "Visite mediche",
+                    "medications": "Farmaci",
+                    "gymfitness": "Palestra e fitness"
+                }
+            },
+            "debt": {
+                "name": "Prestiti",
+                "sub": {
+                    "loanrepayments": "Rimborso prestiti"
+                }
+            },
+            "entertainment": {
+                "name": "Intrattenimento e tempo libero",
+                "sub": {
+                    "subscriptions": "Abbonamenti",
+                    "cinema": "Cinema",
+                    "books": "Libri",
+                    "hobbies": "Giochi e hobby"
+                }
+            },
+            "other": {
+                "name": "Altro"
+            }
         }
     }
-}
+}   

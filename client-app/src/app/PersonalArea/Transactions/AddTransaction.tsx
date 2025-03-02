@@ -1,19 +1,20 @@
 import { Link, Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { DataContext, PersonalAreaContextInterface, PersonalAreaContext } from "../../PersonalArea";
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
-import { ThemeContext, TranslationContext } from "../../../App";
+import { ThemeContext, TranslationContext, TranslationContextType } from "../../../App";
 import { capitalize, currencyFormat } from "../../../assets/libraries/Utils";
-import Transaction, { AssetAllocation, Category, TransactionType } from "../../../assets/model/Transaction";
+import Transaction, { AssetAllocation, Category, defaultExpenseCategories, defaultIncomeCategories, TransactionType } from "../../../assets/model/Transaction";
 import User from "../../../assets/model/User";
 import CurrencyInput from "react-currency-input-field";
 import { BackButton, DynamicIcon } from "../../../assets/components/Utils";
 import InputField from "../../../assets/components/InputField";
 import Loader from "../../../assets/components/Loader";
 import Asset, { AssetAttributes } from "../../../assets/model/Asset";
+import { motion } from "framer-motion";
 
 import { BiCalendar, BiPlus } from "react-icons/bi";
 import { PiNotePencilFill } from "react-icons/pi";
-import { MdArrowForward, MdDone } from "react-icons/md";
+import { MdArrowForward, MdClose, MdDone } from "react-icons/md";
 
 
 interface AddTransactionContext {
@@ -37,6 +38,17 @@ interface AssetPickerType {
     isAllocated: boolean,
     assetsAllocations: AssetAllocation[],
     setAssetsAllocations: Dispatch<SetStateAction<AssetAllocation[]>>
+}
+interface CategoryPickerType {
+    data: DataContext,
+    formData: any,
+    setFormData: Dispatch<SetStateAction<any>>
+}
+interface SelectedCategoryType {
+    name: string,
+    icon?: string,
+    i18n_selector?: string,
+    parent: SelectedCategoryType | null
 }
 
 function AssetListItem({ data, asset, searchString, active = false, clickHandler }: AssetItemType) {
@@ -72,6 +84,24 @@ function AssetListItem({ data, asset, searchString, active = false, clickHandler
                 </div>
             </div>
         </span>
+    );
+}
+
+function CategoryPicker({ data, formData, setFormData}: CategoryPickerType) {
+    const location = useLocation();
+
+    const category: Category = {name:'', subcategories: null};//formData["new-transaction-category"];
+    const emptyCategory = !category.name; 
+
+    return (
+        <>
+            <Link to={"./select-category"} className={`category-picker ${emptyCategory ? "empty" : ""}`}>
+                <div className="d-flex align-items-center gap-2">
+                    <div className="circle">{emptyCategory ? <BiPlus /> : <DynamicIcon lib={JSON.parse(category.icon!).lib} name={JSON.parse(category.icon!).name} />}</div>
+                    <div className="category-name">{emptyCategory ? "Select the category" : category.name}</div>
+                </div>
+            </Link>
+        </>
     );
 }
 
@@ -167,6 +197,20 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
 }
 
 export function TransactionCategorySelector() {
+    const { data } = useOutletContext<AddTransactionContext>();
+    const i18n: TranslationContextType = useContext(TranslationContext);
+
+    const isExpense = (data["new-transaction-type"] as TransactionType) === TransactionType.EXPENCE;
+    const categoryList = isExpense ? defaultExpenseCategories : defaultIncomeCategories;
+
+    const [selectedCategory, setSelectedCategory] = useState<SelectedCategoryType>();
+    const [openSubcategoryOf, setOpenSubcategoryOf] = useState("");
+
+    const onClickParent = (parentName: string, isLogo = false) => { 
+        console.log("triggered")
+        setOpenSubcategoryOf((isLogo && openSubcategoryOf === parentName) ? "" : parentName);
+    }
+
     return (
         <div id="select-transaction-category" className="callout page sub">
             <div className="h-100 d-flex flex-column">
@@ -177,40 +221,44 @@ export function TransactionCategorySelector() {
                 </div>
                 <div className="body">
                     <div className="category-parent-list">
-                        <div className="category">
-                            <div className="parent">
-                                <div className="logo"><BiCalendar /></div>
-                                <div className="name">Parent category #1</div>
-                            </div>
-                            <div className="category-children-list">
-                                <div className="child">
-                                    <div className="branch"></div>
-                                    <div className="circle"></div>
-                                    <div className="name">Sub-category #1</div>
+                        {categoryList.map((category, i) => {
+                            const subcategories = (category.subcategories === null) 
+                                ? <></> 
+                                : category.subcategories.map((sub, i) => {
+                                    return (
+                                        <div key={i} className="child">
+                                            <div className="branch"></div>
+                                            <div className="circle"></div>
+                                            <div className="name">{!sub.i18n_selector ? sub.name : i18n.t(sub.i18n_selector)}</div>
+                                        </div>
+                                    );
+                                });
+                            return (
+                                <div key={i} className={`category ${openSubcategoryOf ? (openSubcategoryOf === category.name ? "active" : "blurred") : ""}`}>
+                                    <div className="parent">
+                                        <div className="logo" onClick={() => onClickParent(category.name, true)}>{openSubcategoryOf === category.name ? <MdClose /> : <DynamicIcon lib={JSON.parse(category.icon!).lib} name={JSON.parse(category.icon!).name} />}</div>
+                                        <div className="name" onClick={() => onClickParent(category.name)}>{!category.i18n_selector ? category.name : i18n.t(category.i18n_selector)}</div>
+                                    </div>
+                                    <motion.div 
+                                        className="category-children-list"
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: (openSubcategoryOf === category.name) ? "auto" : 0, opacity: (openSubcategoryOf === category.name) ? 1 : 0 }}
+                                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                                    >
+                                        {subcategories}
+                                        <div key={i} className="child no-sub">
+                                            <div className="branch"></div>
+                                            <div className="circle"></div>
+                                            <div className="name">{i18n.t("default.glossary.general")}</div>
+                                        </div>
+                                        <div className="child add-button">
+                                            <div className="branch"></div>
+                                            <div className="button btn btn-outline-secondary rounded-pill">Add sub-category</div>
+                                        </div>
+                                    </motion.div>
                                 </div>
-                                <div className="child">
-                                    <div className="branch"></div>
-                                    <div className="circle"></div>
-                                    <div className="name">Sub-category #2</div>
-                                </div>
-                                <div className="child add-button">
-                                    <div className="branch"></div>
-                                    <div className="button btn btn-outline-secondary rounded-pill">Add sub-category</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="category">
-                            <div className="parent">
-                                <div className="logo"><PiNotePencilFill /></div>
-                                <div className="name">Parent category #2</div>
-                            </div>
-                            <div className="category-children-list">
-                                <div className="child add-button">
-                                    <div className="branch"></div>
-                                    <div className="button btn btn-outline-secondary rounded-pill">Add sub-category</div>
-                                </div>
-                            </div>
-                        </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
@@ -608,11 +656,15 @@ export default function AddTransaction() {
                         />
                     </div>
                     <div>
+                        <div className="category-picker-wrapper mb-2">
+                            {/*<label className="form-label">Category</label>*/}
+                            <CategoryPicker data={data} formData={formData} setFormData={setFormData} />
+                        </div>
                         <div className="">
-                            <label className="form-label">Description</label>
+                            {/*<label className="form-label">Description</label>*/}
                             <InputField
                                 type="text"
-                                placeholder={`e.g. "${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "Monthly rent" : ((formData["new-transaction-type"] === TransactionType.INCOME) ? "Salary" : ((formData["new-transaction-type"] === TransactionType.TRANSFER) ? "Transfer" : ""))}"`}
+                                placeholder={`Description (e.g. "${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "Monthly rent" : ((formData["new-transaction-type"] === TransactionType.INCOME) ? "Salary" : ((formData["new-transaction-type"] === TransactionType.TRANSFER) ? "Transfer" : ""))}")`}
                                 name="new-transaction-description"
                                 handleChange={handleChange}
                                 isRegistering='false'
@@ -620,7 +672,7 @@ export default function AddTransaction() {
                             />
                         </div>
                         <div className="asset-picker-wrapper">
-                            <label className="form-label">Asset</label>
+                            {/*<label className="form-label">Asset</label>*/}
                             <AssetPicker data={data} isAllocated={isAllocated} assetsAllocations={assetsAllocations} setAssetsAllocations={setAssetsAllocations} />
                         </div>
                         <div className="d-flex mt-4 gap-1">

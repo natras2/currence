@@ -14,129 +14,241 @@ export interface Category {
     name: string;
     i18n_selector?: string;
     icon?: string;
+    subcategories: Category[] | null
 }
 
 export const defaultIncomeCategories: Category[] = [
     {
-        name: "Salary",
-        i18n_selector: "default.incomecategory.salary",
-        icon: JSON.stringify({lib: "io", name: "IoIosCash"})
+        name: "Salary & bonuses",
+        i18n_selector: "default.incomecategory.salary.name",
+        icon: JSON.stringify({ lib: "io", name: "IoIosCash" }),
+        subcategories: [
+            {
+                name: "Wage",
+                i18n_selector: "default.incomecategory.salary.sub.wage",
+                subcategories: null
+            },
+            {
+                name: "Pension",
+                i18n_selector: "default.incomecategory.salary.sub.pension",
+                subcategories: null
+            },
+            {
+                name: "Self-Employment earnings",
+                i18n_selector: "default.incomecategory.salary.sub.freelance",
+                subcategories: null
+            }
+        ]
     },
     {
-        name: "Business",
-        i18n_selector: "default.incomecategory.business"
+        name: "Investments & dividends",
+        i18n_selector: "default.incomecategory.investments.name",
+        icon: JSON.stringify({ lib: "md", name: "MdTrendingUp" }),
+        subcategories: [
+            {
+                name: "Stock dividends",
+                i18n_selector: "default.incomecategory.investments.sub.stockdividends",
+                subcategories: null
+            },
+            {
+                name: "Interest from savings",
+                i18n_selector: "default.incomecategory.investments.sub.savingsinterest",
+                subcategories: null
+            },
+            {
+                name: "Real Estate income",
+                i18n_selector: "default.incomecategory.investments.sub.realestate",
+                subcategories: null
+            }
+        ]
     },
     {
-        name: "Investment",
-        i18n_selector: "default.incomecategory.investment"
+        name: "Sales & Business",
+        i18n_selector: "default.incomecategory.business.name",
+        icon: JSON.stringify({ lib: "bi", name: "BiBriefcase" }),
+        subcategories: [
+            {
+                name: "Sales",
+                i18n_selector: "default.incomecategory.business.sub.sales",
+                subcategories: null
+            },
+            {
+                name: "Consulting",
+                i18n_selector: "default.incomecategory.business.sub.consulting",
+                subcategories: null
+            }
+        ]
     },
     {
-        name: "Freelance",
-        i18n_selector: "default.incomecategory.freelance"
+        name: "Social benefits",
+        i18n_selector: "default.incomecategory.government.name",
+        icon: JSON.stringify({ lib: "gi", name: "GiReceiveMoney" }),
+        subcategories: [
+            {
+                name: "Unemployment benefits",
+                i18n_selector: "default.incomecategory.government.sub.unemployment",
+                subcategories: null
+            }
+        ]
     },
     {
-        name: "Rent",
-        i18n_selector: "default.incomecategory.rent"
+        name: "Gifts & Donations",
+        i18n_selector: "default.incomecategory.gifts.name",
+        icon: JSON.stringify({ lib: "fa", name: "FaHandHoldingHeart" }),
+        subcategories: null
     },
     {
-        name: "Dividend",
-        i18n_selector: "default.incomecategory.dividend"
-    },
-    {
-        name: "Interest",
-        i18n_selector: "default.incomecategory.interest"
-    },
-    {
-        name: "Scholarship",
-        i18n_selector: "default.incomecategory.scholarship"
-    },
-    {
-        name: "Refund",
-        i18n_selector: "default.incomecategory.refund"
-    },
-    {
-        name: "Gift",
-        i18n_selector: "default.incomecategory.gift"
-    },
-    {
-        name: "Benefit",
-        i18n_selector: "default.incomecategory.benefit"
-    },
-    {
-        name: "Credit management",
-        i18n_selector: "default.incomecategory.creditmanagement"
-    },
-    {
-        name: "Other",
-        i18n_selector: "default.incomecategory.other"
+        name: "Other incomes",
+        i18n_selector: "default.incomecategory.other.name",
+        icon: JSON.stringify({ lib: "md", name: "MdMoreHoriz" }),
+        subcategories: null
     }
 ];
 
 
 export const defaultExpenseCategories: Category[] = [
     {
-        name: "Housing",
-        i18n_selector: "default.expensecategory.housing"
+        name: "Housing & utilities",
+        i18n_selector: "default.outcomecategory.housing.name",
+        icon: JSON.stringify({ lib: "fa", name: "FaHome" }),
+        subcategories: [
+            {
+                name: "Rent",
+                i18n_selector: "default.outcomecategory.housing.sub.rent",
+                subcategories: null
+            },
+            {
+                name: "Mortgage",
+                i18n_selector: "default.outcomecategory.housing.sub.mortgage",
+                subcategories: null
+            },
+            {
+                name: "Internet & Phone",
+                i18n_selector: "default.outcomecategory.housing.sub.internetphone",
+                subcategories: null
+            }
+        ]
     },
     {
-        name: "Food & Drink",
-        i18n_selector: "default.expensecategory.foodanddrink"
+        name: "Food & groceries",
+        i18n_selector: "default.outcomecategory.food.name",
+        icon: JSON.stringify({ lib: "md", name: "MdRestaurant" }),
+        subcategories: [
+            {
+                name: "Supermarket",
+                i18n_selector: "default.outcomecategory.food.sub.supermarket",
+                subcategories: null
+            },
+            {
+                name: "Restaurants",
+                i18n_selector: "default.outcomecategory.food.sub.restaurants",
+                subcategories: null
+            },
+            {
+                name: "Takeaway & Delivery",
+                i18n_selector: "default.outcomecategory.food.sub.takeawaydelivery",
+                subcategories: null
+            }
+        ]
     },
     {
         name: "Transportation",
-        i18n_selector: "default.expensecategory.transportation"
+        i18n_selector: "default.outcomecategory.transportation.name",
+        icon: JSON.stringify({ lib: "fa", name: "FaCar" }),
+        subcategories: [
+            {
+                name: "Fuel",
+                i18n_selector: "default.outcomecategory.transportation.sub.fuel",
+                subcategories: null
+            },
+            {
+                name: "Public transport",
+                i18n_selector: "default.outcomecategory.transportation.sub.publictransport",
+                subcategories: null
+            },
+            {
+                name: "Car maintenance",
+                i18n_selector: "default.outcomecategory.transportation.sub.maintenance",
+                subcategories: null
+            },
+            {
+                name: "Car and bike share",
+                i18n_selector: "default.outcomecategory.transportation.sub.bikeshare",
+                subcategories: null
+            }
+        ]
     },
     {
-        name: "Insurance & Healthcare",
-        i18n_selector: "default.expensecategory.insuranceandhealthcare"
+        name: "Health & insurance",
+        i18n_selector: "default.outcomecategory.health.name",
+        icon: JSON.stringify({ lib: "md", name: "MdLocalHospital" }),
+        subcategories: [
+            {
+                name: "Health Insurance",
+                i18n_selector: "default.outcomecategory.health.sub.insurance",
+                subcategories: null
+            },
+            {
+                name: "Doctor visits",
+                i18n_selector: "default.outcomecategory.health.sub.doctorvisits",
+                subcategories: null
+            },
+            {
+                name: "Medications",
+                i18n_selector: "default.outcomecategory.health.sub.medications",
+                subcategories: null
+            },
+            {
+                name: "Gym & fitness",
+                i18n_selector: "default.outcomecategory.health.sub.gymfitness",
+                subcategories: null
+            }
+        ]
     },
     {
-        name: "Entertainment & Leisure",
-        i18n_selector: "default.expensecategory.entertainmentandleisure"
+        name: "Entertainment & leisure",
+        i18n_selector: "default.outcomecategory.entertainment.name",
+        icon: JSON.stringify({ lib: "md", name: "MdTheaters" }),
+        subcategories: [
+            {
+                name: "Subscriptions",
+                i18n_selector: "default.outcomecategory.entertainment.sub.subscriptions",
+                subcategories: null
+            },
+            {
+                name: "Cinema",
+                i18n_selector: "default.outcomecategory.entertainment.sub.cinema",
+                subcategories: null
+            },
+            {
+                name: "Books",
+                i18n_selector: "default.outcomecategory.entertainment.sub.books",
+                subcategories: null
+            },
+            {
+                name: "Games and hobbies",
+                i18n_selector: "default.outcomecategory.entertainment.sub.hobbies",
+                subcategories: null
+            }
+        ]
     },
     {
-        name: "Financial",
-        i18n_selector: "default.expensecategory.financial"
-    },
-    {
-        name: "Education",
-        i18n_selector: "default.expensecategory.education"
-    },
-    {
-        name: "Personal",
-        i18n_selector: "default.expensecategory.personal"
-    },
-    {
-        name: "Savings & Investments",
-        i18n_selector: "default.expensecategory.savingsandinvestments"
-    },
-    {
-        name: "Childcare & Family",
-        i18n_selector: "default.expensecategory.childcareandfamily"
-    },
-    {
-        name: "Professional",
-        i18n_selector: "default.expensecategory.professional"
-    },
-    {
-        name: "Travel & Vacations",
-        i18n_selector: "default.expensecategory.travelandvacations"
-    },
-    {
-        name: "Subscriptions & Memberships",
-        i18n_selector: "default.expensecategory.subscriptionsandmemberships"
-    },
-    {
-        name: "Gifts & Donations",
-        i18n_selector: "default.expensecategory.giftsanddonations"
-    },
-    {
-        name: "Debt Management",
-        i18n_selector: "default.expensecategory.debtmanagement"
+        name: "Loans",
+        i18n_selector: "default.outcomecategory.debt.name",
+        icon: JSON.stringify({ lib: "fa", name: "FaCreditCard" }),
+        subcategories: [
+            {
+                name: "Loan repayments",
+                i18n_selector: "default.outcomecategory.debt.sub.loanrepayments",
+                subcategories: null
+            }
+        ]
     },
     {
         name: "Other",
-        i18n_selector: "default.expensecategory.other"
+        i18n_selector: "default.outcomecategory.other.name",
+        icon: JSON.stringify({ lib: "md", name: "MdMoreHoriz" }),
+        subcategories: null
     }
 ];
 

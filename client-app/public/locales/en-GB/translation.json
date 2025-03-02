@@ -18,38 +18,99 @@
         }
     },
     "default": {
-        "incomecategory": {
-            "salary": "",
-            "business": "",
-            "investment": "",
-            "freelance": "",
-            "rent": "",
-            "dividend": "",
-            "interest": "",
-            "scholarship": "",
-            "refund": "",
-            "gift": "",
-            "benefit": "",
-            "creditmanagement": "",
-            "other": ""
+        "glossary": {
+            "general": "General"
         },
-        "expensecategory": {
-            "housing": "",
-            "foodanddrink": "",
-            "transportation": "",
-            "insuranceandhealthcare": "",
-            "entertainmentandleisure": "",
-            "financial": "",
-            "education": "",
-            "personal": "",
-            "savingsandinvestments": "",
-            "childcareandfamily": "",
-            "professional": "",
-            "travelandvacations": "",
-            "subscriptionsandmemberships": "",
-            "giftsanddonations": "",
-            "debtmanagement": "",
-            "other": ""
+        "incomecategory": {
+            "salary": {
+                "name": "Salary & bonuses",
+                "sub": {
+                    "wage": "Wage",
+                    "pension": "Pension",
+                    "freelance": "Self-Employment earnings"
+                }
+            },
+            "investments": {
+                "name": "Investments & dividends",
+                "sub": {
+                    "stockdividends": "Stock dividends",
+                    "savingsinterest": "Interest from savings",
+                    "realestate": "Real Estate income"
+                }
+            },
+            "business": {
+                "name": "Sales & Business",
+                "sub": {
+                    "sales": "Sales",
+                    "consulting": "Consulting"
+                }
+            },
+            "government": {
+                "name": "Social benefits",
+                "sub": {
+                    "unemployment": "Unemployment benefits"
+                }
+            },
+            "gifts": {
+                "name": "Gifts & Donations"
+            },
+            "other": {
+                "name": "Other incomes"
+            }
+        },
+        "outcomecategory": {
+            "housing": {
+                "name": "Housing & utilities",
+                "sub": {
+                    "rent": "Rent",
+                    "mortgage": "Mortgage",
+                    "internetphone": "Internet & Phone"
+                }
+            },
+            "food": {
+                "name": "Food & groceries",
+                "sub": {
+                    "supermarket": "Supermarket",
+                    "restaurants": "Restaurants",
+                    "takeawaydelivery": "Takeaway & Delivery"
+                }
+            },
+            "transportation": {
+                "name": "Transportation",
+                "sub": {
+                    "fuel": "Fuel",
+                    "publictransport": "Public transport",
+                    "maintenance": "Car maintenance",
+                    "bikeshare": "Car and bike share"
+                }
+            },
+            "health": {
+                "name": "Health & insurance",
+                "sub": {
+                    "insurance": "Health Insurance",
+                    "doctorvisits": "Doctor visits",
+                    "medications": "Medications",
+                    "gymfitness": "Gym & fitness"
+                }
+            },
+            "debt": {
+                "name": "Loans",
+                "sub": {
+                    "loanrepayments": "Loan repayments"
+                }
+            },
+            "entertainment": {
+                "name": "Entertainment & leisure",
+                "sub": {
+                    "subscriptions": "Subscriptions",
+                    "cinema": "Cinema",
+                    "books": "Books",
+                    "hobbies": "Games and hobbies"
+                }
+            },
+            "other": {
+                "name": "Other"
+            }
         }
     }
 }
