@@ -3,7 +3,7 @@ import { DataContext, PersonalAreaContextInterface, PersonalAreaContext } from "
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { ThemeContext, TranslationContext, TranslationContextType } from "../../../App";
 import { capitalize, currencyFormat } from "../../../assets/libraries/Utils";
-import Transaction, { AssetAllocation, Category, defaultExpenseCategories, defaultIncomeCategories, TransactionType } from "../../../assets/model/Transaction";
+import Transaction, { AssetAllocation, Category, defaultExpenseCategories, defaultIncomeCategories, SelectedCategory, TransactionType } from "../../../assets/model/Transaction";
 import User from "../../../assets/model/User";
 import CurrencyInput from "react-currency-input-field";
 import { BackButton, DynamicIcon } from "../../../assets/components/Utils";
@@ -11,6 +11,7 @@ import InputField from "../../../assets/components/InputField";
 import Loader from "../../../assets/components/Loader";
 import Asset, { AssetAttributes } from "../../../assets/model/Asset";
 import { motion } from "framer-motion";
+import useLongPress from "../../../assets/libraries/Utils";
 
 import { BiCalendar, BiPlus } from "react-icons/bi";
 import { PiNotePencilFill } from "react-icons/pi";
@@ -44,12 +45,15 @@ interface CategoryPickerType {
     formData: any,
     setFormData: Dispatch<SetStateAction<any>>
 }
-interface SelectedCategoryType {
-    name: string,
-    icon?: string,
-    i18n_selector?: string,
-    progressive?: number,
-    parent: SelectedCategoryType | null
+interface CategorySelectionType {
+    category: Category, 
+    subcategory: Category | null, 
+    progressive: number
+}
+interface SubcategoryItemType {
+    selection: CategorySelectionType, 
+    setSelected: Dispatch<SetStateAction<SelectedCategory>>,
+    handleChange: any
 }
 
 function AssetListItem({ data, asset, searchString, active = false, clickHandler }: AssetItemType) {
@@ -92,7 +96,7 @@ function CategoryPicker({ data, formData, setFormData}: CategoryPickerType) {
     const location = useLocation();
     const i18n: TranslationContextType = useContext(TranslationContext);
 
-    const category: SelectedCategoryType = formData["new-transaction-category"];
+    const category: SelectedCategory = formData["new-transaction-category"];
     const emptyCategory = !category.name; 
 
     const icon = (emptyCategory) 
@@ -214,6 +218,50 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
     )
 }
 
+function SubcategoryItem({selection, handleChange, setSelected}: SubcategoryItemType) {
+    const i18n: TranslationContextType = useContext(TranslationContext);
+    const navigate = useNavigate();
+
+    const {category, subcategory, progressive} = selection;
+
+    const onLongPressOnCategory = (selection: CategorySelectionType) => {
+        alert(selection.subcategory!.name);
+    }
+    const onClickOnCategory = ({ category, subcategory, progressive }: CategorySelectionType) => {
+        const selectedCategory: SelectedCategory = (!subcategory) 
+            ? {
+                name: category.name,
+                icon: category.icon,
+                i18n_selector: category.i18n_selector,
+                progressive: progressive,
+                parent: null
+            }
+            : {
+                name: subcategory.name,
+                i18n_selector: subcategory.i18n_selector,
+                progressive: progressive,
+                parent: {
+                    name: category.name,
+                    icon: category.icon,
+                    i18n_selector: category.i18n_selector,
+                    parent: null
+                }
+            }
+        setSelected(selectedCategory);
+        handleChange({target: { name: "new-transaction-category", value: selectedCategory}})
+        navigate(-1);
+    }
+    const longPressOnCategory = useLongPress(onLongPressOnCategory, onClickOnCategory, { delay: 500 }, {category: category, subcategory: subcategory, progressive: progressive});
+
+    return (
+        <div {...longPressOnCategory} className="child">
+            <div className="branch"></div>
+            <div className="circle"></div>
+            <div className="button btn btn-dark">{!(subcategory!).i18n_selector ? subcategory!.name : i18n.t(subcategory!.i18n_selector)}</div>
+        </div>
+    );
+}
+
 export function TransactionCategorySelector() {
     const { data, handleChange } = useOutletContext<AddTransactionContext>();
     const i18n: TranslationContextType = useContext(TranslationContext);
@@ -222,15 +270,15 @@ export function TransactionCategorySelector() {
     const isExpense = (data["new-transaction-type"] as TransactionType) === TransactionType.EXPENCE;
     const categoryList = isExpense ? defaultExpenseCategories : defaultIncomeCategories;
 
-    const [selected, setSelected] = useState<SelectedCategoryType>(data["new-transaction-category"]);
+    const [selected, setSelected] = useState<SelectedCategory>(data["new-transaction-category"]);
     const [openSubcategoryOf, setOpenSubcategoryOf] = useState("");
 
     const onClickParent = (parentName: string, isLogo = false) => { 
         setOpenSubcategoryOf((isLogo && openSubcategoryOf === parentName) ? "" : parentName);
     }
 
-    const selectCategory = (category: Category, subcategory: Category | null, progressive: number) => {
-        const selectedCategory: SelectedCategoryType = (!subcategory) 
+    const selectCategory = ({category, subcategory, progressive}: CategorySelectionType) => {
+        const selectedCategory: SelectedCategory = (!subcategory) 
             ? {
                 name: category.name,
                 icon: category.icon,
@@ -269,11 +317,7 @@ export function TransactionCategorySelector() {
                                 ? <></> 
                                 : category.subcategories.map((sub, j) => {
                                     return (
-                                        <div key={j} className="child" onClick={() => selectCategory(category, sub, i+1)}>
-                                            <div className="branch"></div>
-                                            <div className="circle"></div>
-                                            <div className="name">{!sub.i18n_selector ? sub.name : i18n.t(sub.i18n_selector)}</div>
-                                        </div>
+                                        <SubcategoryItem key={j} selection={{category: category, subcategory: sub, progressive: i+1}} setSelected={setSelected} handleChange={handleChange} />
                                     );
                                 });
                             return (
@@ -282,13 +326,20 @@ export function TransactionCategorySelector() {
                                         <div className="logo" onClick={() => onClickParent(category.name, true)}>{openSubcategoryOf === category.name ? <MdClose /> : <DynamicIcon lib={JSON.parse(category.icon!).lib} name={JSON.parse(category.icon!).name} />}</div>
                                         <div className="name-wrapper">
                                             <div className="name" onClick={() => onClickParent(category.name)}>{!category.i18n_selector ? category.name : i18n.t(category.i18n_selector)}</div>
-                                            {openSubcategoryOf === category.name && <div className="no-sub" onClick={() => selectCategory(category, null, i+1)}>Use this as category</div>}
+                                            {openSubcategoryOf === category.name && 
+                                            <motion.div 
+                                                className="no-sub" 
+                                                initial={{ visibility: "hidden", height: 0, opacity: 0 }}
+                                                animate={{ visibility: "visible",  height: "auto", opacity: 1 }}
+                                                onClick={() => {selectCategory({category: category, subcategory: null, progressive: i+1})}}
+                                                >Use this as category
+                                            </motion.div>}
                                         </div>
                                     </div>
                                     <motion.div 
                                         className="category-children-list"
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: (openSubcategoryOf === category.name) ? "auto" : 0, opacity: (openSubcategoryOf === category.name) ? 1 : 0 }}
+                                        initial={{ visibility: "hidden", height: 0, opacity: 0 }}
+                                        animate={{ height: (openSubcategoryOf === category.name) ? "auto" : 0, opacity: (openSubcategoryOf === category.name) ? 1 : 0, visibility: (openSubcategoryOf === category.name) ? "visible" : "hidden" }}
                                         transition={{ duration: 0.3, ease: "easeInOut" }}
                                     >
                                         {subcategories}
@@ -531,7 +582,7 @@ export default function AddTransaction() {
 
     const [formData, setFormData] = useState({
         "new-transaction-type": TransactionType.EXPENCE,
-        "new-transaction-category": { name: '' } as Category,
+        "new-transaction-category": { name: '' } as SelectedCategory,
         "new-transaction-description": '',
         "new-transaction-amount": '0.00',
         "new-transaction-date": new Date(),
@@ -705,11 +756,13 @@ export default function AddTransaction() {
                             {/*<label className="form-label">Description</label>*/}
                             <InputField
                                 type="text"
-                                placeholder={`Description (e.g. "${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "Monthly rent" : ((formData["new-transaction-type"] === TransactionType.INCOME) ? "Salary" : ((formData["new-transaction-type"] === TransactionType.TRANSFER) ? "Transfer" : ""))}")`}
+                                placeholder={""}//`E.g. "${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "Monthly rent" : ((formData["new-transaction-type"] === TransactionType.INCOME) ? "Salary" : ((formData["new-transaction-type"] === TransactionType.TRANSFER) ? "Transfer" : ""))}"`}
                                 name="new-transaction-description"
                                 handleChange={handleChange}
                                 isRegistering='false'
                                 value={formData["new-transaction-description"]}
+                                test
+                                label={"Description"}
                             />
                         </div>
                         <div className="asset-picker-wrapper">

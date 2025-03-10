@@ -3,6 +3,7 @@ import PasswordStrengthBar from 'react-password-strength-bar';
 import { useState } from 'react';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { GrClose } from 'react-icons/gr';
+import { borderRadius, fontSize, fontWeight, padding } from '@mui/system';
 
 function TextualField(props: any) {
     const [fieldValue, setFieldValue] = useState(props.value); // Initialize state with prop value
@@ -11,62 +12,98 @@ function TextualField(props: any) {
         setFieldValue(e.target.value); // Update state with input value
         props.handleChange(e);
     };
-    return (
-        <div className="mb-2 position-relative">
-            <input 
-                type={props.type} 
-                className="form-control" 
-                id={props.name} 
-                value={fieldValue}
-                placeholder={props.placeholder} 
-                name={props.name} 
-                onChange={handleFieldChange} 
-                style={(!!props.contenttype && props.contenttype === 'search') ? {paddingLeft: "2.8rem", marginBottom: 5} : {}}
-                required />
-            {(!!props.contenttype && props.contenttype === 'search') && 
-                <>
-                    <FaMagnifyingGlass 
-                        style={{ 
-                            color: "var(--search-input-icon)",
-                            position: 'absolute',
-                            top: "1.1rem",
-                            left: 17,
-                            fontSize: 18
 
-                        }}
-                    />
-                    {(fieldValue.length > 0) &&
-                        <div style={{ 
-                            color: "var(--inverse-text-color)",
-                            position: 'absolute',
-                            top: "1.1rem",
-                            right: 17,
-                            height: 16,
-                            width: 16,
-                            background: "var(--search-input-icon)",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            borderRadius: 20,
-                            cursor: "pointer"
-                        }}
-                        onClick={() => handleFieldChange({target: {name: 'search', value: ''}})}>
-                            <GrClose style={{height: 10, width: 10 }}/>
-                        </div>
-                    }
-                </>
-            }
-            <div className="invalid-feedback">Please fill out this field.</div>
-            {(props.type === 'password' && props.isRegistering === 'true') &&
-                <PasswordStrengthBar 
-                    className='password-strength-bar' 
-                    minLength={8} 
-                    scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
-                    shortScoreWord='Too short'
-                    password={fieldValue} />
-            }
-        </div>
-    )
+    const testInputStyle = {
+        height: 70,
+        padding: "1.4rem 1.2rem 0",
+        borderRadius: 15,
+        paddingLeft: (!!props.contenttype && props.contenttype === 'search') ? "2.8rem" : undefined,
+        marginBottom: (!!props.contenttype && props.contenttype === 'search') ? 5 : undefined
+    }
+    const testLabelStyle = {
+        fontSize: 13,
+        fontWeight: 300,
+        left: "1.2rem",
+        top: ".7rem"
+    }
+
+    if (props.test) {
+        return (
+            <>
+                <div className="mb-2 position-relative">
+                    <div className='label position-absolute' style={testLabelStyle}>{props.label}</div>
+                    <input
+                        type={props.type}
+                        className="form-control"
+                        id={props.name}
+                        value={fieldValue}
+                        placeholder={props.placeholder}
+                        name={props.name}
+                        onChange={handleFieldChange}
+                        style={testInputStyle}//, (!!props.contenttype && props.contenttype === 'search') ? { paddingLeft: "2.8rem", marginBottom: 5 } : {}}
+                        required />
+                </div>
+            </>
+        )
+    }
+    else {
+        return (
+            <div className="mb-2 position-relative">
+                <input
+                    type={props.type}
+                    className="form-control"
+                    id={props.name}
+                    value={fieldValue}
+                    placeholder={props.placeholder}
+                    name={props.name}
+                    onChange={handleFieldChange}
+                    style={(!!props.contenttype && props.contenttype === 'search') ? { paddingLeft: "2.8rem", marginBottom: 5 } : {}}
+                    required />
+                {(!!props.contenttype && props.contenttype === 'search') &&
+                    <>
+                        <FaMagnifyingGlass
+                            style={{
+                                color: "var(--search-input-icon)",
+                                position: 'absolute',
+                                top: "1.1rem",
+                                left: 17,
+                                fontSize: 18
+
+                            }}
+                        />
+                        {(fieldValue.length > 0) &&
+                            <div style={{
+                                color: "var(--inverse-text-color)",
+                                position: 'absolute',
+                                top: "1.1rem",
+                                right: 17,
+                                height: 16,
+                                width: 16,
+                                background: "var(--search-input-icon)",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                borderRadius: 20,
+                                cursor: "pointer"
+                            }}
+                                onClick={() => handleFieldChange({ target: { name: 'search', value: '' } })}>
+                                <GrClose style={{ height: 10, width: 10 }} />
+                            </div>
+                        }
+                    </>
+                }
+                <div className="invalid-feedback">Please fill out this field.</div>
+                {(props.type === 'password' && props.isRegistering === 'true') &&
+                    <PasswordStrengthBar
+                        className='password-strength-bar'
+                        minLength={8}
+                        scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
+                        shortScoreWord='Too short'
+                        password={fieldValue} />
+                }
+            </div>
+        )
+    }
 }
 function SelectField(props: any) {
     const [fieldValue, setFieldValue] = useState(props.value); // Initialize state with prop value
@@ -81,7 +118,7 @@ function SelectField(props: any) {
         props.handleChange(e);
         setFieldValue(selectedOption.value); // Update state with input value
     };
-    
+
     const style = {
         control: (base: any) => ({
             ...base,
@@ -92,13 +129,13 @@ function SelectField(props: any) {
     };
     return (
         <div className="mb-2">
-            <Select 
-                className="form-control" 
-                name={props.name} 
-                value={props.options.find((option: any) => option.value === fieldValue)} 
-                placeholder={props.placeholder} 
-                onChange={handleFieldChange} 
-                options={props.options} 
+            <Select
+                className="form-control"
+                name={props.name}
+                value={props.options.find((option: any) => option.value === fieldValue)}
+                placeholder={props.placeholder}
+                onChange={handleFieldChange}
+                options={props.options}
                 styles={style} />
         </div>
     )
@@ -109,21 +146,17 @@ export default function InputField(props: any) {
     switch (props.type) {
         case 'text':
             field = (
-                <TextualField 
-                    type='text' 
-                    name={props.name}
-                    value={props.value}
-                    placeholder={props.placeholder} 
-                    handleChange={props.handleChange} 
-                    isRegistering={props.isRegistering}
+                <TextualField
+                    type='text'
+                    {...props}
                 />
             );
             break;
         case 'password':
             field = (
-                <TextualField 
-                    type='password' 
-                    name={props.name} 
+                <TextualField
+                    type='password'
+                    name={props.name}
                     value={props.value}
                     placeholder={props.placeholder}
                     handleChange={props.handleChange}
@@ -133,24 +166,24 @@ export default function InputField(props: any) {
             break;
         case 'email':
             field = (
-                <TextualField 
-                    type='email' 
+                <TextualField
+                    type='email'
                     name={props.name}
-                    value={props.value} 
-                    placeholder={props.placeholder} 
-                    handleChange={props.handleChange} 
-                    isRegistering={props.isRegistering} 
+                    value={props.value}
+                    placeholder={props.placeholder}
+                    handleChange={props.handleChange}
+                    isRegistering={props.isRegistering}
                 />
             );
             break;
         case 'select':
             field = (
-                <SelectField 
-                    name={props.name} 
-                    value={props.value} 
-                    placeholder={props.placeholder} 
-                    handleChange={props.handleChange} 
-                    options={props.options} 
+                <SelectField
+                    name={props.name}
+                    value={props.value}
+                    placeholder={props.placeholder}
+                    handleChange={props.handleChange}
+                    options={props.options}
                     isRegistering={props.isRegistering}
                     isAddress={false} />
             );
@@ -158,9 +191,9 @@ export default function InputField(props: any) {
         case 'address':
             field = (
                 <SelectField
-                    name={props.name} 
-                    value={props.value} 
-                    placeholder={props.placeholder} 
+                    name={props.name}
+                    value={props.value}
+                    placeholder={props.placeholder}
                     handleChange={props.handleChange}
                     isRegistering={props.isRegistering}
                     isAddress={true} />
@@ -168,13 +201,13 @@ export default function InputField(props: any) {
             break;
         case 'search':
             field = (
-                <TextualField 
-                    type='text' 
+                <TextualField
+                    type='text'
                     contenttype='search'
                     name={props.name}
                     value={props.value}
-                    placeholder={props.placeholder} 
-                    handleChange={props.handleChange} 
+                    placeholder={props.placeholder}
+                    handleChange={props.handleChange}
                     isRegistering={props.isRegistering}
                 />
             );

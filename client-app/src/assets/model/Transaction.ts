@@ -17,6 +17,14 @@ export interface Category {
     subcategories: Category[] | null
 }
 
+export interface SelectedCategory {
+    name: string,
+    icon?: string,
+    i18n_selector?: string,
+    progressive?: number,
+    parent: SelectedCategory | null
+}
+
 export const defaultIncomeCategories: Category[] = [
     {
         name: "Salary & bonuses",
@@ -258,7 +266,7 @@ export default class Transaction {
     date: Date;
     description: string;
     type: TransactionType;
-    category: Category;
+    category: SelectedCategory;
     amount: number;
     creationTime: number;
     fromAssets?: AssetAllocation[];
@@ -266,7 +274,7 @@ export default class Transaction {
     associatedPendingsId?: string[];
     notes?: string;
 
-    constructor(uid: string, date = new Date(), description: string, type: TransactionType, category: Category, amount: number, fromAssets?: AssetAllocation[], toAssets?: AssetAllocation[], associatedPendingsId?: string[], notes?: string, creationTime: number = new Date().getTime()) {
+    constructor(uid: string, date = new Date(), description: string, type: TransactionType, category: SelectedCategory, amount: number, fromAssets?: AssetAllocation[], toAssets?: AssetAllocation[], associatedPendingsId?: string[], notes?: string, creationTime: number = new Date().getTime()) {
         this.uid = uid;
         this.date = date;
         this.description = description;

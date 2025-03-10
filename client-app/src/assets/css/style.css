@@ -1095,7 +1095,7 @@ body.dark-mode .btn-outline-warning {
     background: linear-gradient(0.4turn, var(--palette-blue-3), var(--palette-blue-2));
     border: var(--bs-border-width) solid var(--bs-border-color);
     height: 71px;
-    border-radius: 23px;
+    border-radius: 15px;
     padding: .8rem 1.5rem;
     display: flex;
     align-items: center;
@@ -1240,6 +1240,7 @@ body.dark-mode .btn-outline-warning {
     display: flex;
     flex-direction: column;
     row-gap: 15px;
+    padding-top: 20px;
 }
 
 #add-transaction .category-picker.category-1,
@@ -1304,11 +1305,22 @@ body.dark-mode .btn-outline-warning {
     color:var(--text-color);
 }
 #select-transaction-category .category > .parent .name-wrapper {
-    height: 45px;
+    height: 57px;
+    margin-top: -6px;
+    margin-bottom: -6px;
     width: calc(100% - 55px);
     display: flex;
     align-items: center;
+    margin-left: -18px;
     flex-wrap: wrap;
+    max-width: 70%;
+    border-radius: 50px;
+    padding: 0 20px;
+    align-content: center;
+    transition: all .5s;
+}
+#select-transaction-category .category.active > .parent .name-wrapper {
+    background: var(--list-background);
 }
 #select-transaction-category .category > .parent .name-wrapper > .name {
     font-size: 17px;
@@ -1324,7 +1336,7 @@ body.dark-mode .btn-outline-warning {
 #select-transaction-category .category .category-children-list {
     display: flex;
     flex-direction: column;
-    row-gap: 15px;
+    row-gap: 8px;
     margin-top: 15px
 }
 
@@ -1336,10 +1348,11 @@ body.dark-mode .btn-outline-warning {
     left: 37px;
     gap: 10px;
     cursor: pointer;
+    height: 40px;
 }
 #select-transaction-category .category .child .branch {
-    height:50px;
-    width:15px;
+    height: 59px;
+    width: 15px;
     border-bottom-left-radius: 10px;
     border-left: 1px solid #6c6c6c;
     border-bottom: 1px solid #6c6c6c;
@@ -1348,18 +1361,35 @@ body.dark-mode .btn-outline-warning {
     left: -15px;
     z-index: 90;
 }
-
 #select-transaction-category .category .child .circle {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 20px;
-    width: 20px;
-    border: 4px solid var(--category-color);
+    height: 10px;
+    width: 10px;
+    border: 5px solid var(--category-color);
     border-radius: 50px;
+    z-index: 50;
+}
+#select-transaction-category .category .child:not(.add-button) .button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    margin: 0 -15px;    
+    padding: 0 20px 0 21px;
+    background: var(--list-background);
+    border: transparent;
+    z-index: 30;
+    border-radius: 50px;
+    transition: all .5s;
+}
+#select-transaction-category .category .child:not(.add-button) .button:hover {
+    background: var(--bs-btn-hover-bg);
 }
 #select-transaction-category .category .child.add-button .branch {
-    height: 54px;
+    height: 59px;
     width: 20px;
     border-bottom-left-radius: 15px;
 }
@@ -1367,7 +1397,7 @@ body.dark-mode .btn-outline-warning {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 30px;
+    height: 32px;
     width: 140px;
     position:relative;
     left: 5px;
@@ -1375,11 +1405,12 @@ body.dark-mode .btn-outline-warning {
     padding: 0;
     color: var(--category-color);
     border-color: var(--category-color);
+    margin: 4px 0;
 }
 
 #add-transaction .category-picker {
-    --category-color: var(--text-color);
-    --darker-category-color: var(--empty-pickers-background);
+    --category-color: var(--empty-pickers-background);
+    --darker-category-color: var(--text-color);
     color: var(--text-color);
     text-decoration: none;
 }

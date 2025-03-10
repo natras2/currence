@@ -1,6 +1,6 @@
 import { doc, getDoc, setDoc, getDocs, collection, onSnapshot, addDoc, updateDoc, increment } from "firebase/firestore";
 import { app, db } from "../../firebase/firebaseConfig";
-import Transaction, { transactionConverter, TransactionType } from "../model/Transaction";
+import Transaction, { SelectedCategory, transactionConverter, TransactionType } from "../model/Transaction";
 import { getAuth } from "firebase/auth";
 import Controller from "./Controller";
 import { DataContext } from "../../app/PersonalArea";
@@ -177,8 +177,8 @@ export default class TransactionsController extends Controller {
     
     }
     
-    async CreateNewCategory (transactionType: TransactionType, category: string) {
-    
+    async CreateNewCategory (transactionType: TransactionType, category: SelectedCategory) {
+        
     }
 
 }
