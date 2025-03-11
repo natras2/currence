@@ -1,46 +1,55 @@
 import Select from 'react-select'
 import PasswordStrengthBar from 'react-password-strength-bar';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { GrClose } from 'react-icons/gr';
-import { borderRadius, fontSize, fontWeight, padding } from '@mui/system';
+import { motion } from "framer-motion";
 
 function TextualField(props: any) {
     const [fieldValue, setFieldValue] = useState(props.value); // Initialize state with prop value
+    const [isFocused, setIsFocused] = useState(false); // Initialize state with prop value
+    const inputElement = useRef<any>();
+
+    const focusInput = () => {
+        inputElement.current.focus();
+    };
 
     const handleFieldChange = (e: any) => {
         setFieldValue(e.target.value); // Update state with input value
         props.handleChange(e);
     };
+    const handleFocus = (e: any) => {
+        setIsFocused(true); // Update state with input value
+    };
+    const handleBlur = (e: any) => {
+        setIsFocused((!!e.target.value)); // Update state with input value
+    };
 
-    const testInputStyle = {
+    const wideInputStyle = {
         height: 70,
         padding: "1.4rem 1.2rem 0",
         borderRadius: 15,
         paddingLeft: (!!props.contenttype && props.contenttype === 'search') ? "2.8rem" : undefined,
         marginBottom: (!!props.contenttype && props.contenttype === 'search') ? 5 : undefined
     }
-    const testLabelStyle = {
-        fontSize: 13,
-        fontWeight: 300,
-        left: "1.2rem",
-        top: ".7rem"
-    }
 
-    if (props.test) {
+    if (props.wide) {
         return (
             <>
                 <div className="mb-2 position-relative">
-                    <div className='label position-absolute' style={testLabelStyle}>{props.label}</div>
+                    <div onClick={focusInput} className={`wide-input-label position-absolute ${isFocused ? "focused" : ""}`}>{props.label}</div>
                     <input
                         type={props.type}
+                        ref={inputElement}
                         className="form-control"
                         id={props.name}
                         value={fieldValue}
                         placeholder={props.placeholder}
                         name={props.name}
                         onChange={handleFieldChange}
-                        style={testInputStyle}//, (!!props.contenttype && props.contenttype === 'search') ? { paddingLeft: "2.8rem", marginBottom: 5 } : {}}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        style={wideInputStyle}//, (!!props.contenttype && props.contenttype === 'search') ? { paddingLeft: "2.8rem", marginBottom: 5 } : {}}
                         required />
                 </div>
             </>

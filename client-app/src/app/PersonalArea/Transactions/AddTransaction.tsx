@@ -13,7 +13,7 @@ import Asset, { AssetAttributes } from "../../../assets/model/Asset";
 import { motion } from "framer-motion";
 import useLongPress from "../../../assets/libraries/Utils";
 
-import { BiCalendar, BiPlus } from "react-icons/bi";
+import { BiCalendar, BiPencil, BiPlus, BiTrash } from "react-icons/bi";
 import { PiNotePencilFill } from "react-icons/pi";
 import { MdArrowForward, MdClose, MdDone } from "react-icons/md";
 
@@ -52,6 +52,7 @@ interface CategorySelectionType {
 }
 interface SubcategoryItemType {
     selection: CategorySelectionType, 
+    selected: SelectedCategory,
     setSelected: Dispatch<SetStateAction<SelectedCategory>>,
     handleChange: any
 }
@@ -218,14 +219,15 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
     )
 }
 
-function SubcategoryItem({selection, handleChange, setSelected}: SubcategoryItemType) {
+function SubcategoryItem({selection, selected, handleChange, setSelected}: SubcategoryItemType) {
+    const [isLongPressed, setIsLongPressed] = useState(false);
     const i18n: TranslationContextType = useContext(TranslationContext);
     const navigate = useNavigate();
 
     const {category, subcategory, progressive} = selection;
 
     const onLongPressOnCategory = (selection: CategorySelectionType) => {
-        alert(selection.subcategory!.name);
+        setIsLongPressed(true);
     }
     const onClickOnCategory = ({ category, subcategory, progressive }: CategorySelectionType) => {
         const selectedCategory: SelectedCategory = (!subcategory) 
@@ -254,10 +256,16 @@ function SubcategoryItem({selection, handleChange, setSelected}: SubcategoryItem
     const longPressOnCategory = useLongPress(onLongPressOnCategory, onClickOnCategory, { delay: 500 }, {category: category, subcategory: subcategory, progressive: progressive});
 
     return (
-        <div {...longPressOnCategory} className="child">
-            <div className="branch"></div>
-            <div className="circle"></div>
-            <div className="button btn btn-dark">{!(subcategory!).i18n_selector ? subcategory!.name : i18n.t(subcategory!.i18n_selector)}</div>
+        <div className={`child ${(!!selected && !!selected.parent && selected.parent.name === selection.category.name && selected.name === selection.subcategory!.name) ? "selected" : ""}`}>
+            <div className="child-content-wrapper" {...longPressOnCategory}>
+                <div className="branch"></div>
+                <div className="circle"></div>
+                <div className="button btn btn-dark">{!(subcategory!).i18n_selector ? subcategory!.name : i18n.t(subcategory!.i18n_selector)}</div>
+            </div>
+            {isLongPressed && <>
+                <motion.div initial={{scale: 0}} animate={{scale: 1}} className="edit-button"><BiPencil /></motion.div>
+                <motion.div initial={{scale: 0}} animate={{scale: 1}} className="delete-button"><BiTrash /></motion.div>
+            </>}
         </div>
     );
 }
@@ -272,6 +280,11 @@ export function TransactionCategorySelector() {
 
     const [selected, setSelected] = useState<SelectedCategory>(data["new-transaction-category"]);
     const [openSubcategoryOf, setOpenSubcategoryOf] = useState("");
+
+    useEffect(() => {
+        if (!!selected) 
+            setOpenSubcategoryOf(!!selected.parent ? selected.parent.name : selected.name)
+    }, []);
 
     const onClickParent = (parentName: string, isLogo = false) => { 
         setOpenSubcategoryOf((isLogo && openSubcategoryOf === parentName) ? "" : parentName);
@@ -317,23 +330,23 @@ export function TransactionCategorySelector() {
                                 ? <></> 
                                 : category.subcategories.map((sub, j) => {
                                     return (
-                                        <SubcategoryItem key={j} selection={{category: category, subcategory: sub, progressive: i+1}} setSelected={setSelected} handleChange={handleChange} />
+                                        <SubcategoryItem key={j} selected={selected} selection={{category: category, subcategory: sub, progressive: i+1}} setSelected={setSelected} handleChange={handleChange} />
                                     );
                                 });
                             return (
                                 <div key={i} className={`category ${openSubcategoryOf ? (openSubcategoryOf === category.name ? "active" : "blurred") : ""}`}>
                                     <div className="parent">
                                         <div className="logo" onClick={() => onClickParent(category.name, true)}>{openSubcategoryOf === category.name ? <MdClose /> : <DynamicIcon lib={JSON.parse(category.icon!).lib} name={JSON.parse(category.icon!).name} />}</div>
-                                        <div className="name-wrapper">
+                                        <div className={`name-wrapper ${(!!selected && !selected.parent && selected.name === category.name) ? "selected": ""}`} onClick={(openSubcategoryOf === category.name) ? () => {selectCategory({category: category, subcategory: null, progressive: i+1})} : () => {}}>
                                             <div className="name" onClick={() => onClickParent(category.name)}>{!category.i18n_selector ? category.name : i18n.t(category.i18n_selector)}</div>
-                                            {openSubcategoryOf === category.name && 
+                                            {/*openSubcategoryOf === category.name && 
                                             <motion.div 
                                                 className="no-sub" 
                                                 initial={{ visibility: "hidden", height: 0, opacity: 0 }}
                                                 animate={{ visibility: "visible",  height: "auto", opacity: 1 }}
                                                 onClick={() => {selectCategory({category: category, subcategory: null, progressive: i+1})}}
                                                 >Use this as category
-                                            </motion.div>}
+                                            </motion.div>*/}
                                         </div>
                                     </div>
                                     <motion.div 
@@ -761,7 +774,7 @@ export default function AddTransaction() {
                                 handleChange={handleChange}
                                 isRegistering='false'
                                 value={formData["new-transaction-description"]}
-                                test
+                                wide
                                 label={"Description"}
                             />
                         </div>
