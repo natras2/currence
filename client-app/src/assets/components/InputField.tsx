@@ -27,9 +27,11 @@ function TextualField(props: any) {
 
     const wideInputStyle = {
         height: 70,
-        padding: "1.4rem 1.2rem 0",
         borderRadius: 15,
-        paddingLeft: (!!props.contenttype && props.contenttype === 'search') ? "2.8rem" : undefined,
+        paddingTop: "1.4rem",
+        paddingRight: "1.2rem",
+        paddingBottom: "0",
+        paddingLeft: (!!props.contenttype && props.contenttype === 'search') ? "2.8rem" : "1.2rem",
         marginBottom: (!!props.contenttype && props.contenttype === 'search') ? 5 : undefined
     }
 
@@ -49,7 +51,7 @@ function TextualField(props: any) {
                         onChange={handleFieldChange}
                         onFocus={handleFocus}
                         onBlur={handleBlur}
-                        style={wideInputStyle}//, (!!props.contenttype && props.contenttype === 'search') ? { paddingLeft: "2.8rem", marginBottom: 5 } : {}}
+                        style={wideInputStyle}
                         required />
                 </div>
             </>

@@ -111,7 +111,7 @@ function CategoryPicker({ data, formData, setFormData}: CategoryPickerType) {
         name = <strong>Select the category</strong>
     else {
         if (category.parent) {
-            name = <>{(!category.parent.i18n_selector) ? category.parent.name : i18n.t(category.parent.i18n_selector)} &middot; </>
+            name = <><span style={{fontSize: 12}}>{(!category.parent.i18n_selector) ? category.parent.name : i18n.t(category.parent.i18n_selector)} {/*&middot;*/} </span><br/></>
         }
         name = <>{name}<strong>{(!category.i18n_selector) ? category.name : i18n.t(category.i18n_selector)}</strong></>
     }
@@ -119,9 +119,9 @@ function CategoryPicker({ data, formData, setFormData}: CategoryPickerType) {
     return (
         <>
             <Link to={"./select-category"} className={`category-picker ${emptyCategory ? "empty" : "category-"+category.progressive}`}>
-                <div className="d-flex align-items-center gap-2">
-                    <div className="circle">{icon}</div>
-                    <div className="category-name">{name}</div>
+                <div className="d-flex align-items-center">
+                    <div className="circle ms-1" style={{transform: "scale(1.1)", marginRight: 12}}>{icon}</div>
+                    <div className="category-name" style={{lineHeight: 1.3}}>{name}</div>
                 </div>
             </Link>
         </>
@@ -148,7 +148,7 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
     const NoAllocations = () => {
         return (
             <Link to={"./select-asset"} state={{ isSingularSelect: true }} className="asset-picker list-0">
-                <div style={{ marginTop: -3, transform: "scale(1.2)" }}><BiPlus /></div>
+                <div style={{ marginTop: -3, marginRight: 5, transform: "scale(1.4)" }}><BiPlus /></div>
                 <div>Select an asset</div>
             </Link>
         );
@@ -172,7 +172,7 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
             <>
                 <Link to={"./select-asset"} state={{ isSingularSelect: true }} className="asset-picker">
                     <div className="d-flex align-items-center">
-                        {!!asset.attributes && <div className="asset-logo">
+                        {!!asset.attributes && <div className="asset-logo ms-2" style={{transform: "scale(1.2)" }}>
                             {(asset.attributes.sourceName !== "")
                                 ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
                                 : <div className="type-icon">{<DynamicIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
@@ -197,7 +197,7 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
             <>
                 <Link to={"./select-asset/assets-allocation"} state={{ fromRoot: true }} className="asset-picker">
                     <div className="d-flex align-items-center">
-                        <div className="multiple asset-logo">
+                        <div className="multiple asset-logo ms-2" style={{transform: "scale(1.2)" }}>
                             {firstThreeLogos.map((a, i) => {
                                 return (a.sourceName !== "")
                                     ? <img key={i} src={a.logo} alt={a.sourceName} className="source-logo" />
@@ -264,7 +264,7 @@ function SubcategoryItem({selection, selected, handleChange, setSelected}: Subca
             </div>
             {isLongPressed && <>
                 <motion.div initial={{scale: 0}} animate={{scale: 1}} className="edit-button"><BiPencil /></motion.div>
-                <motion.div initial={{scale: 0}} animate={{scale: 1}} className="delete-button"><BiTrash /></motion.div>
+                {/*<motion.div initial={{scale: 0}} animate={{scale: 1}} className="delete-button"><BiTrash /></motion.div>*/}
             </>}
         </div>
     );
@@ -761,9 +761,13 @@ export default function AddTransaction() {
                         />
                     </div>
                     <div>
-                        <div className="category-picker-wrapper mb-2">
+                        <div className="category-picker-wrapper mb-3">
                             {/*<label className="form-label">Category</label>*/}
                             <CategoryPicker data={data} formData={formData} setFormData={setFormData} />
+                        </div>
+                        <div className="asset-picker-wrapper mb-2">
+                            {/*<label className="form-label">Asset</label>*/}
+                            <AssetPicker data={data} isAllocated={isAllocated} assetsAllocations={assetsAllocations} setAssetsAllocations={setAssetsAllocations} />
                         </div>
                         <div className="">
                             {/*<label className="form-label">Description</label>*/}
@@ -777,10 +781,6 @@ export default function AddTransaction() {
                                 wide
                                 label={"Description"}
                             />
-                        </div>
-                        <div className="asset-picker-wrapper">
-                            {/*<label className="form-label">Asset</label>*/}
-                            <AssetPicker data={data} isAllocated={isAllocated} assetsAllocations={assetsAllocations} setAssetsAllocations={setAssetsAllocations} />
                         </div>
                         <div className="d-flex mt-4 gap-1">
                             <Link to={"./select-date"} className="near-create-button"><BiCalendar /></Link>
