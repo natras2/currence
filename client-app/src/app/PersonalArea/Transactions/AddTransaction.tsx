@@ -6,7 +6,7 @@ import { capitalize, currencyFormat } from "../../../assets/libraries/Utils";
 import Transaction, { AssetAllocation, Category, defaultExpenseCategories, defaultIncomeCategories, SelectedCategory, TransactionType } from "../../../assets/model/Transaction";
 import User from "../../../assets/model/User";
 import CurrencyInput from "react-currency-input-field";
-import { BackButton, DynamicIcon } from "../../../assets/components/Utils";
+import { BackButton, defaultCategoryIconBase, DynamicIcon } from "../../../assets/components/Utils";
 import InputField from "../../../assets/components/InputField";
 import Loader from "../../../assets/components/Loader";
 import Asset, { AssetAttributes } from "../../../assets/model/Asset";
@@ -113,9 +113,9 @@ function CategoryPicker({ data, formData, setFormData }: CategoryPickerType) {
         name = <strong>Select the category</strong>
     else {
         if (category.parent) {
-            name = <><span style={{ fontSize: 12 }}>{(!category.parent.i18n_selector) ? category.parent.name : i18n.t(category.parent.i18n_selector)} {/*&middot;*/} </span><br /></>
+            name = <><span style={{ fontSize: 12 }}>{(!category.parent.i18n_selector || category.parent.isUpdated) ? category.parent.name : i18n.t(category.parent.i18n_selector)} {/*&middot;*/} </span><br /></>
         }
-        name = <>{name}<strong>{(!category.i18n_selector) ? category.name : i18n.t(category.i18n_selector)}</strong></>
+        name = <>{name}<strong>{(!category.i18n_selector || category.isUpdated) ? category.name : i18n.t(category.i18n_selector)}</strong></>
     }
 
     return (
@@ -237,16 +237,19 @@ function SubcategoryItem({ selection, selected, handleChange, setSelected, setIs
                 icon: category.icon,
                 i18n_selector: category.i18n_selector,
                 progressive: progressive,
+                isUpdated: category.isUpdated,
                 parent: null
             }
             : {
                 name: subcategory.name,
                 i18n_selector: subcategory.i18n_selector,
                 progressive: progressive,
+                isUpdated: subcategory.isUpdated,
                 parent: {
                     name: category.name,
                     icon: category.icon,
                     i18n_selector: category.i18n_selector,
+                    isUpdated: category.isUpdated,
                     parent: null
                 }
             }
@@ -261,7 +264,7 @@ function SubcategoryItem({ selection, selected, handleChange, setSelected, setIs
             <div className="child-content-wrapper" {...longPressOnCategory}>
                 <div className="branch"></div>
                 <div className="circle"></div>
-                <div className="button btn btn-dark">{!(subcategory!).i18n_selector ? subcategory!.name : i18n.t(subcategory!.i18n_selector)}</div>
+                <div className="button btn btn-dark">{(!(subcategory!).i18n_selector || (subcategory!).isUpdated) ? subcategory!.name : i18n.t(subcategory!.i18n_selector)}</div>
             </div>
         </div>
     );
@@ -269,14 +272,15 @@ function SubcategoryItem({ selection, selected, handleChange, setSelected, setIs
 
 export function TransactionCategorySelector() {
     const [isLongPressed, setIsLongPressed] = useState(false);
-    const { data, handleChange } = useOutletContext<AddTransactionContext>();
+    const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
+    const { data: formData, handleChange } = useOutletContext<AddTransactionContext>();
     const i18n: TranslationContextType = useContext(TranslationContext);
     const navigate = useNavigate();
 
-    const isExpense = (data["new-transaction-type"] as TransactionType) === TransactionType.EXPENCE;
-    const categoryList = isExpense ? defaultExpenseCategories : defaultIncomeCategories;
+    const isExpense = (formData["new-transaction-type"] as TransactionType) === TransactionType.EXPENCE;
+    const categoryList = isExpense ? data.user.expenceCategories : data.user.incomeCategories;
 
-    const [selected, setSelected] = useState<SelectedCategory>(data["new-transaction-category"]);
+    const [selected, setSelected] = useState<SelectedCategory>(formData["new-transaction-category"]);
     const [openSubcategoryOf, setOpenSubcategoryOf] = useState("");
 
     useEffect(() => {
@@ -295,16 +299,19 @@ export function TransactionCategorySelector() {
                 icon: category.icon,
                 i18n_selector: category.i18n_selector,
                 progressive: progressive,
+                isUpdated: category.isUpdated,
                 parent: null
             }
             : {
                 name: subcategory.name,
                 i18n_selector: subcategory.i18n_selector,
                 progressive: progressive,
+                isUpdated: subcategory.isUpdated,
                 parent: {
                     name: category.name,
                     icon: category.icon,
                     i18n_selector: category.i18n_selector,
+                    isUpdated: category.isUpdated,
                     parent: null
                 }
             }
@@ -340,11 +347,11 @@ export function TransactionCategorySelector() {
                                     );
                                 });
                             return (
-                                <div key={i} className={`category ${openSubcategoryOf ? (openSubcategoryOf === category.name ? "active" : "blurred") : ""}`}>
-                                    <div className="parent">
-                                        <div className="logo" onClick={() => onClickParent(category.name, true)}>{openSubcategoryOf === category.name ? <MdClose /> : <DynamicIcon lib={JSON.parse(category.icon!).lib} name={JSON.parse(category.icon!).name} />}</div>
+                                <div key={i} className={`category ${openSubcategoryOf ? ((openSubcategoryOf === category.name) ? ((category.name === selected.name && selected.name === "Other") ? "other" : "active") : ((selected.name === "Other") ? "" : "blurred")) : ""}`}>
+                                    <div className="parent" onClick={(category.isOther) ? () => { selectCategory({ category: category, subcategory: null, progressive: i + 1 }) } : () => { }}>
+                                        <div className="logo" onClick={() => onClickParent(category.name, true)}>{(openSubcategoryOf === category.name && !category.isOther) ? <MdClose /> : (defaultCategoryIconBase[JSON.parse(category.icon!).name as keyof typeof defaultCategoryIconBase])}</div>
                                         <div className={`name-wrapper ${(!!selected && !selected.parent && selected.name === category.name) ? "selected" : ""}`} onClick={(openSubcategoryOf === category.name) ? () => { selectCategory({ category: category, subcategory: null, progressive: i + 1 }) } : () => { }}>
-                                            <div className="name" onClick={() => onClickParent(category.name)}>{!category.i18n_selector ? category.name : i18n.t(category.i18n_selector)}</div>
+                                            <div className="name" onClick={() => onClickParent(category.name)}>{(!category.i18n_selector || category.isUpdated) ? category.name : i18n.t(category.i18n_selector)}</div>
                                             {/*openSubcategoryOf === category.name && 
                                             <motion.div 
                                                 className="no-sub" 
@@ -355,18 +362,20 @@ export function TransactionCategorySelector() {
                                             </motion.div>*/}
                                         </div>
                                     </div>
-                                    <motion.div
-                                        className="category-children-list"
-                                        initial={{ visibility: "hidden", height: 0, opacity: 0 }}
-                                        animate={{ height: (openSubcategoryOf === category.name) ? "auto" : 0, opacity: (openSubcategoryOf === category.name) ? 1 : 0, visibility: (openSubcategoryOf === category.name) ? "visible" : "hidden" }}
-                                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                                    >
-                                        {subcategories}
-                                        <div className="child add-button">
-                                            <div className="branch"></div>
-                                            <div className="button btn btn-outline-dark rounded-pill" onClick={() => navigate("./create")}>Add sub-category</div>
-                                        </div>
-                                    </motion.div>
+                                    {!category.isOther &&
+                                        <motion.div
+                                            className="category-children-list"
+                                            initial={{ visibility: "hidden", height: 0, opacity: 0 }}
+                                            animate={{ height: (openSubcategoryOf === category.name) ? "auto" : 0, opacity: (openSubcategoryOf === category.name) ? 1 : 0, visibility: (openSubcategoryOf === category.name) ? "visible" : "hidden" }}
+                                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                                        >
+                                            {subcategories}
+                                            <div className="child add-button">
+                                                <div className="branch"></div>
+                                                <div className="button btn btn-outline-dark rounded-pill" onClick={() => navigate("./create")}>Add sub-category</div>
+                                            </div>
+                                        </motion.div>
+                                    }
                                 </div>
                             );
                         })}
@@ -618,20 +627,24 @@ export default function AddTransaction() {
     const i18n = useContext(TranslationContext);
 
     const [processing, setProcessing] = useState(false);
-
-    const [formData, setFormData] = useState({
-        "new-transaction-type": TransactionType.EXPENCE,
-        "new-transaction-category": { name: '' } as SelectedCategory,
-        "new-transaction-description": '',
-        "new-transaction-amount": '0.00',
-        "new-transaction-date": new Date(),
-        "new-transaction-notes": ''
-    });
     const [isAllocated, setIsAllocated] = useState(false);
     const [assetsAllocations, setAssetsAllocations] = useState<AssetAllocation[]>([]);
 
     const user: User = data.user;
     const navigate = useNavigate();
+
+    const clearTransaction = (type: TransactionType) => {
+        return {
+            "new-transaction-type": type,
+            "new-transaction-category": { name: '' } as SelectedCategory,
+            "new-transaction-description": '',
+            "new-transaction-amount": '0.00',
+            "new-transaction-date": new Date(),
+            "new-transaction-notes": ''
+        }
+    }
+
+    const [formData, setFormData] = useState(clearTransaction(TransactionType.EXPENCE));
 
     /*
     useEffect (() => {
@@ -659,6 +672,10 @@ export default function AddTransaction() {
                 ...prevState,
                 [name]: value
             }));
+            if (name === "new-transaction-type") {
+                setFormData(clearTransaction(value));
+                setAssetsAllocations([])
+            }
         }
     }
 
@@ -803,9 +820,9 @@ export default function AddTransaction() {
                                 name="new-transaction-description"
                                 handleChange={handleChange}
                                 isRegistering='false'
-                                value={formData["new-transaction-description"]}
-                                wide
+                                value={formData["new-transaction-description"] || ""}
                                 label={"Description"}
+                                wide
                             />
                         </div>
                         <div className="d-flex mt-4 gap-1">

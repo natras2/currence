@@ -1,6 +1,6 @@
 import Select from 'react-select'
 import PasswordStrengthBar from 'react-password-strength-bar';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { GrClose } from 'react-icons/gr';
 import { motion } from "framer-motion";
@@ -9,6 +9,11 @@ function TextualField(props: any) {
     const [fieldValue, setFieldValue] = useState(props.value); // Initialize state with prop value
     const [isFocused, setIsFocused] = useState(false); // Initialize state with prop value
     const inputElement = useRef<any>();
+
+    useEffect(() => {
+        if (isFocused && document.activeElement !== inputElement.current && props.value === "") 
+            setIsFocused(false)
+    }, [props.value])
 
     const focusInput = () => {
         inputElement.current.focus();
@@ -26,11 +31,6 @@ function TextualField(props: any) {
     };
 
     const wideInputStyle = {
-        height: 70,
-        borderRadius: 15,
-        paddingTop: "1.4rem",
-        paddingRight: "1.2rem",
-        paddingBottom: "0",
         paddingLeft: (!!props.contenttype && props.contenttype === 'search') ? "2.8rem" : "1.2rem",
         marginBottom: (!!props.contenttype && props.contenttype === 'search') ? 5 : undefined
     }
@@ -43,9 +43,9 @@ function TextualField(props: any) {
                     <input
                         type={props.type}
                         ref={inputElement}
-                        className="form-control"
+                        className="form-control wide"
                         id={props.name}
-                        value={fieldValue}
+                        value={props.value}
                         placeholder={props.placeholder}
                         name={props.name}
                         onChange={handleFieldChange}

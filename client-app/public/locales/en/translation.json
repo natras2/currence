@@ -19,7 +19,8 @@
     },
     "default": {
         "glossary": {
-            "general": "General"
+            "general": "General",
+            "other": "Other"
         },
         "incomecategory": {
             "salary": {
@@ -27,7 +28,7 @@
                 "sub": {
                     "wage": "Wage",
                     "pension": "Pension",
-                    "freelance": "Self-Employment earnings"
+                    "freelance": "Freelance earnings"
                 }
             },
             "investments": {
@@ -52,10 +53,10 @@
                 }
             },
             "gifts": {
-                "name": "Gifts & Donations"
+                "name": "Gifts & donations"
             },
             "other": {
-                "name": "Other incomes"
+                "name": "Other"
             }
         },
         "outcomecategory": {
@@ -64,7 +65,7 @@
                 "sub": {
                     "rent": "Rent",
                     "mortgage": "Mortgage",
-                    "internetphone": "Internet & Phone"
+                    "utilities": "Utilities"
                 }
             },
             "food": {
@@ -72,7 +73,7 @@
                 "sub": {
                     "supermarket": "Supermarket",
                     "restaurants": "Restaurants",
-                    "takeawaydelivery": "Takeaway & Delivery"
+                    "takeawaydelivery": "Takeaway and delivery"
                 }
             },
             "transportation": {
@@ -85,12 +86,11 @@
                 }
             },
             "health": {
-                "name": "Health & insurance",
+                "name": "Health & medications",
                 "sub": {
-                    "insurance": "Health Insurance",
+                    "insurance": "Health insurance",
                     "doctorvisits": "Doctor visits",
-                    "medications": "Medications",
-                    "gymfitness": "Gym & fitness"
+                    "medications": "Medications"
                 }
             },
             "debt": {
@@ -100,12 +100,13 @@
                 }
             },
             "entertainment": {
-                "name": "Entertainment & leisure",
+                "name": "Entertainment & hobbies",
                 "sub": {
-                    "subscriptions": "Subscriptions",
+                    "subscriptions": "Streaming services",
                     "cinema": "Cinema",
                     "books": "Books",
-                    "hobbies": "Games and hobbies"
+                    "hobbies": "Games",
+                    "gymfitness": "Gym & fitness"
                 }
             },
             "other": {

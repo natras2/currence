@@ -6,6 +6,12 @@ import React from "react";
 import { IconContext, IconType } from "react-icons";
 
 import Skeleton from "react-loading-skeleton";
+import { IoIosCash } from "react-icons/io";
+import { MdLocalHospital, MdMoreHoriz, MdRestaurant, MdTheaters, MdTrendingUp } from "react-icons/md";
+import { BiBriefcase } from "react-icons/bi";
+import { GiReceiveMoney } from "react-icons/gi";
+import { FaCar, FaCreditCard, FaHandHoldingHeart } from "react-icons/fa6";
+import { FaHome } from "react-icons/fa";
 /*
 import * as ai from "react-icons/ai";
 import * as bi from "react-icons/bi";   
@@ -278,4 +284,19 @@ export function BackButton(props: any) {
             }
         </Link>
     );
+}
+
+export const defaultCategoryIconBase = {
+    "IoIosCash": <IoIosCash/>,
+    "MdTrendingUp": <MdTrendingUp/>,
+    "BiBriefcase": <BiBriefcase/>,
+    "GiReceiveMoney": <GiReceiveMoney/>,
+    "FaHandHoldingHeart": <FaHandHoldingHeart/>,
+    "MdMoreHoriz": <MdMoreHoriz/>,
+    "FaHome": <FaHome/>,
+    "MdRestaurant": <MdRestaurant/>,
+    "FaCar": <FaCar/>,
+    "MdLocalHospital": <MdLocalHospital/>,
+    "MdTheaters": <MdTheaters/>,
+    "FaCreditCard": <FaCreditCard/>
 }

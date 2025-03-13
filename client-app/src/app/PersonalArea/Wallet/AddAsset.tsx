@@ -18,6 +18,7 @@ import { GrMoney } from "react-icons/gr";
 import { BsCashCoin } from "react-icons/bs";
 import { MdOutlinePayments } from "react-icons/md";
 import { RiSecurePaymentFill } from "react-icons/ri";
+import InputField from "../../../assets/components/InputField";
 
 /*
 const NumericInputWithDotAsComma = () => {
@@ -376,7 +377,7 @@ export default function AddAsset(props: any) {
                                             <input
                                                 {...inputProps}
                                                 className="form-control"
-                                                ref={(node) => {
+                                                ref={(node: any) => {
                                                     inputRef(node);
                                                     referenceElementRef(node);
                                                 }}

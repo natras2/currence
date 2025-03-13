@@ -19,7 +19,8 @@
     },
     "default": {
         "glossary": {
-            "general": "Generale"
+            "general": "Generale",
+            "other": "Altro"
         },
         "incomecategory": {
             "salary": {
@@ -55,16 +56,16 @@
                 "name": "Regali e donazioni"
             },
             "other": {
-                "name": "Altri redditi"
+                "name": "Altro"
             }
         },
         "outcomecategory": {
             "housing": {
-                "name": "Abitazione e utenze",
+                "name": "Casa e utenze",
                 "sub": {
                     "rent": "Affitto",
                     "mortgage": "Mutuo",
-                    "internetphone": "Internet e telefono"
+                    "utilities": "Utenze"
                 }
             },
             "food": {
@@ -85,12 +86,11 @@
                 }
             },
             "health": {
-                "name": "Salute e assicurazioni",
+                "name": "Salute e farmaci",
                 "sub": {
                     "insurance": "Assicurazione sanitaria",
                     "doctorvisits": "Visite mediche",
-                    "medications": "Farmaci",
-                    "gymfitness": "Palestra e fitness"
+                    "medications": "Farmaci"
                 }
             },
             "debt": {
@@ -100,12 +100,13 @@
                 }
             },
             "entertainment": {
-                "name": "Intrattenimento e tempo libero",
+                "name": "Intrattenimento e hobby",
                 "sub": {
-                    "subscriptions": "Abbonamenti",
+                    "subscriptions": "Servizi di streaming",
                     "cinema": "Cinema",
                     "books": "Libri",
-                    "hobbies": "Giochi e hobby"
+                    "hobbies": "Giochi",
+                    "gymfitness": "Palestra e fitness"
                 }
             },
             "other": {
