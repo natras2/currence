@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { DataContext, PersonalAreaContextInterface, PersonalAreaContext } from "../../PersonalArea";
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import { ThemeContext, TranslationContext, TranslationContextType } from "../../../App";
 import { capitalize, currencyFormat } from "../../../assets/libraries/Utils";
 import Transaction, { AssetAllocation, Category, defaultExpenseCategories, defaultIncomeCategories, SelectedCategory, TransactionType } from "../../../assets/model/Transaction";
@@ -10,7 +10,7 @@ import { BackButton, DynamicIcon } from "../../../assets/components/Utils";
 import InputField from "../../../assets/components/InputField";
 import Loader from "../../../assets/components/Loader";
 import Asset, { AssetAttributes } from "../../../assets/model/Asset";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import useLongPress from "../../../assets/libraries/Utils";
 
 import { BiCalendar, BiPencil, BiPlus, BiTrash } from "react-icons/bi";
@@ -46,15 +46,17 @@ interface CategoryPickerType {
     setFormData: Dispatch<SetStateAction<any>>
 }
 interface CategorySelectionType {
-    category: Category, 
-    subcategory: Category | null, 
+    category: Category,
+    subcategory: Category | null,
     progressive: number
 }
 interface SubcategoryItemType {
-    selection: CategorySelectionType, 
+    selection: CategorySelectionType,
     selected: SelectedCategory,
     setSelected: Dispatch<SetStateAction<SelectedCategory>>,
-    handleChange: any
+    handleChange: any,
+    isLongPressed: boolean,
+    setIsLongPressed: Dispatch<SetStateAction<boolean>>
 }
 
 function AssetListItem({ data, asset, searchString, active = false, clickHandler }: AssetItemType) {
@@ -78,7 +80,7 @@ function AssetListItem({ data, asset, searchString, active = false, clickHandler
                             : <div className="type-icon">{<DynamicIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
                         }
                     </div>}
-                    <div className="asset-name" style={(!!searchString) ? {fontWeight: 400} : {}}>{
+                    <div className="asset-name" style={(!!searchString) ? { fontWeight: 400 } : {}}>{
                         (!!searchString)
                             ? onSearchAssetName()
                             : asset.name
@@ -93,16 +95,16 @@ function AssetListItem({ data, asset, searchString, active = false, clickHandler
     );
 }
 
-function CategoryPicker({ data, formData, setFormData}: CategoryPickerType) {
+function CategoryPicker({ data, formData, setFormData }: CategoryPickerType) {
     const location = useLocation();
     const i18n: TranslationContextType = useContext(TranslationContext);
 
     const category: SelectedCategory = formData["new-transaction-category"];
-    const emptyCategory = !category.name; 
+    const emptyCategory = !category.name;
 
-    const icon = (emptyCategory) 
-        ? <BiPlus /> 
-        : ((!category.parent) 
+    const icon = (emptyCategory)
+        ? <BiPlus />
+        : ((!category.parent)
             ? <DynamicIcon lib={JSON.parse(category.icon!).lib} name={JSON.parse(category.icon!).name} />
             : <DynamicIcon lib={JSON.parse(category.parent.icon!).lib} name={JSON.parse(category.parent.icon!).name} />)
 
@@ -111,17 +113,17 @@ function CategoryPicker({ data, formData, setFormData}: CategoryPickerType) {
         name = <strong>Select the category</strong>
     else {
         if (category.parent) {
-            name = <><span style={{fontSize: 12}}>{(!category.parent.i18n_selector) ? category.parent.name : i18n.t(category.parent.i18n_selector)} {/*&middot;*/} </span><br/></>
+            name = <><span style={{ fontSize: 12 }}>{(!category.parent.i18n_selector) ? category.parent.name : i18n.t(category.parent.i18n_selector)} {/*&middot;*/} </span><br /></>
         }
         name = <>{name}<strong>{(!category.i18n_selector) ? category.name : i18n.t(category.i18n_selector)}</strong></>
     }
 
     return (
         <>
-            <Link to={"./select-category"} className={`category-picker ${emptyCategory ? "empty" : "category-"+category.progressive}`}>
+            <Link to={"./select-category"} className={`category-picker ${emptyCategory ? "empty" : "category-" + category.progressive}`}>
                 <div className="d-flex align-items-center">
-                    <div className="circle ms-1" style={{transform: "scale(1.1)", marginRight: 12}}>{icon}</div>
-                    <div className="category-name" style={{lineHeight: 1.3}}>{name}</div>
+                    <div className="circle ms-1" style={{ transform: "scale(1.1)", marginRight: 12 }}>{icon}</div>
+                    <div className="category-name" style={{ lineHeight: 1.3 }}>{name}</div>
                 </div>
             </Link>
         </>
@@ -172,7 +174,7 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
             <>
                 <Link to={"./select-asset"} state={{ isSingularSelect: true }} className="asset-picker">
                     <div className="d-flex align-items-center">
-                        {!!asset.attributes && <div className="asset-logo ms-2" style={{transform: "scale(1.2)" }}>
+                        {!!asset.attributes && <div className="asset-logo ms-2" style={{ transform: "scale(1.2)" }}>
                             {(asset.attributes.sourceName !== "")
                                 ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
                                 : <div className="type-icon">{<DynamicIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
@@ -197,7 +199,7 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
             <>
                 <Link to={"./select-asset/assets-allocation"} state={{ fromRoot: true }} className="asset-picker">
                     <div className="d-flex align-items-center">
-                        <div className="multiple asset-logo ms-2" style={{transform: "scale(1.2)" }}>
+                        <div className="multiple asset-logo ms-2" style={{ transform: "scale(1.2)" }}>
                             {firstThreeLogos.map((a, i) => {
                                 return (a.sourceName !== "")
                                     ? <img key={i} src={a.logo} alt={a.sourceName} className="source-logo" />
@@ -219,18 +221,17 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
     )
 }
 
-function SubcategoryItem({selection, selected, handleChange, setSelected}: SubcategoryItemType) {
-    const [isLongPressed, setIsLongPressed] = useState(false);
+function SubcategoryItem({ selection, selected, handleChange, setSelected, setIsLongPressed }: SubcategoryItemType) {
     const i18n: TranslationContextType = useContext(TranslationContext);
     const navigate = useNavigate();
 
-    const {category, subcategory, progressive} = selection;
+    const { category, subcategory, progressive } = selection;
 
     const onLongPressOnCategory = (selection: CategorySelectionType) => {
         setIsLongPressed(true);
     }
     const onClickOnCategory = ({ category, subcategory, progressive }: CategorySelectionType) => {
-        const selectedCategory: SelectedCategory = (!subcategory) 
+        const selectedCategory: SelectedCategory = (!subcategory)
             ? {
                 name: category.name,
                 icon: category.icon,
@@ -250,10 +251,10 @@ function SubcategoryItem({selection, selected, handleChange, setSelected}: Subca
                 }
             }
         setSelected(selectedCategory);
-        handleChange({target: { name: "new-transaction-category", value: selectedCategory}})
+        handleChange({ target: { name: "new-transaction-category", value: selectedCategory } })
         navigate(-1);
     }
-    const longPressOnCategory = useLongPress(onLongPressOnCategory, onClickOnCategory, { delay: 500 }, {category: category, subcategory: subcategory, progressive: progressive});
+    const longPressOnCategory = useLongPress(onLongPressOnCategory, onClickOnCategory, { delay: 500 }, { category: category, subcategory: subcategory, progressive: progressive });
 
     return (
         <div className={`child ${(!!selected && !!selected.parent && selected.parent.name === selection.category.name && selected.name === selection.subcategory!.name) ? "selected" : ""}`}>
@@ -262,15 +263,12 @@ function SubcategoryItem({selection, selected, handleChange, setSelected}: Subca
                 <div className="circle"></div>
                 <div className="button btn btn-dark">{!(subcategory!).i18n_selector ? subcategory!.name : i18n.t(subcategory!.i18n_selector)}</div>
             </div>
-            {isLongPressed && <>
-                <motion.div initial={{scale: 0}} animate={{scale: 1}} className="edit-button"><BiPencil /></motion.div>
-                {/*<motion.div initial={{scale: 0}} animate={{scale: 1}} className="delete-button"><BiTrash /></motion.div>*/}
-            </>}
         </div>
     );
 }
 
 export function TransactionCategorySelector() {
+    const [isLongPressed, setIsLongPressed] = useState(false);
     const { data, handleChange } = useOutletContext<AddTransactionContext>();
     const i18n: TranslationContextType = useContext(TranslationContext);
     const navigate = useNavigate();
@@ -282,16 +280,16 @@ export function TransactionCategorySelector() {
     const [openSubcategoryOf, setOpenSubcategoryOf] = useState("");
 
     useEffect(() => {
-        if (!!selected) 
+        if (!!selected)
             setOpenSubcategoryOf(!!selected.parent ? selected.parent.name : selected.name)
     }, []);
 
-    const onClickParent = (parentName: string, isLogo = false) => { 
+    const onClickParent = (parentName: string, isLogo = false) => {
         setOpenSubcategoryOf((isLogo && openSubcategoryOf === parentName) ? "" : parentName);
     }
 
-    const selectCategory = ({category, subcategory, progressive}: CategorySelectionType) => {
-        const selectedCategory: SelectedCategory = (!subcategory) 
+    const selectCategory = ({ category, subcategory, progressive }: CategorySelectionType) => {
+        const selectedCategory: SelectedCategory = (!subcategory)
             ? {
                 name: category.name,
                 icon: category.icon,
@@ -311,7 +309,7 @@ export function TransactionCategorySelector() {
                 }
             }
         setSelected(selectedCategory);
-        handleChange({target: { name: "new-transaction-category", value: selectedCategory}})
+        handleChange({ target: { name: "new-transaction-category", value: selectedCategory } })
         navigate(-1);
     }
 
@@ -326,18 +324,26 @@ export function TransactionCategorySelector() {
                 <div className="body">
                     <div className="category-parent-list">
                         {categoryList.map((category, i) => {
-                            const subcategories = (category.subcategories === null) 
-                                ? <></> 
+                            const subcategories = (category.subcategories === null)
+                                ? <></>
                                 : category.subcategories.map((sub, j) => {
                                     return (
-                                        <SubcategoryItem key={j} selected={selected} selection={{category: category, subcategory: sub, progressive: i+1}} setSelected={setSelected} handleChange={handleChange} />
+                                        <SubcategoryItem
+                                            key={j}
+                                            selected={selected}
+                                            selection={{ category: category, subcategory: sub, progressive: i + 1 }}
+                                            setSelected={setSelected}
+                                            handleChange={handleChange}
+                                            isLongPressed={isLongPressed}
+                                            setIsLongPressed={setIsLongPressed}
+                                        />
                                     );
                                 });
                             return (
                                 <div key={i} className={`category ${openSubcategoryOf ? (openSubcategoryOf === category.name ? "active" : "blurred") : ""}`}>
                                     <div className="parent">
                                         <div className="logo" onClick={() => onClickParent(category.name, true)}>{openSubcategoryOf === category.name ? <MdClose /> : <DynamicIcon lib={JSON.parse(category.icon!).lib} name={JSON.parse(category.icon!).name} />}</div>
-                                        <div className={`name-wrapper ${(!!selected && !selected.parent && selected.name === category.name) ? "selected": ""}`} onClick={(openSubcategoryOf === category.name) ? () => {selectCategory({category: category, subcategory: null, progressive: i+1})} : () => {}}>
+                                        <div className={`name-wrapper ${(!!selected && !selected.parent && selected.name === category.name) ? "selected" : ""}`} onClick={(openSubcategoryOf === category.name) ? () => { selectCategory({ category: category, subcategory: null, progressive: i + 1 }) } : () => { }}>
                                             <div className="name" onClick={() => onClickParent(category.name)}>{!category.i18n_selector ? category.name : i18n.t(category.i18n_selector)}</div>
                                             {/*openSubcategoryOf === category.name && 
                                             <motion.div 
@@ -349,7 +355,7 @@ export function TransactionCategorySelector() {
                                             </motion.div>*/}
                                         </div>
                                     </div>
-                                    <motion.div 
+                                    <motion.div
                                         className="category-children-list"
                                         initial={{ visibility: "hidden", height: 0, opacity: 0 }}
                                         animate={{ height: (openSubcategoryOf === category.name) ? "auto" : 0, opacity: (openSubcategoryOf === category.name) ? 1 : 0, visibility: (openSubcategoryOf === category.name) ? "visible" : "hidden" }}
@@ -367,6 +373,26 @@ export function TransactionCategorySelector() {
                     </div>
                 </div>
             </div>
+            <AnimatePresence>
+                {isLongPressed && (
+                    <div className="category-modal-wrapper" >
+                        <motion.div
+                            className="category-modal-bg"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsLongPressed(false)}
+                        />
+                        <motion.div
+                            key="modal"
+                            className="category-modal-content"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                        ></motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
