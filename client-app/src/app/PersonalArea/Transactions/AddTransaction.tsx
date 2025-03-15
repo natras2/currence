@@ -6,7 +6,7 @@ import { capitalize, currencyFormat } from "../../../assets/libraries/Utils";
 import Transaction, { AssetAllocation, Category, defaultExpenseCategories, defaultIncomeCategories, SelectedCategory, TransactionType } from "../../../assets/model/Transaction";
 import User from "../../../assets/model/User";
 import CurrencyInput from "react-currency-input-field";
-import { BackButton, defaultCategoryIconBase, DynamicIcon } from "../../../assets/components/Utils";
+import { BackButton, defaultAssetTypeIconBase, defaultCategoryIconBase } from "../../../assets/components/Utils";
 import InputField from "../../../assets/components/InputField";
 import Loader from "../../../assets/components/Loader";
 import Asset, { AssetAttributes } from "../../../assets/model/Asset";
@@ -55,8 +55,8 @@ interface SubcategoryItemType {
     selected: SelectedCategory,
     setSelected: Dispatch<SetStateAction<SelectedCategory>>,
     handleChange: any,
-    isLongPressed: boolean,
-    setIsLongPressed: Dispatch<SetStateAction<boolean>>
+    longPressed?: SelectedCategory,
+    setLongPressed: Dispatch<SetStateAction<SelectedCategory | undefined>>
 }
 
 function AssetListItem({ data, asset, searchString, active = false, clickHandler }: AssetItemType) {
@@ -77,7 +77,7 @@ function AssetListItem({ data, asset, searchString, active = false, clickHandler
                     {!!asset.attributes && <div className="asset-logo">
                         {(asset.attributes.sourceName !== "")
                             ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
-                            : <div className="type-icon">{<DynamicIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
+                            : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
                         }
                     </div>}
                     <div className="asset-name" style={(!!searchString) ? { fontWeight: 400 } : {}}>{
@@ -105,8 +105,8 @@ function CategoryPicker({ data, formData, setFormData }: CategoryPickerType) {
     const icon = (emptyCategory)
         ? <BiPlus />
         : ((!category.parent)
-            ? <DynamicIcon lib={JSON.parse(category.icon!).lib} name={JSON.parse(category.icon!).name} />
-            : <DynamicIcon lib={JSON.parse(category.parent.icon!).lib} name={JSON.parse(category.parent.icon!).name} />)
+            ? (defaultCategoryIconBase[JSON.parse(category.icon!).name as keyof typeof defaultCategoryIconBase])
+            : (defaultCategoryIconBase[JSON.parse(category.parent.icon!).name as keyof typeof defaultCategoryIconBase]))
 
     var name = <></>
     if (emptyCategory)
@@ -177,7 +177,7 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
                         {!!asset.attributes && <div className="asset-logo ms-2" style={{ transform: "scale(1.2)" }}>
                             {(asset.attributes.sourceName !== "")
                                 ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
-                                : <div className="type-icon">{<DynamicIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
+                                : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
                             }
                         </div>}
                         <div className="asset-name">{asset.name}</div>
@@ -203,7 +203,7 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
                             {firstThreeLogos.map((a, i) => {
                                 return (a.sourceName !== "")
                                     ? <img key={i} src={a.logo} alt={a.sourceName} className="source-logo" />
-                                    : <div key={i} className="type-icon">{<DynamicIcon lib={JSON.parse(a.logo).lib} name={JSON.parse(a.logo).name} />}</div>
+                                    : <div key={i} className="type-icon">{defaultAssetTypeIconBase[JSON.parse(a.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
                             })}
                         </div>
                         <div className="asset-name">{firstAssetName} +{assetsAllocations.length - 1}</div>
@@ -221,14 +221,65 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
     )
 }
 
-function SubcategoryItem({ selection, selected, handleChange, setSelected, setIsLongPressed }: SubcategoryItemType) {
+function LongPressedSubcategory ({name, i18n_selector, progressive, isUpdated, parent}: SelectedCategory) {
+    const i18n: TranslationContextType = useContext(TranslationContext);
+    const [tempSubcategoryName, setTempSubcategoryName] = useState<string>((!i18n_selector || isUpdated) ? name : i18n.t(i18n_selector)) 
+    const parentName = (!(parent!).i18n_selector || (parent!).isUpdated) ? (parent!).name : i18n.t((parent!).i18n_selector) 
+
+    const handleChangeName = (e: any) => {
+        setTempSubcategoryName(e.target.value)
+    }
+
+    return (
+        <div id="longpressed-subcategory-editor" className={"category-" + progressive}>
+            <div>
+                <div className="elipse"></div>
+                <div className="name mt-3 mb-4">
+                    <input 
+                        type="text" 
+                        name="subcategory-name" 
+                        className="subcategory-name"
+                        placeholder="Subcategory name"
+                        value={tempSubcategoryName}
+                        autoComplete="off"
+                        onChange={handleChangeName}
+                    />
+                </div>
+                <div className="parent">
+                    <InputField
+                        type="text"
+                        name="parent-category"
+                        className="parent-category"
+                        value={parentName}
+                        label={"Parent category"}
+                        wide
+                    />
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function SubcategoryItem({ selection, selected, handleChange, setSelected, setLongPressed }: SubcategoryItemType) {
     const i18n: TranslationContextType = useContext(TranslationContext);
     const navigate = useNavigate();
 
     const { category, subcategory, progressive } = selection;
 
-    const onLongPressOnCategory = (selection: CategorySelectionType) => {
-        setIsLongPressed(true);
+    const onLongPressOnCategory = ({ category, subcategory, progressive }: CategorySelectionType) => {
+        setLongPressed({
+            name: subcategory!.name,
+            i18n_selector: subcategory!.i18n_selector,
+            progressive: progressive,
+            isUpdated: subcategory!.isUpdated,
+            parent: {
+                name: category.name,
+                icon: category.icon,
+                i18n_selector: category.i18n_selector,
+                isUpdated: category.isUpdated,
+                parent: null
+            }
+        });
     }
     const onClickOnCategory = ({ category, subcategory, progressive }: CategorySelectionType) => {
         const selectedCategory: SelectedCategory = (!subcategory)
@@ -271,7 +322,7 @@ function SubcategoryItem({ selection, selected, handleChange, setSelected, setIs
 }
 
 export function TransactionCategorySelector() {
-    const [isLongPressed, setIsLongPressed] = useState(false);
+    const [longPressed, setLongPressed] = useState<SelectedCategory>();
     const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
     const { data: formData, handleChange } = useOutletContext<AddTransactionContext>();
     const i18n: TranslationContextType = useContext(TranslationContext);
@@ -337,12 +388,12 @@ export function TransactionCategorySelector() {
                                     return (
                                         <SubcategoryItem
                                             key={j}
-                                            selected={selected}
                                             selection={{ category: category, subcategory: sub, progressive: i + 1 }}
+                                            selected={selected}
                                             setSelected={setSelected}
                                             handleChange={handleChange}
-                                            isLongPressed={isLongPressed}
-                                            setIsLongPressed={setIsLongPressed}
+                                            longPressed={longPressed}
+                                            setLongPressed={setLongPressed}
                                         />
                                     );
                                 });
@@ -383,22 +434,22 @@ export function TransactionCategorySelector() {
                 </div>
             </div>
             <AnimatePresence>
-                {isLongPressed && (
+                {!!longPressed && (
                     <div className="category-modal-wrapper" >
                         <motion.div
                             className="category-modal-bg"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            onClick={() => setIsLongPressed(false)}
+                            onClick={() => setLongPressed(undefined)}
                         />
                         <motion.div
                             key="modal"
                             className="category-modal-content"
-                            initial={{ opacity: 0, y: 10 }}
+                            initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 10 }}
-                        ></motion.div>
+                            exit={{ opacity: 0, y: 20 }}
+                        ><LongPressedSubcategory {...longPressed}/></motion.div>
                     </div>
                 )}
             </AnimatePresence>

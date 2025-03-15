@@ -8,7 +8,7 @@ import Skeleton from "react-loading-skeleton";
 import { Link, useNavigate } from "react-router-dom";
 import { ControllersContext, DataContext, PersonalAreaContext, PersonalAreaContextInterface } from "../PersonalArea";
 import { ThemeContext, TranslationContext } from "../../App";
-import { DynamicIcon } from "../../assets/components/Utils";
+import { defaultAssetTypeIconBase } from "../../assets/components/Utils";
 
 import { LuEyeOff } from "react-icons/lu";
 import { LuPlus } from "react-icons/lu";
@@ -37,7 +37,7 @@ function AssetListItem({ data, controllers, asset }: AssetItemType) {
                     {!!asset.attributes && <div className="asset-logo">
                         {(asset.attributes.sourceName !== "")
                             ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
-                            : <div className="type-icon">{<DynamicIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name} />}</div>
+                            : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
                         }
                     </div>}
                     <div className="asset-name">{asset.name}</div>
@@ -110,7 +110,7 @@ export default function Wallet() {
                                                                             {!!asset.attributes && <div className="asset-logo">
                                                                                 {(asset.attributes.sourceName !== "")
                                                                                     ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
-                                                                                    : <div className="type-icon">{<DynamicIcon lib={JSON.parse(asset.attributes.logo).lib} name={JSON.parse(asset.attributes.logo).name}/>}</div>
+                                                                                    : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
                                                                                 }
                                                                             </div>}
                                                                             <div>

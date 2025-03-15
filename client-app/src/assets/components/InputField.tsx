@@ -1,57 +1,68 @@
 import Select from 'react-select'
 import PasswordStrengthBar from 'react-password-strength-bar';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { GrClose } from 'react-icons/gr';
-import { motion } from "framer-motion";
 
-function TextualField(props: any) {
-    const [fieldValue, setFieldValue] = useState(props.value); // Initialize state with prop value
-    const [isFocused, setIsFocused] = useState(false); // Initialize state with prop value
-    const inputElement = useRef<any>();
+interface InputParameters {
+    type: string,
+    name: string,
+    placeholder: string,
+    value: any,
+    handleChange?: any,
+}
+interface WideInputParameters extends InputParameters {
+    wide: boolean,
+    label: string
+}
+interface TypeaheadInputParameters extends WideInputParameters {
+    inputParams: any,
+    typeahead: boolean,
+    innerRef: any
+}
+
+function WideField(props: any) {
+    const [isFocused, setIsFocused] = useState(!!props.value); // Initialize state with prop value
 
     useEffect(() => {
-        if (isFocused && document.activeElement !== inputElement.current && props.value === "") 
+        if (isFocused && document.activeElement !== document.getElementById(props.name) && props.value === "")
             setIsFocused(false)
     }, [props.value])
 
     const focusInput = () => {
-        inputElement.current.focus();
+        document.getElementById(props.name)!.focus();
     };
 
     const handleFieldChange = (e: any) => {
-        setFieldValue(e.target.value); // Update state with input value
-        props.handleChange(e);
+        if (props.handleChange) props.handleChange(e);
     };
     const handleFocus = (e: any) => {
         setIsFocused(true); // Update state with input value
+        if (props.typeahead) props.typeaheadProps.onFocus(e);
     };
     const handleBlur = (e: any) => {
         setIsFocused((!!e.target.value)); // Update state with input value
+        if (props.typeahead) props.typeaheadProps.onBlur(e);
     };
 
     const wideInputStyle = {
         paddingLeft: (!!props.contenttype && props.contenttype === 'search') ? "2.8rem" : "1.2rem",
         marginBottom: (!!props.contenttype && props.contenttype === 'search') ? 5 : undefined
     }
-
-    if (props.wide) {
+    if (props.typeahead) {
         return (
             <>
-                <div className="mb-2 position-relative">
-                    <div onClick={focusInput} className={`wide-input-label position-absolute ${isFocused ? "focused" : ""}`}>{props.label}</div>
+                <div className="position-relative">
+                    <div onClick={focusInput} className={`wide-input-label typeahead-label position-absolute ${isFocused ? "focused" : ""}`}>{props.label}</div>
                     <input
-                        type={props.type}
-                        ref={inputElement}
+                        {...props.typeaheadProps}
                         className="form-control wide"
+                        ref={props.innerRef}
                         id={props.name}
-                        value={props.value}
-                        placeholder={props.placeholder}
-                        name={props.name}
-                        onChange={handleFieldChange}
+                        style={wideInputStyle}
                         onFocus={handleFocus}
                         onBlur={handleBlur}
-                        style={wideInputStyle}
+                        value={props.value}
                         required />
                 </div>
             </>
@@ -59,62 +70,105 @@ function TextualField(props: any) {
     }
     else {
         return (
-            <div className="mb-2 position-relative">
-                <input
-                    type={props.type}
-                    className="form-control"
-                    id={props.name}
-                    value={fieldValue}
-                    placeholder={props.placeholder}
-                    name={props.name}
-                    onChange={handleFieldChange}
-                    style={(!!props.contenttype && props.contenttype === 'search') ? { paddingLeft: "2.8rem", marginBottom: 5 } : {}}
-                    required />
-                {(!!props.contenttype && props.contenttype === 'search') &&
-                    <>
-                        <FaMagnifyingGlass
-                            style={{
-                                color: "var(--search-input-icon)",
-                                position: 'absolute',
-                                top: "1.1rem",
-                                left: 17,
-                                fontSize: 18
-
-                            }}
-                        />
-                        {(fieldValue.length > 0) &&
-                            <div style={{
-                                color: "var(--inverse-text-color)",
-                                position: 'absolute',
-                                top: "1.1rem",
-                                right: 17,
-                                height: 16,
-                                width: 16,
-                                background: "var(--search-input-icon)",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                borderRadius: 20,
-                                cursor: "pointer"
-                            }}
-                                onClick={() => handleFieldChange({ target: { name: 'search', value: '' } })}>
-                                <GrClose style={{ height: 10, width: 10 }} />
-                            </div>
-                        }
-                    </>
-                }
-                <div className="invalid-feedback">Please fill out this field.</div>
-                {(props.type === 'password' && props.isRegistering === 'true') &&
-                    <PasswordStrengthBar
-                        className='password-strength-bar'
-                        minLength={8}
-                        scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
-                        shortScoreWord='Too short'
-                        password={fieldValue} />
-                }
-            </div>
+            <>
+                <div className="mb-2 position-relative">
+                    <div onClick={focusInput} className={`wide-input-label position-absolute ${isFocused ? "focused" : ""}`}>{props.label}</div>
+                    {(props.type !== "textarea")
+                        ? (
+                            <input
+                                type={props.type}
+                                className="form-control wide"
+                                id={props.name}
+                                name={props.name}
+                                value={props.value}
+                                placeholder={props.placeholder}
+                                onChange={handleFieldChange}
+                                onFocus={handleFocus}
+                                onBlur={handleBlur}
+                                style={wideInputStyle}
+                                required />
+                        )
+                        : (
+                            <textarea
+                                rows={props.rows}
+                                id={props.name}
+                                name={props.name}
+                                value={props.value}
+                                className="form-control wide"
+                                onChange={handleFieldChange}
+                                onFocus={handleFocus}
+                                onBlur={handleBlur}
+                                style={{ resize: "none", ...wideInputStyle}}
+                                autoComplete={props.autocomplete}
+                            ></textarea>
+                        )
+                    }
+                </div>
+            </>
         )
     }
+}
+function TextualField(props: any) {
+    const handleFieldChange = (e: any) => {
+        if (props.handleChange) props.handleChange(e);
+    };
+
+    return (
+        <div className="mb-2 position-relative">
+            <input
+                type={props.type}
+                className="form-control"
+                id={props.name}
+                value={props.value}
+                placeholder={props.placeholder}
+                name={props.name}
+                onChange={handleFieldChange}
+                style={(!!props.contenttype && props.contenttype === 'search') ? { paddingLeft: "2.8rem", marginBottom: 5 } : {}}
+                required />
+            {(!!props.contenttype && props.contenttype === 'search') &&
+                <>
+                    <FaMagnifyingGlass
+                        style={{
+                            color: "var(--search-input-icon)",
+                            position: 'absolute',
+                            top: "1.1rem",
+                            left: 17,
+                            fontSize: 18
+
+                        }}
+                    />
+                    {(props.value.length > 0) &&
+                        <div style={{
+                            color: "var(--inverse-text-color)",
+                            position: 'absolute',
+                            top: "1.1rem",
+                            right: 17,
+                            height: 16,
+                            width: 16,
+                            background: "var(--search-input-icon)",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderRadius: 20,
+                            cursor: "pointer"
+                        }}
+                            onClick={() => handleFieldChange({ target: { name: 'search', value: '' } })}>
+                            <GrClose style={{ height: 10, width: 10 }} />
+                        </div>
+                    }
+                </>
+            }
+            <div className="invalid-feedback">Please fill out this field.</div>
+            {(props.type === 'password' && props.isRegistering === 'true') &&
+                <PasswordStrengthBar
+                    className='password-strength-bar'
+                    minLength={8}
+                    scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
+                    shortScoreWord='Too short'
+                    password={props.value} />
+            }
+        </div>
+    )
 }
 function SelectField(props: any) {
     const [fieldValue, setFieldValue] = useState(props.value); // Initialize state with prop value
@@ -156,12 +210,31 @@ export default function InputField(props: any) {
     let field;
     switch (props.type) {
         case 'text':
-            field = (
-                <TextualField
-                    type='text'
-                    {...props}
-                />
-            );
+            field = (props.wide)
+                ? (
+                    <WideField
+                        type='text'
+                        {...props}
+                    />
+                )
+                : (
+                    <TextualField
+                        type='text'
+                        {...props}
+                    />
+                );
+            break;
+        case 'textarea':
+            field = (props.wide)
+                ? (
+                    <WideField
+                        type='textarea'
+                        {...props}
+                    />
+                )
+                : (
+                    <></>
+                );
             break;
         case 'password':
             field = (

@@ -1,5 +1,5 @@
 import CurrencyInput from "react-currency-input-field";
-import { DynamicIcon, BackButton} from "../../../assets/components/Utils";
+import { BackButton, defaultAssetTypeIconBase } from "../../../assets/components/Utils";
 import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import { ChangeEvent, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import Asset, { AssetAttributes, AssetType } from "../../../assets/model/Asset";
@@ -14,11 +14,9 @@ import { FilterByCallback } from "react-bootstrap-typeahead/types/types";
 
 import { IoClose } from "react-icons/io5";
 import { HiMiniBanknotes } from "react-icons/hi2";
-import { GrMoney } from "react-icons/gr";
-import { BsCashCoin } from "react-icons/bs";
-import { MdOutlinePayments } from "react-icons/md";
-import { RiSecurePaymentFill } from "react-icons/ri";
 import InputField from "../../../assets/components/InputField";
+
+import { AnimatePresence, motion, delay } from "framer-motion";
 
 /*
 const NumericInputWithDotAsComma = () => {
@@ -78,8 +76,7 @@ export function AssetTypeSelector() {
         {
             id: 0,
             selector: AssetType.BANKACCOUNT,
-            icon: { 
-                jsx: <RiSecurePaymentFill />,
+            icon: {
                 name: "RiSecurePaymentFill",
                 lib: "ri"
             }
@@ -87,8 +84,7 @@ export function AssetTypeSelector() {
         {
             id: 1,
             selector: AssetType.CASH,
-            icon: { 
-                jsx: <BsCashCoin />,
+            icon: {
                 name: "BsCashCoin",
                 lib: "bs"
             }
@@ -96,8 +92,7 @@ export function AssetTypeSelector() {
         {
             id: 2,
             selector: AssetType.EWALLET,
-            icon: { 
-                jsx: <MdOutlinePayments />,
+            icon: {
                 name: "MdOutlinePayments",
                 lib: "md"
             }
@@ -105,8 +100,7 @@ export function AssetTypeSelector() {
         {
             id: 3,
             selector: AssetType.OTHER,
-            icon: { 
-                jsx: <GrMoney />,
+            icon: {
                 name: "GrMoney",
                 lib: "gr"
             }
@@ -117,7 +111,7 @@ export function AssetTypeSelector() {
         setSelectedType({
             name: "",
             type: selector,
-            logo: JSON.stringify({name: icon.name, lib: icon.lib})
+            logo: JSON.stringify({ name: icon.name, lib: icon.lib })
         } as Option)
     }
 
@@ -142,14 +136,14 @@ export function AssetTypeSelector() {
                         <div className={`asset-type-list ${(selectedType) ? "selected" : ""}`}>
                             {(types.map(type => {
                                 return <div key={type.id} onClick={() => handleSelectType(type.selector, type.icon)} className={`asset-type ${(selectedType?.type === type.selector) ? "active" : ""}`}>
-                                    <div className="asset-type-icon">{type.icon.jsx}</div>
+                                    <div className="asset-type-icon">{defaultAssetTypeIconBase[type.icon.name as keyof typeof defaultAssetTypeIconBase]}</div>
                                     <div className="asset-type-name">{i18n.t(type.selector)}</div>
                                 </div>
                             }))}
                         </div>
                     </div>
                 </div>
-                <button className={`btn w-100 fw-bold text-center rounded-pill btn-outline-warning shadow-sm align-items-center ${(!selectedType) ? " disabled": ""}`} onClick={handleConfirmType} style={{ padding: "1rem 0" }}>
+                <button className={`btn w-100 fw-bold text-center rounded-pill btn-outline-warning shadow-sm align-items-center ${(!selectedType) ? " disabled" : ""}`} onClick={handleConfirmType} style={{ padding: "1rem 0" }}>
                     Confirm
                 </button>
             </div>
@@ -220,7 +214,7 @@ export default function AddAsset(props: any) {
             const assetTypeSelectorTitleRef = document.getElementById("asset-type-selector-title");
             setTimeout(() => {
                 if (assetTypeSelectorRef && assetTypeSelectorTitleRef) {
-                    assetTypeSelectorRef.style.width = "32px"
+                    assetTypeSelectorRef.style.width = "40px"
                     assetTypeSelectorTitleRef.style.opacity = "0"
                     setTimeout(() => {
                         assetTypeSelectorTitleRef.style.display = "none"
@@ -324,16 +318,13 @@ export default function AddAsset(props: any) {
                         />
                     </div>
                     <div>
-                        <div className="mb-3">
-                            <label className="form-label">Asset name</label>
-                            {/*<InputField type="text" placeholder='e.g. "Revolut"' name="new-asset-name" handleChange={handleChange} isRegistering='false' value={formData["new-asset-name"]} />*/}
+                        <div className="mb-2">
                             <div className="asset-type-detail">
                                 <Typeahead
                                     id="asset-name-autocomplete"
                                     labelKey={((option: Option) => `${option.name}`) as any}
                                     defaultInputValue={formData["new-asset-name"]}
                                     options={options}
-                                    placeholder='e.g. "Revolut"'
                                     minLength={3}
                                     maxResults={2}
                                     maxHeight="220px"
@@ -374,7 +365,7 @@ export default function AddAsset(props: any) {
                                     }) as FilterByCallback}
                                     renderInput={({ inputRef, referenceElementRef, ...inputProps }) => (
                                         <>
-                                            <input
+                                            {/*<input
                                                 {...inputProps}
                                                 className="form-control"
                                                 ref={(node: any) => {
@@ -382,6 +373,19 @@ export default function AddAsset(props: any) {
                                                     referenceElementRef(node);
                                                 }}
                                                 value={formData["new-asset-name"]}
+                                            />*/}
+                                            <InputField
+                                                type={"text"}
+                                                typeaheadProps={{...inputProps}}
+                                                innerRef={(node: any) => {
+                                                    inputRef(node);
+                                                    referenceElementRef(node);
+                                                }}
+                                                name={"new-asset-name"}
+                                                value={formData["new-asset-name"]}
+                                                label={"Asset name"}
+                                                wide
+                                                typeahead
                                             />
                                             {(assetType && assetType.name.length > 0 && assetType.logo) && <img
                                                 alt={assetType.name}
@@ -390,19 +394,38 @@ export default function AddAsset(props: any) {
                                             />
                                             }
                                             {(assetType && assetType.name.length === 0 && assetType.logo) && <div id="asset-type-selector" className="selected">
-                                                <div id="asset-type-selector-icon">{<DynamicIcon lib={JSON.parse(assetType.logo).lib} name={JSON.parse(assetType.logo).name} />}</div>
+                                                <div id="asset-type-selector-icon">{defaultAssetTypeIconBase[JSON.parse(assetType.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
                                             </div>}
                                         </>
                                     )}
                                     onChange={(handleAssetNameSelection as any)}
                                 />
-                                {assetType && <div className="py-1 px-3 d-flex justify-content-between align-items-center">
-                                    <div>
-                                        {(assetType.name && assetType.name.length > 0) && <div className="pe-3" style={{ fontWeight: 700, marginBottom: -3 }}>{assetType.name}</div>}
-                                        <div className="small">{i18n.t(assetType.type)}</div>
-                                    </div>
-                                    <IoClose style={{ fontSize: 22, background: "#534b00", padding: 2, borderRadius: "50%", cursor: "pointer" }} onClick={() => setAssetType(undefined)} />
-                                </div>}
+                                <AnimatePresence>
+                                    {assetType && (<>
+                                        <motion.div 
+                                            initial= {{ height: 0}}
+                                            animate= {{ height: (assetType.name && assetType.name.length > 0) ? 58 : 38}}
+                                            exit= {{ height: 0 }}
+                                        ></motion.div>
+                                        <motion.div 
+                                            initial= {{ opacity: 0}}
+                                            animate= {{ 
+                                                opacity: 1, 
+                                                transition: {
+                                                    display: {delay: 0.9}
+                                                }}}
+                                            exit= {{ opacity: 0 }}
+                                            className="py-2 px-3 d-flex justify-content-between align-items-center position-absolute"
+                                            style={{ marginTop: (assetType.name && assetType.name.length > 0) ? -58 : -38, width: "100%"}}
+                                        >
+                                            <div>
+                                                {(assetType.name && assetType.name.length > 0) && <div className="pe-3" style={{ fontWeight: 700, marginBottom: -3 }}>{assetType.name}</div>}
+                                                <div className="small">{i18n.t(assetType.type)}</div>
+                                            </div>
+                                            <IoClose style={{ fontSize: 22, background: "#534b00", padding: 2, borderRadius: "50%", cursor: "pointer" }} onClick={() => setAssetType(undefined)} />
+                                        </motion.div>
+                                    </>)}
+                                </AnimatePresence>
                                 {displayAssetTypeSelector && <div id="asset-type-selector" onClick={() => navigate("./select-type")}>
                                     <div id="asset-type-selector-title"><div style={{ textOverflow: "ellipsis" }}>Select asset type</div></div>
                                     <div id="asset-type-selector-icon"><HiMiniBanknotes /></div>
@@ -410,15 +433,23 @@ export default function AddAsset(props: any) {
                             </div>
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Description</label>
-                            <textarea className="form-control" name="new-asset-description" rows={3} placeholder="Optional" onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={formData["new-asset-description"]}></textarea>
+                            <InputField 
+                                type="textarea" 
+                                name="new-asset-description" 
+                                rows={3} 
+                                handleChange={handleChange} 
+                                autoComplete="off" 
+                                value={formData["new-asset-description"]}
+                                label={"Description"}
+                                wide
+                            />
                         </div>
                         <button type='submit' className="btn w-100 border fw-bold text-center btn-primary rounded-pill shadow-sm align-items-center" style={{ padding: "1rem 0" }}>
                             Create
                         </button>
                     </div>
                 </form>
-                <Outlet context={context}/>
+                <Outlet context={context} />
             </div>
             {processing && <Loader theme={theme} selector="login" />}
         </>
