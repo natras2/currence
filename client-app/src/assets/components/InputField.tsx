@@ -86,6 +86,7 @@ function WideField(props: any) {
                                 onFocus={handleFocus}
                                 onBlur={handleBlur}
                                 style={wideInputStyle}
+                                disabled={props.disabled}
                                 required />
                         )
                         : (

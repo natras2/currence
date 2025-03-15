@@ -9,8 +9,8 @@ import CurrencyInput from "react-currency-input-field";
 import { BackButton, defaultAssetTypeIconBase, defaultCategoryIconBase } from "../../../assets/components/Utils";
 import InputField from "../../../assets/components/InputField";
 import Loader from "../../../assets/components/Loader";
-import Asset, { AssetAttributes } from "../../../assets/model/Asset";
-import { AnimatePresence, motion } from "framer-motion";
+import Asset, { AssetAttributes, AssetType } from "../../../assets/model/Asset";
+import { AnimatePresence, delay, motion } from "framer-motion";
 import useLongPress from "../../../assets/libraries/Utils";
 
 import { BiCalendar, BiPencil, BiPlus, BiTrash } from "react-icons/bi";
@@ -57,6 +57,9 @@ interface SubcategoryItemType {
     handleChange: any,
     longPressed?: SelectedCategory,
     setLongPressed: Dispatch<SetStateAction<SelectedCategory | undefined>>
+}
+interface LongPressedSubcategoryType extends SelectedCategory {
+    type: TransactionType
 }
 
 function AssetListItem({ data, asset, searchString, active = false, clickHandler }: AssetItemType) {
@@ -221,10 +224,11 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
     )
 }
 
-function LongPressedSubcategory ({name, i18n_selector, progressive, isUpdated, parent}: SelectedCategory) {
+function LongPressedSubcategory({ name, i18n_selector, progressive, isUpdated, parent, type }: LongPressedSubcategoryType) {
     const i18n: TranslationContextType = useContext(TranslationContext);
-    const [tempSubcategoryName, setTempSubcategoryName] = useState<string>((!i18n_selector || isUpdated) ? name : i18n.t(i18n_selector)) 
-    const parentName = (!(parent!).i18n_selector || (parent!).isUpdated) ? (parent!).name : i18n.t((parent!).i18n_selector) 
+    const [tempSubcategoryName, setTempSubcategoryName] = useState<string>((!i18n_selector || isUpdated) ? name : i18n.t(i18n_selector))
+    const parentName = (!(parent!).i18n_selector || (parent!).isUpdated) ? (parent!).name : i18n.t((parent!).i18n_selector)
+    const [clicked, setClicked] = useState(false);
 
     const handleChangeName = (e: any) => {
         setTempSubcategoryName(e.target.value)
@@ -235,14 +239,26 @@ function LongPressedSubcategory ({name, i18n_selector, progressive, isUpdated, p
             <div>
                 <div className="elipse"></div>
                 <div className="name mt-3 mb-4">
-                    <input 
-                        type="text" 
-                        name="subcategory-name" 
+                    <textarea
+                        rows={2}
+                        name="subcategory-name"
                         className="subcategory-name"
                         placeholder="Subcategory name"
                         value={tempSubcategoryName}
                         autoComplete="off"
                         onChange={handleChangeName}
+                        style={{ resize: "none" }}
+                    ></textarea>
+                </div>
+                <div className="type mb-2">
+                    <InputField
+                        type="text"
+                        name="category-type"
+                        className="category-type"
+                        value={i18n.t(type)}
+                        label={"Category type"}
+                        disabled
+                        wide
                     />
                 </div>
                 <div className="parent">
@@ -254,7 +270,28 @@ function LongPressedSubcategory ({name, i18n_selector, progressive, isUpdated, p
                         label={"Parent category"}
                         wide
                     />
+                    <div className="circle">
+                        <div className="logo">{defaultCategoryIconBase[JSON.parse((parent!).icon!).name as keyof typeof defaultCategoryIconBase]}</div>
+                    </div>
                 </div>
+            </div>
+            <div style={{ position: "relative", width: "100%" }}>
+                <div
+                    
+                    onClick={() => setClicked(!clicked)}
+                    className={`delete-button btn btn-danger ${clicked ? "clicked" : ""}`}
+                >
+                    {(!clicked) && <BiTrash />}
+                    <AnimatePresence>
+                        {(clicked) && 
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: .5 }}} exit={{ opacity: 0, transition: {duration: 0}}} className="delete-content d-flex flex-column gap-3">
+                                <div className="delete-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sunt, numquam commodi eveniet aliquid iure facilis est deleniti error voluptate vitae in illum.</div>
+                                <div className="delete-confirm-button w-100 btn btn-outline-info d-flex align-items-center justify-content-center rounded-pill">Confirm</div>
+                            </motion.div>
+                        }
+                    </AnimatePresence>
+                </div>
+                <div className="confirm-button btn btn-outline disabled rounded-pill">Confirm</div>
             </div>
         </div>
     );
@@ -371,6 +408,11 @@ export function TransactionCategorySelector() {
         navigate(-1);
     }
 
+    const longPressedData: LongPressedSubcategoryType = {
+        ...longPressed!,
+        type: formData["new-transaction-type"]
+    }
+
     return (
         <div id="select-transaction-category" className="callout page sub">
             <div className="h-100 d-flex flex-column">
@@ -398,7 +440,7 @@ export function TransactionCategorySelector() {
                                     );
                                 });
                             return (
-                                <div key={i} className={`category ${openSubcategoryOf ? ((openSubcategoryOf === category.name) ? ((category.name === selected.name && selected.name === "Other") ? "other" : "active") : ((selected.name === "Other") ? "" : "blurred")) : ""}`}>
+                                <div key={i} className={`category ${openSubcategoryOf ? ((openSubcategoryOf === category.name) ? ((category.name === selected.name && selected.name === "Other") ? "other" : "active") : ((openSubcategoryOf === "Other" && selected.name === "Other") ? "" : "blurred")) : ""}`}>
                                     <div className="parent" onClick={(category.isOther) ? () => { selectCategory({ category: category, subcategory: null, progressive: i + 1 }) } : () => { }}>
                                         <div className="logo" onClick={() => onClickParent(category.name, true)}>{(openSubcategoryOf === category.name && !category.isOther) ? <MdClose /> : (defaultCategoryIconBase[JSON.parse(category.icon!).name as keyof typeof defaultCategoryIconBase])}</div>
                                         <div className={`name-wrapper ${(!!selected && !selected.parent && selected.name === category.name) ? "selected" : ""}`} onClick={(openSubcategoryOf === category.name) ? () => { selectCategory({ category: category, subcategory: null, progressive: i + 1 }) } : () => { }}>
@@ -449,7 +491,7 @@ export function TransactionCategorySelector() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 20 }}
-                        ><LongPressedSubcategory {...longPressed}/></motion.div>
+                        ><LongPressedSubcategory {...longPressedData} /></motion.div>
                     </div>
                 )}
             </AnimatePresence>

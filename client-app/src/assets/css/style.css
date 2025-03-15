@@ -153,6 +153,7 @@ textarea.form-control {
     padding-right: 1.2rem !important;
     padding-bottom: 0 !important;
     font-weight: 500;
+    font-size: 19px;
 }
 textarea.form-control.wide {
     height: unset;
@@ -1076,7 +1077,7 @@ body.dark-mode .btn-outline-warning {
 
 #add-transaction .type-selector {
     display: flex;
-    padding: 5px;
+    padding: 3px;
     width: calc(100% + .8rem);
     border: 1px solid var(--list-background);
     background-color: var(--highlight-background);
@@ -1088,7 +1089,7 @@ body.dark-mode .btn-outline-warning {
 #add-transaction .type-selector>.selector {
     flex: 1 0 33.33%;
     border-radius: 50px;
-    height: 30px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1551,14 +1552,18 @@ body.dark-mode .btn-outline-warning {
     position: absolute;
     width: calc(100% - 2.2rem);
     top:10%;
-    min-height: 65%;
+    height: 65%;
     background-color: #000;
     z-index: 1001;
-    border-radius: 30px;
+    border-radius: 40px;
 }
 #longpressed-subcategory-editor {
     padding: 1.8rem 1rem;
     position: relative;
+    display: flex;
+    height:100%;
+    flex-direction: column;
+    justify-content: space-between;
 }
 #longpressed-subcategory-editor .elipse {
     display: block;
@@ -1579,12 +1584,74 @@ body.dark-mode .btn-outline-warning {
     font-weight: 600;
     width: 100%;
     text-align: center;
-    text-decoration: underline solid transparent 70%;
+    text-decoration: underline solid transparent 5%;
+    text-underline-offset: 10px;
     transition:text-decoration-color 0.3s;
+    line-height: 1.4;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
 }
 #longpressed-subcategory-editor .subcategory-name:focus {
     text-decoration-color: var(--darker-category-color);
 }
 #longpressed-subcategory-editor .subcategory-name:focus-visible {
     outline: transparent;
+}
+#longpressed-subcategory-editor .parent {
+    position: relative;
+}
+#longpressed-subcategory-editor .parent > .circle {
+    position: absolute;
+    right: 13px;
+    top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 50px;
+    background-color: var(--category-color);
+    color: var(--darker-category-color);
+    font-size: 18px;
+}
+#longpressed-subcategory-editor .btn {
+    height: 60px;
+    flex: 1 0 auto;
+}
+#longpressed-subcategory-editor .delete-button.btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    position: absolute;
+    z-index: 300;
+    bottom: 0; 
+    border-radius: 50px;
+    transition: all .5s;
+}
+#longpressed-subcategory-editor .delete-button.btn.clicked {
+    width: 100%;
+    height: 200px;
+    bottom: -10px; 
+    border-radius: 25px;
+}
+#longpressed-subcategory-editor .delete-button.btn.clicked .delete-text {
+    font-size: 16px;
+}
+#longpressed-subcategory-editor .delete-button.btn.clicked .delete-confirm-button {
+    height: 50px;
+}
+#longpressed-subcategory-editor .confirm-button.btn {
+    width: calc(100% - .5rem - 60px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
