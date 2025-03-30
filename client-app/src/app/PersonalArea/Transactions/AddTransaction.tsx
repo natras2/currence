@@ -277,16 +277,22 @@ function LongPressedSubcategory({ name, i18n_selector, progressive, isUpdated, p
             </div>
             <div style={{ position: "relative", width: "100%" }}>
                 <div
-                    
-                    onClick={() => setClicked(!clicked)}
                     className={`delete-button btn btn-danger ${clicked ? "clicked" : ""}`}
                 >
-                    {(!clicked) && <BiTrash />}
+                    <AnimatePresence initial={false}>
+                        {(!clicked) && 
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: .5 }}} className="delete-button-closed" onClick={() => setClicked(!clicked)}>
+                                <BiTrash/>
+                            </motion.div>}
+                    </AnimatePresence>
                     <AnimatePresence>
                         {(clicked) && 
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: .5 }}} exit={{ opacity: 0, transition: {duration: 0}}} className="delete-content d-flex flex-column gap-3">
                                 <div className="delete-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sunt, numquam commodi eveniet aliquid iure facilis est deleniti error voluptate vitae in illum.</div>
-                                <div className="delete-confirm-button w-100 btn btn-outline-info d-flex align-items-center justify-content-center rounded-pill">Confirm</div>
+                                <div className="d-flex gap-1">
+                                    <div className="delete-cancel-button w-100 btn btn-outline-light d-flex align-items-center justify-content-center rounded-pill" onClick={() => setClicked(!clicked)}>Cancel</div>
+                                    <div className="delete-confirm-button w-100 btn btn-light d-flex align-items-center justify-content-center rounded-pill">Confirm</div>
+                                </div>
                             </motion.div>
                         }
                     </AnimatePresence>
@@ -897,28 +903,56 @@ export default function AddTransaction() {
                         />
                     </div>
                     <div>
-                        <div className="category-picker-wrapper mb-3">
-                            {/*<label className="form-label">Category</label>*/}
-                            <CategoryPicker data={data} formData={formData} setFormData={setFormData} />
+                        <div style={{position: "relative"}}>
+                            <AnimatePresence initial={false}>
+                                {(formData["new-transaction-type"] === TransactionType.EXPENCE || formData["new-transaction-type"] === TransactionType.INCOME) &&
+                                    <motion.div 
+                                        style={{position: "absolute", bottom: 0, width: "100%"}}
+                                        initial={{opacity: 0}}
+                                        animate={{opacity: 1}}
+                                        exit={{opacity: 0}}
+                                        >
+                                        <div className="category-picker-wrapper mb-3">
+                                            {/*<label className="form-label">Category</label>*/}
+                                            <CategoryPicker data={data} formData={formData} setFormData={setFormData} />
+                                        </div>
+                                        <div className="asset-picker-wrapper mb-2">
+                                            {/*<label className="form-label">Asset</label>*/}
+                                            <AssetPicker data={data} isAllocated={isAllocated} assetsAllocations={assetsAllocations} setAssetsAllocations={setAssetsAllocations} />
+                                        </div>
+                                        <div className="">
+                                            {/*<label className="form-label">Description</label>*/}
+                                            <InputField
+                                                type="text"
+                                                placeholder={""}//`E.g. "${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "Monthly rent" : ((formData["new-transaction-type"] === TransactionType.INCOME) ? "Salary" : ((formData["new-transaction-type"] === TransactionType.TRANSFER) ? "Transfer" : ""))}"`}
+                                                name="new-transaction-description"
+                                                handleChange={handleChange}
+                                                isRegistering='false'
+                                                value={formData["new-transaction-description"] || ""}
+                                                label={"Description"}
+                                                wide
+                                            />
+                                        </div>
+                                    </motion.div>
+                                }
+                            </AnimatePresence>
+                            <AnimatePresence>
+                                {(formData["new-transaction-type"] === TransactionType.TRANSFER) &&
+                                    <motion.div 
+                                        style={{position: "absolute", bottom: 0, width: "100%"}}
+                                        initial={{opacity: 0}}
+                                        animate={{opacity: 1}}
+                                        exit={{opacity: 0}}
+                                        >
+                                        <div className="asset-picker-wrapper mb-2">
+                                            {/*<label className="form-label">Asset</label>*/}
+                                            <AssetPicker data={data} isAllocated={isAllocated} assetsAllocations={assetsAllocations} setAssetsAllocations={setAssetsAllocations} />
+                                        </div>
+                                    </motion.div>
+                                }
+                            </AnimatePresence>
                         </div>
-                        <div className="asset-picker-wrapper mb-2">
-                            {/*<label className="form-label">Asset</label>*/}
-                            <AssetPicker data={data} isAllocated={isAllocated} assetsAllocations={assetsAllocations} setAssetsAllocations={setAssetsAllocations} />
-                        </div>
-                        <div className="">
-                            {/*<label className="form-label">Description</label>*/}
-                            <InputField
-                                type="text"
-                                placeholder={""}//`E.g. "${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "Monthly rent" : ((formData["new-transaction-type"] === TransactionType.INCOME) ? "Salary" : ((formData["new-transaction-type"] === TransactionType.TRANSFER) ? "Transfer" : ""))}"`}
-                                name="new-transaction-description"
-                                handleChange={handleChange}
-                                isRegistering='false'
-                                value={formData["new-transaction-description"] || ""}
-                                label={"Description"}
-                                wide
-                            />
-                        </div>
-                        <div className="d-flex mt-4 gap-1">
+                        <div className="d-flex mt-3 gap-1">
                             <Link to={"./select-date"} className="near-create-button"><BiCalendar /></Link>
                             <Link to={"./add-notes"} className="near-create-button"><PiNotePencilFill /></Link>
                             <button type='submit' className="btn w-100 border fw-bold text-center btn-primary rounded-pill shadow-sm" style={{ height: 50 }}>
