@@ -24,21 +24,25 @@ interface AddTransactionContext {
     isSingularSelect: boolean,
     isAllocated: boolean,
     setIsAllocated: Dispatch<SetStateAction<boolean>>,
-    assetsAllocations: AssetAllocation[],
-    setAssetsAllocations: Dispatch<SetStateAction<AssetAllocation[]>>
+    fromAssetsAllocations: AssetAllocation[],
+    setFromAssetsAllocations: Dispatch<SetStateAction<AssetAllocation[]>>,
+    toAssetsAllocations: AssetAllocation[],
+    setToAssetsAllocations: Dispatch<SetStateAction<AssetAllocation[]>>
 }
 interface AssetItemType {
     data: DataContext,
     asset: Asset,
     searchString?: string,
     active?: boolean,
-    clickHandler: any
+    clickHandler: any,
+    disabled: boolean
 }
 interface AssetPickerType {
     data: DataContext,
     isAllocated: boolean,
     assetsAllocations: AssetAllocation[],
-    setAssetsAllocations: Dispatch<SetStateAction<AssetAllocation[]>>
+    setAssetsAllocations: Dispatch<SetStateAction<AssetAllocation[]>>,
+    isFrom: boolean
 }
 interface CategoryPickerType {
     data: DataContext,
@@ -62,7 +66,7 @@ interface LongPressedSubcategoryType extends SelectedCategory {
     type: TransactionType
 }
 
-function AssetListItem({ data, asset, searchString, active = false, clickHandler }: AssetItemType) {
+function AssetListItem({ data, asset, searchString, active = false, clickHandler, disabled }: AssetItemType) {
 
     const onSearchAssetName = () => {
         const searchStringPosInit = asset.name.toLowerCase().indexOf(searchString!.toLowerCase())
@@ -75,7 +79,7 @@ function AssetListItem({ data, asset, searchString, active = false, clickHandler
 
     return (
         <span className="asset-wrapper">
-            <div className={`asset ${active ? "active" : ""}`} onClick={clickHandler}>
+            <div className={`asset ${active ? "active" : (disabled ? "disabled" : "")}`} onClick={!disabled ? clickHandler : null}>
                 <div className="d-flex align-items-center">
                     {!!asset.attributes && <div className="asset-logo">
                         {(asset.attributes.sourceName !== "")
@@ -133,7 +137,7 @@ function CategoryPicker({ data, formData, setFormData }: CategoryPickerType) {
     );
 }
 
-function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAssetsAllocations }: AssetPickerType) {
+function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAssetsAllocations, isFrom }: AssetPickerType) {
     const data: DataContext = dataContext;
     const location = useLocation();
 
@@ -152,7 +156,7 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
 
     const NoAllocations = () => {
         return (
-            <Link to={"./select-asset"} state={{ isSingularSelect: true }} className="asset-picker list-0">
+            <Link to={"./select-asset"} state={{ isSingularSelect: true, isFrom: isFrom }} className="asset-picker list-0">
                 <div style={{ marginTop: -3, marginRight: 5, transform: "scale(1.4)" }}><BiPlus /></div>
                 <div>Select an asset</div>
             </Link>
@@ -175,7 +179,7 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
         const asset = data.assets.find(a => a.id === assetsAllocations[0].assetId)!
         return (
             <>
-                <Link to={"./select-asset"} state={{ isSingularSelect: true }} className="asset-picker">
+                <Link to={"./select-asset"} state={{ isSingularSelect: true, isFrom: isFrom }} className="asset-picker">
                     <div className="d-flex align-items-center">
                         {!!asset.attributes && <div className="asset-logo ms-2" style={{ transform: "scale(1.2)" }}>
                             {(asset.attributes.sourceName !== "")
@@ -256,7 +260,7 @@ function LongPressedSubcategory({ name, i18n_selector, progressive, isUpdated, p
                         name="category-type"
                         className="category-type"
                         value={i18n.t(type)}
-                        label={"Category type"}
+                        label={i18n.t("pages.addtransaction.transactioncategoryselector.labels.type")}
                         disabled
                         wide
                     />
@@ -267,7 +271,7 @@ function LongPressedSubcategory({ name, i18n_selector, progressive, isUpdated, p
                         name="parent-category"
                         className="parent-category"
                         value={parentName}
-                        label={"Parent category"}
+                        label={i18n.t("pages.addtransaction.transactioncategoryselector.labels.parent")}
                         wide
                     />
                     <div className="circle">
@@ -288,16 +292,16 @@ function LongPressedSubcategory({ name, i18n_selector, progressive, isUpdated, p
                     <AnimatePresence>
                         {(clicked) && 
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: .5 }}} exit={{ opacity: 0, transition: {duration: 0}}} className="delete-content d-flex flex-column gap-3">
-                                <div className="delete-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sunt, numquam commodi eveniet aliquid iure facilis est deleniti error voluptate vitae in illum.</div>
+                                <div className="delete-text">{i18n.t("pages.addtransaction.transactioncategoryselector.deletetext")}</div>
                                 <div className="d-flex gap-1">
-                                    <div className="delete-cancel-button w-100 btn btn-outline-light d-flex align-items-center justify-content-center rounded-pill" onClick={() => setClicked(!clicked)}>Cancel</div>
-                                    <div className="delete-confirm-button w-100 btn btn-light d-flex align-items-center justify-content-center rounded-pill">Confirm</div>
+                                    <div className="delete-cancel-button w-100 btn btn-outline-light d-flex align-items-center justify-content-center rounded-pill" onClick={() => setClicked(!clicked)}>{i18n.t("static.buttons.cancel")}</div>
+                                    <div className="delete-confirm-button w-100 btn btn-light d-flex align-items-center justify-content-center rounded-pill">{i18n.t("static.buttons.confirm")}</div>
                                 </div>
                             </motion.div>
                         }
                     </AnimatePresence>
                 </div>
-                <div className="confirm-button btn btn-outline disabled rounded-pill">Confirm</div>
+                <div className="confirm-button btn btn-outline disabled rounded-pill">{i18n.t("static.buttons.confirm")}</div>
             </div>
         </div>
     );
@@ -521,8 +525,11 @@ export function AddTransactionCategory() {
 }
 
 export function AssetsAllocationSetter() {
-    const { data: formData, isAllocated, setIsAllocated, assetsAllocations, setAssetsAllocations } = useOutletContext<AddTransactionContext>();
+    const { data: formData, isAllocated, setIsAllocated, fromAssetsAllocations, setFromAssetsAllocations, toAssetsAllocations, setToAssetsAllocations } = useOutletContext<AddTransactionContext>();
     const location = useLocation();
+
+    const assetsAllocations = (formData["new-transtaction-type"] === TransactionType.EXPENCE) ? fromAssetsAllocations : toAssetsAllocations;
+    const setAssetsAllocations = (formData["new-transtaction-type"] === TransactionType.EXPENCE) ? setFromAssetsAllocations : setToAssetsAllocations;
 
     return (
         <div id="set-asset-allocations" className="callout page sub">
@@ -546,14 +553,19 @@ export function AssetsAllocationSetter() {
 
 export function InvolvedAssetsSelector() {
     const { data } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
-    const { data: formData, isAllocated, setIsAllocated, assetsAllocations, setAssetsAllocations } = useOutletContext<AddTransactionContext>();
+    const { data: formData, isAllocated, setIsAllocated, fromAssetsAllocations, setFromAssetsAllocations, toAssetsAllocations, setToAssetsAllocations } = useOutletContext<AddTransactionContext>();
     const [searchString, setSearchString] = useState("");
-
-    const initialSelectionLength = assetsAllocations.length;
 
     const navigate = useNavigate();
     const location = useLocation();
 
+    const isFrom: boolean = (formData["new-transtaction-type"] === TransactionType.EXPENCE || (location.state && location.state.isFrom))
+
+    //define the dataset to operate on
+    const assetsAllocations = (isFrom) ? fromAssetsAllocations : toAssetsAllocations;
+    const setAssetsAllocations = (isFrom) ? setFromAssetsAllocations : setToAssetsAllocations;
+
+    const initialSelectionLength = assetsAllocations.length;
     const isSingularSelect: boolean = (location.state && location.state.isSingularSelect);
 
     const handleAddSelectedAsset = (assetId: string, onAdd?: boolean) => {
@@ -595,7 +607,7 @@ export function InvolvedAssetsSelector() {
         return (
             <div className="asset-list selected mb-3">
                 {assetsAllocations.map((allocation, i) => {
-                    return <AssetListItem key={i} data={data} asset={data.assets.filter((a) => a.id === allocation.assetId)[0]} clickHandler={() => handleAddSelectedAsset(data.assets.filter((a) => a.id === allocation.assetId)[0].id!, false)} />;
+                    return <AssetListItem key={i} data={data} asset={data.assets.filter((a) => a.id === allocation.assetId)[0]} clickHandler={() => handleAddSelectedAsset(data.assets.filter((a) => a.id === allocation.assetId)[0].id!, false)} disabled={false} />;
                 })}
             </div>
         )
@@ -618,7 +630,8 @@ export function InvolvedAssetsSelector() {
                 {unselectedAssets.length > 0 && <div className="mb-2 mt-4">Select one or more assets</div>}
                 <div className="asset-list">
                     {unselectedAssets.map((asset, i) => {
-                        return <AssetListItem key={i} data={data} asset={asset} searchString={searchString} clickHandler={() => handleAddSelectedAsset(asset.id!, true)} />;
+                        const isDisabled = () => { return (isFrom) ? !!fromAssetsAllocations.find((allocation) => allocation.assetId === asset.id) : !!toAssetsAllocations.find((allocation) => allocation.assetId === asset.id) }
+                        return <AssetListItem key={i} data={data} asset={asset} searchString={searchString} clickHandler={() => handleAddSelectedAsset(asset.id!, true)} disabled={isDisabled()} />;
                     })}
                 </div>
             </>
@@ -639,7 +652,8 @@ export function InvolvedAssetsSelector() {
                 {(assets.length > 0) && <div className="mb-2 mt-4">Select an asset</div>}
                 <div className="asset-list">
                     {assets.map((asset, i) => {
-                        return <AssetListItem key={i} data={data} asset={asset} searchString={searchString} active={(assetsAllocations.find(aa => aa.assetId === asset.id)) ? true : false} clickHandler={() => handleAddSelectedAsset(asset.id!)} />;
+                        const isDisabled = () => { return (isFrom) ? !!toAssetsAllocations.find((allocation) => allocation.assetId === asset.id) : !!fromAssetsAllocations.find((allocation) => allocation.assetId === asset.id) }
+                        return <AssetListItem key={i} data={data} asset={asset} searchString={searchString} active={(assetsAllocations.find(aa => aa.assetId === asset.id)) ? true : false} clickHandler={() => handleAddSelectedAsset(asset.id!)} disabled={isDisabled()} />;
                     })}
                 </div>
             </>
@@ -727,7 +741,8 @@ export default function AddTransaction() {
 
     const [processing, setProcessing] = useState(false);
     const [isAllocated, setIsAllocated] = useState(false);
-    const [assetsAllocations, setAssetsAllocations] = useState<AssetAllocation[]>([]);
+    const [fromAssetsAllocations, setFromAssetsAllocations] = useState<AssetAllocation[]>([]);
+    const [toAssetsAllocations, setToAssetsAllocations] = useState<AssetAllocation[]>([]);
 
     const user: User = data.user;
     const navigate = useNavigate();
@@ -773,7 +788,8 @@ export default function AddTransaction() {
             }));
             if (name === "new-transaction-type") {
                 setFormData(clearTransaction(value));
-                setAssetsAllocations([])
+                setFromAssetsAllocations([]);
+                setToAssetsAllocations([]);
             }
         }
     }
@@ -783,8 +799,10 @@ export default function AddTransaction() {
         handleChange: handleChange,
         isAllocated: isAllocated,
         setIsAllocated: setIsAllocated,
-        assetsAllocations: assetsAllocations,
-        setAssetsAllocations: setAssetsAllocations
+        fromAssetsAllocations: fromAssetsAllocations,
+        setFromAssetsAllocations: setFromAssetsAllocations,
+        toAssetsAllocations: toAssetsAllocations,
+        setToAssetsAllocations: setToAssetsAllocations
     } as AddTransactionContext;
 
     const handleSubmit = async (e: any) => {
@@ -793,13 +811,13 @@ export default function AddTransaction() {
 
         setProcessing(true);
 
-        // Set the name data field
+        // Set the description data field
         setFormData(prevState => ({
             ...prevState,
             "new-transaction-description": capitalize(formData["new-transaction-description"].trim())
         }));
 
-        // Check if any of the required field is empty
+        // Check if the transaction field is well formed
         if (!formData["new-transaction-description"] || !formData["new-transaction-amount"]) {
             setProcessing(false);
             console.error("Empty required fields");
@@ -918,7 +936,13 @@ export default function AddTransaction() {
                                         </div>
                                         <div className="asset-picker-wrapper mb-2">
                                             {/*<label className="form-label">Asset</label>*/}
-                                            <AssetPicker data={data} isAllocated={isAllocated} assetsAllocations={assetsAllocations} setAssetsAllocations={setAssetsAllocations} />
+                                            <AssetPicker 
+                                                data={data} 
+                                                isAllocated={isAllocated} 
+                                                assetsAllocations={(formData["new-transaction-type"] === TransactionType.EXPENCE) ? fromAssetsAllocations : toAssetsAllocations} 
+                                                setAssetsAllocations={(formData["new-transaction-type"] === TransactionType.EXPENCE) ? setFromAssetsAllocations : setToAssetsAllocations} 
+                                                isFrom={(formData["new-transaction-type"] === TransactionType.EXPENCE)}
+                                            />
                                         </div>
                                         <div className="">
                                             {/*<label className="form-label">Description</label>*/}
@@ -946,7 +970,19 @@ export default function AddTransaction() {
                                         >
                                         <div className="asset-picker-wrapper mb-2">
                                             {/*<label className="form-label">Asset</label>*/}
-                                            <AssetPicker data={data} isAllocated={isAllocated} assetsAllocations={assetsAllocations} setAssetsAllocations={setAssetsAllocations} />
+                                            <AssetPicker 
+                                                data={data} 
+                                                isAllocated={isAllocated} 
+                                                assetsAllocations={fromAssetsAllocations} 
+                                                setAssetsAllocations={setFromAssetsAllocations}
+                                                isFrom={true} />
+                                            <hr/>
+                                            <AssetPicker 
+                                                data={data} 
+                                                isAllocated={isAllocated} 
+                                                assetsAllocations={toAssetsAllocations} 
+                                                setAssetsAllocations={setToAssetsAllocations}
+                                                isFrom={false} />
                                         </div>
                                     </motion.div>
                                 }

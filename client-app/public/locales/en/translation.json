@@ -15,6 +15,10 @@
             "income": "Income",
             "transfer": "Transfer",
             "manageassets": "Manage assets"
+        },
+        "buttons": {
+            "confirm": "Confirm",
+            "cancel": "Cancel"
         }
     },
     "default": {
@@ -111,6 +115,18 @@
             },
             "other": {
                 "name": "Other"
+            }
+        }
+    },
+    "pages": {
+        "addtransaction": {
+            "transactioncategoryselector": {
+                "labels": {
+                    "type": "Category type",
+                    "sub": "Sub-category",
+                    "parent": "Parent category"
+                },
+                "deletetext": "The deletion will result in the reassignment of the existing transactions associated with this sub-category to the corresponding parent category."
             }
         }
     }

@@ -15,6 +15,10 @@
             "income": "Entrata",
             "transfer": "Trasferimento",
             "manageassets": "Gestione asset"
+        },
+        "buttons": {
+            "confirm": "Conferma",
+            "cancel": "Annulla"
         }
     },
     "default": {
@@ -113,5 +117,17 @@
                 "name": "Altro"
             }
         }
+    },
+    "pages": {
+        "addtransaction": {
+            "transactioncategoryselector": {
+                "labels": {
+                    "type": "Tipo",
+                    "sub": "Sottocategoria",
+                    "parent": "Macro-categoria"
+                },
+                "deletetext": "L'eliminazione comporterà la riassegnazione delle transazioni esistenti associate a questa sottocategoria alla macro-categoria corrispondente."
+            }
+        }
     }
-}   
+}

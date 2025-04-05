@@ -1138,7 +1138,7 @@ body.dark-mode .btn-outline-warning {
 #add-transaction .asset-picker {
     background: linear-gradient(0.4turn, var(--palette-blue-3), var(--palette-blue-2));
     border: var(--bs-border-width) solid var(--bs-border-color);
-    height: 71px;
+    height: 70px;
     border-radius: 15px;
     padding: .8rem 1.5rem;
     display: flex;
@@ -1190,6 +1190,10 @@ body.dark-mode .btn-outline-warning {
     cursor: pointer;
     border-radius: 5px;
     transition: margin .5s;
+}
+#add-transaction #select-involved-assets .asset-list .asset.disabled {
+    opacity: 0.5;
+    cursor: unset;
 }
 
 #add-transaction #select-involved-assets .asset-list .asset .asset-name {
