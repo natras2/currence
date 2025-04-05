@@ -47,7 +47,8 @@ function WideField(props: any) {
 
     const wideInputStyle = {
         paddingLeft: (!!props.contenttype && props.contenttype === 'search') ? "2.8rem" : "1.2rem",
-        marginBottom: (!!props.contenttype && props.contenttype === 'search') ? 5 : undefined
+        marginBottom: (!!props.contenttype && props.contenttype === 'search') ? 5 : undefined,
+        ...props.style
     }
     if (props.typeahead) {
         return (
@@ -77,7 +78,7 @@ function WideField(props: any) {
                         ? (
                             <input
                                 type={props.type}
-                                className="form-control wide"
+                                className={`form-control wide ${(!!props.className) ? props.className : ""}`}
                                 id={props.name}
                                 name={props.name}
                                 value={props.value}
@@ -95,7 +96,7 @@ function WideField(props: any) {
                                 id={props.name}
                                 name={props.name}
                                 value={props.value}
-                                className="form-control wide"
+                                className={`form-control wide ${(!!props.className) ? props.className : ""}`}
                                 onChange={handleFieldChange}
                                 onFocus={handleFocus}
                                 onBlur={handleBlur}

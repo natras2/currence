@@ -272,6 +272,8 @@ function LongPressedSubcategory({ name, i18n_selector, progressive, isUpdated, p
                         className="parent-category"
                         value={parentName}
                         label={i18n.t("pages.addtransaction.transactioncategoryselector.labels.parent")}
+                        style={{backgroundColor: "var(--bs-body-bg)"}}
+                        disabled
                         wide
                     />
                     <div className="circle">

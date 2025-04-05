@@ -126,7 +126,7 @@
                     "sub": "Sub-category",
                     "parent": "Parent category"
                 },
-                "deletetext": "The deletion will result in the reassignment of the existing transactions associated with this sub-category to the corresponding parent category."
+                "deletetext": "The deletion will result in the reassignment of any existing transactions associated with this sub-category to the corresponding parent category."
             }
         }
     }

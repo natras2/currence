@@ -126,7 +126,7 @@
                     "sub": "Sottocategoria",
                     "parent": "Macro-categoria"
                 },
-                "deletetext": "L'eliminazione comporterà la riassegnazione delle transazioni esistenti associate a questa sottocategoria alla macro-categoria corrispondente."
+                "deletetext": "L'eliminazione comporterà la riassegnazione delle eventuali transazioni esistenti associate a questa sottocategoria alla macro-categoria corrispondente."
             }
         }
     }
