@@ -16,6 +16,7 @@ import useLongPress from "../../../assets/libraries/Utils";
 import { BiCalendar, BiPencil, BiPlus, BiTrash } from "react-icons/bi";
 import { PiNotePencilFill } from "react-icons/pi";
 import { MdArrowForward, MdClose, MdDone } from "react-icons/md";
+import { GiConsoleController } from "react-icons/gi";
 
 
 interface AddTransactionContext {
@@ -117,12 +118,12 @@ function CategoryPicker({ data, formData, setFormData }: CategoryPickerType) {
 
     var name = <></>
     if (emptyCategory)
-        name = <strong>Select the category</strong>
+        name = <>Select the category</>
     else {
-        if (category.parent) {
-            name = <><span style={{ fontSize: 12 }}>{(!category.parent.i18n_selector || category.parent.isUpdated) ? category.parent.name : i18n.t(category.parent.i18n_selector)} {/*&middot;*/} </span><br /></>
-        }
-        name = <>{name}<strong>{(!category.i18n_selector || category.isUpdated) ? category.name : i18n.t(category.i18n_selector)}</strong></>
+        /*if (category.parent) {
+            name = <><span style={{ fontSize: 12 }}>{(!category.parent.i18n_selector || category.parent.isUpdated) ? category.parent.name : i18n.t(category.parent.i18n_selector)} </span><br /></>
+        }*/
+        name = <>{name}{(!category.i18n_selector || category.isUpdated) ? category.name : i18n.t(category.i18n_selector)}</>
     }
 
     return (
@@ -130,7 +131,7 @@ function CategoryPicker({ data, formData, setFormData }: CategoryPickerType) {
             <Link to={"./select-category"} className={`category-picker ${emptyCategory ? "empty" : "category-" + category.progressive}`}>
                 <div className="d-flex align-items-center">
                     <div className="circle ms-1" style={{ transform: "scale(1.1)", marginRight: 12 }}>{icon}</div>
-                    <div className="category-name" style={{ lineHeight: 1.3 }}>{name}</div>
+                    <div className="category-name" style={{ lineHeight: 1.3, fontWeight: 600 }}>{name}</div>
                 </div>
             </Link>
         </>
@@ -755,7 +756,7 @@ export default function AddTransaction() {
             "new-transaction-category": { name: '' } as SelectedCategory,
             "new-transaction-description": '',
             "new-transaction-amount": '0.00',
-            "new-transaction-date": new Date(),
+            "new-transaction-date": undefined,
             "new-transaction-notes": ''
         }
     }
@@ -828,23 +829,36 @@ export default function AddTransaction() {
 
         const transaction = new Transaction(
             user.uid,
-            formData["new-transaction-date"],
+            (!!formData["new-transaction-date"]) ? formData["new-transaction-date"] : new Date(),
             formData["new-transaction-description"],
             formData["new-transaction-type"],
             formData["new-transaction-category"],
-            (parseFloat(formData["new-transaction-amount"].replace(',', '.')))
+            (parseFloat(formData["new-transaction-amount"].replace(',', '.'))),
+            (formData["new-transaction-type"] === TransactionType.INCOME) ? undefined : fromAssetsAllocations,
+            (formData["new-transaction-type"] === TransactionType.EXPENCE) ? undefined : toAssetsAllocations,
+            undefined,
+            formData["new-transaction-notes"]
         );
 
-        // Add the new transaction to Firestore
-        var result = await controllers.transactionsController.CreateTransaction(transaction);
-        if (result) {
-            navigate(-1)
-        }
-        else {
-            setProcessing(false);
-            console.error("Error while creating the transaction");
-            return;
-            //error handling
+        /* Add the new transaction to Firestore
+        */
+
+        const checkResult = controllers.transactionsController.CheckTransaction(transaction, (errorList) => {
+            console.log(errorList)
+        })
+        
+        if (checkResult) {
+            //Add the new transaction to Firestore
+            var result = await controllers.transactionsController.CreateTransaction(transaction);
+            if (result) {
+                navigate("..")
+            }
+            else {
+                setProcessing(false);
+                console.error("Error while creating the transaction");
+                return;
+                //error handling
+            }
         }
     }
 

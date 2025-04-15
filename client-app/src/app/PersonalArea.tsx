@@ -105,7 +105,7 @@ function TopRightButtons(props: any) {
         },
         {
             id: "eye",
-            page: ["Dashboard", "Wallet"],
+            page: ["Dashboard", "Wallet", "Transactions"],
             icon: <LuEye />,
             iconActive: <LuEyeOff />,
             activeCondition: props.hiddenBalance as boolean,
@@ -117,6 +117,13 @@ function TopRightButtons(props: any) {
             page: ["Wallet"],
             icon: <LuPlus />,
             link: "/wallet/create",
+            index: 5
+        },
+        {
+            id: "addTransaction",
+            page: ["Transactions"],
+            icon: <LuPlus />,
+            link: "/transactions/create",
             index: 5
         },
         {

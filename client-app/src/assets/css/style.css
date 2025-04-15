@@ -22,7 +22,7 @@
     --currency-input-color: #000080;
     --list-dropdown-background: #ffffff;
     --search-input-icon: #585c5e;
-    --empty-pickers-background: #abb2b9;
+    --empty-pickers-background: #e4e4e4;
     --bs-btn-hover-bg: #424649;
 }
 
@@ -336,7 +336,7 @@ form .input-guide {
 
 /********** PERSONAL AREA **********/
 .personal-area.page {
-    overflow-x: auto;
+    overflow-x: hidden;
     padding-top: 2rem;
     position: relative;
 }
@@ -419,26 +419,32 @@ form .input-guide {
 
 /************ DASHBOARD *************/
 .personal-area.page #dashboard .total-balance {
-    background-color: var(--palette-blue-2);
+    /*background-color: var(--palette-blue-2);*/
     border-radius: 5px;
-    color: #fefefe;
-    padding: 10px 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 22px;
-    margin-top: 1.5rem;
-    font-weight: 600;
 }
-
 .personal-area.page #dashboard .total-balance .label {
     font-weight: 300;
-    font-size: 15px;
+    font-size: 14px;
+    margin-bottom: -2px
+}
+.personal-area.page #dashboard .total-balance .balance {
+    font-family: "Baloo Da 2", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
+    font-size: 30px;
+    font-weight: 700;
 }
 
-.personal-area.page #dashboard .total-balance .icon {
-    font-size: 28px;
-    margin-right: 10px;
+.personal-area.page #dashboard .balance-trend {
+    margin-left: calc(-1.2rem - 6px);
+    margin-right: calc(-1.2rem - 6px);
+    overflow-x: hidden;
+}
+.personal-area.page #dashboard .balance-trend > canvas {
+    height: 180px !important;
+    text-align: center;
 }
 
 /************ SETTINGS *************/
@@ -475,6 +481,7 @@ form .input-guide {
     width: 100%;
     -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);
+    z-index: 9999;
 }
 
 .loader.app {
@@ -786,66 +793,83 @@ body.dark-mode input.currency-input::placeholder {
     justify-content: space-between;
 }
 
-.personal-area.page #asset-detail .asset-balance {
+
+.personal-area.page #asset-detail .asset-header {
+    display: flex;
+    gap: 10px;
+}
+.personal-area.page #asset-detail .asset-header>* {
+    display: flex;
+    flex-shrink: 0;
+    width: 60px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.personal-area.page #asset-detail .asset-header>.asset-balance {
+    flex-grow: 1;
+    flex-shrink: unset;
+    flex-direction: row;
+    height: 140px;
+    width: 100%;
     background-color: #0040c7;
-    border-radius: 5px;
+    border-radius: 20px !important;
     color: #fefefe;
     padding: 1rem;
     align-items: center;
     font-size: 22px;
     font-weight: 600;
+    margin-top: -5px;
 }
 
-.personal-area.page #asset-detail .asset-balance>.asset-balance-wrapper {
+.personal-area.page #asset-detail .asset-header>.asset-balance>.asset-balance-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
 }
 
-.personal-area.page #asset-detail .asset-balance>.asset-balance-wrapper .label {
+.personal-area.page #asset-detail .asset-header>.asset-balance>.asset-balance-wrapper .label {
     font-weight: 300;
     font-size: 15px;
 }
 
-.personal-area.page #asset-detail .asset-balance>.asset-balance-wrapper .icon {
+.personal-area.page #asset-detail .asset-header>.asset-balance>.asset-balance-wrapper .icon {
     font-size: 28px;
     margin-right: 10px;
 }
-
-.personal-area.page #asset-detail .asset-actions {
+.personal-area.page #asset-detail .asset-header>.set-starred .icon, 
+.personal-area.page #asset-detail .asset-header>.set-hidden-from-total .icon {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.personal-area.page #asset-detail .asset-actions>* {
-    flex: 1 0;
-    display: flex;
-    gap: 8px;
-    padding: 10px;
     align-items: center;
-    border-radius: 5px;
-    /* box-shadow: 2px 2px 4px 0px rgb(0 0 0 / 25%); */
+    justify-content: center;
+    border-radius: 30px;
+    width: 50px;
+    height: 50px;
     border: 1px solid #c4c4c4;
     cursor: pointer;
 }
 
-.personal-area.page #asset-detail .asset-actions>*>.icon {
+.personal-area.page #asset-detail .asset-header>*>.icon {
+    font-size: 18px;
     margin-top: -3px
 }
 
-.personal-area.page #asset-detail .asset-actions>*>.label {
-    font-size: 14px;
+.personal-area.page #asset-detail .asset-header>*>.label {
+    font-size: 12px;
+    text-align: center;
+    line-height: 1;
+    margin-top: 8px;
 }
 
-.personal-area.page #asset-detail .asset-actions>.set-starred.is-starred {
+.personal-area.page #asset-detail .asset-header>.set-starred.is-starred .icon {
     border-color: #cb9800;
     background-color: #cb9800;
     color: #fff5d8;
     font-weight: 500;
 }
 
-.personal-area.page #asset-detail .asset-actions>.set-hidden-from-total.is-hidden {
+.personal-area.page #asset-detail .asset-header>.set-hidden-from-total.is-hidden .icon {
     border-color: #b11818;
     background-color: #b11818;
     color: #ffe2e2;
@@ -1191,6 +1215,7 @@ body.dark-mode .btn-outline-warning {
     border-radius: 5px;
     transition: margin .5s;
 }
+
 #add-transaction #select-involved-assets .asset-list .asset.disabled {
     opacity: 0.5;
     cursor: unset;
@@ -1209,8 +1234,8 @@ body.dark-mode .btn-outline-warning {
 #add-transaction .asset-picker-wrapper .asset-logo>* {
     border-radius: 50%;
     padding: 6px;
-    height: 34px;
-    width: 34px;
+    height: 37px;
+    width: 37px;
     margin-right: 10px;
     margin-left: -10px;
 }
@@ -1253,6 +1278,10 @@ body.dark-mode .btn-outline-warning {
     color: inherit;
     border-radius: 50px;
     gap: 5px;
+}
+
+#add-transaction .asset-picker-wrapper .asset-name {
+    font-weight: 600;
 }
 
 #add-transaction .asset-picker-wrapper .asset-logo {
@@ -1759,13 +1788,16 @@ body.dark-mode .btn-outline-warning {
 #longpressed-subcategory-editor .delete-button.btn.clicked .delete-text {
     font-size: 16px;
 }
+
 #longpressed-subcategory-editor .delete-button.btn.clicked .delete-cancel-button,
 #longpressed-subcategory-editor .delete-button.btn.clicked .delete-confirm-button {
     height: 50px;
 }
+
 #longpressed-subcategory-editor .delete-button.btn.clicked .delete-cancel-button {
     width: 100px !important;
 }
+
 #longpressed-subcategory-editor .delete-button.btn.clicked .delete-confirm-button {
     flex-shrink: 1;
 }

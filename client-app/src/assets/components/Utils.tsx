@@ -203,7 +203,7 @@ export const DynamicIcon: React.FC<IProps> = ({ lib, name, ...props }) => {
 
 export function BackButton(props: any) {
     return (
-        <Link to={props.link} id="back-arrow" replace={(!!props.link && !!props.replace)} onClick={(props.handler) ? props.handler : ""} style={{ textDecoration: "none", position: "relative", top: "-1rem" }}>
+        <Link to={props.link} id="back-arrow" replace={(!!props.link && !!props.replace)} onClick={(props.handler) ? props.handler : ""} style={{ textDecoration: "none", position: "relative", top: "-1rem", color: "var(--text-color)" }}>
             {(props.close)
                 ? (<span style={{ fontSize: "40px", marginLeft: -7 }}>
                     <IoClose style={{ fontSize: 30, marginRight: 8 }} />

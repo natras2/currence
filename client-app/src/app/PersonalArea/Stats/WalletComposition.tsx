@@ -3,14 +3,11 @@ import { useOutletContext } from "react-router-dom";
 import { PersonalAreaContext, PersonalAreaContextInterface } from "../../PersonalArea";
 import Asset from "../../../assets/model/Asset";
 import { ChartData } from "../Stats";
-import WalletCompositionChart from "../../../assets/components/charts/WalletCompositionChart";
-import { cheerfulFiestaPaletteDark, pieArcClasses, PieChart } from "@mui/x-charts"
 import User from "../../../assets/model/User";
 import { currencyFormat } from "../../../assets/libraries/Utils";
-import { SeriesValueFormatter } from "@mui/x-charts/internals";
 import { ThemeContext, TranslationContext } from "../../../App";
-import { StyledEngineProvider } from "@mui/material";
 import { BackButton } from "../../../assets/components/Utils";
+import { BalanceTrend } from "../../../assets/components/charts/BalanceTrend";
 
 export default function WalletComposition() {
     const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
@@ -52,7 +49,8 @@ export default function WalletComposition() {
                     <div style={{ width: "31px" }}></div>
                 </div>
                 <div className="body" style={{ height: 500 }} >
-                    <PieChart
+                    <BalanceTrend />
+                    {/*<PieChart
                         colors={cheerfulFiestaPaletteDark}
                         series={[
                             {
@@ -90,7 +88,7 @@ export default function WalletComposition() {
                             },
                         }}
 
-                    />
+                    />*/}
                 </div>
             </div>
         </div>

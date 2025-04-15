@@ -52,15 +52,15 @@ function DisplayAssetDetail({ data, controllers, asset, setDeleteProcessing }: D
                     <div className="page-title" style={{ marginTop: 0 }}>{asset.name}</div>
                     <div style={{ width: 31 }}></div>
                 </div>
-                <div className="asset-balance">
-                    <div className="asset-balance-wrapper">
-                        <div className="label">Balance</div>
-                        <div className="balance">{(data.user.hiddenBalance) ? <span style={{ filter: "blur(4px)" }}>{currencyFormat(919)}</span> : currencyFormat(asset.balance)}</div>
+                <div className="asset-header">
+                    <div className="asset-balance">
+                        <div className="asset-balance-wrapper">
+                            <div className="label">Balance</div>
+                            <div className="balance">{(data.user.hiddenBalance) ? <span style={{ filter: "blur(4px)" }}>{currencyFormat(919)}</span> : currencyFormat(asset.balance)}</div>
+                        </div>
                     </div>
-                </div>
-                <div className="asset-actions">
                     <div className={`set-starred ${(asset.starred) ? "is-starred" : "is-not-starred"}`} onClick={handlerFavorite}>
-                        {(!asset.starred)
+                    {(!asset.starred)
                             ? <>
                                 <div className="icon"><FaRegStar /></div>
                                 <div className="label">Add to favorites</div>

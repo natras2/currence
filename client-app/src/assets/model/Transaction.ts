@@ -338,7 +338,7 @@ export default class Transaction {
 // Firestore data converter
 export const transactionConverter = {
     toFirestore: (transaction: Transaction) => {
-        return {
+        const data: any = {
             uid: transaction.uid,
             date: transaction.date,
             description: transaction.description,
@@ -351,6 +351,9 @@ export const transactionConverter = {
             notes: transaction.notes,
             creationTime: transaction.creationTime
         };
+
+        // Remove undefined values
+        return Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined));
     },
     fromFirestore: (snapshot: any, options: any) => {
         const data = snapshot.data(options);

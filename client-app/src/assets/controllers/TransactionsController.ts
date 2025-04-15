@@ -28,7 +28,7 @@ export default class TransactionsController extends Controller {
         return unsubscribe;
     }
 
-    CheckTransaction (transaction: Transaction, errorMonitor?: (errorsList : string[]) => void): boolean {
+    CheckTransaction (transaction: Transaction, errorMonitor: (errorsList : string[]) => void): boolean {
         let result = true;
         let errorList: string[] = [];
 
@@ -70,18 +70,23 @@ export default class TransactionsController extends Controller {
                     errorList.push("MISSING MANDATORY FIELDS: fromAssets");
                 }
                 else {
-                    let amountFromAllocations = 0;
-                    transaction.fromAssets.forEach((allocation) => {
-                        if (!this.assets.find((asset) => asset.id === allocation.assetId)
-                            || !allocation.amount || allocation.amount <= 0) {
+                    if (transaction.fromAssets.length === 1) {
+                        transaction.fromAssets[0].amount = transaction.amount
+                    }
+                    else {
+                        let amountFromAllocations = 0;
+                        transaction.fromAssets.forEach((allocation) => {
+                            if (!this.assets.find((asset) => asset.id === allocation.assetId)
+                                || !allocation.amount || allocation.amount <= 0) {
+                                result = false
+                                errorList.push("EXPENCE: MISSING, INCOMPLETE OR INCORRECT ASSET ALLOCATIONS");
+                            }
+                            else amountFromAllocations += allocation.amount;
+                        })
+                        if (amountFromAllocations !== transaction.amount) {
                             result = false
-                            errorList.push("EXPENCE: MISSING, INCOMPLETE OR INCORRECT ASSET ALLOCATIONS");
+                            errorList.push("EXPENCE: ASSET ALLOCATIONS AMOUNTS NOT CORRESPONDING TO TRANSACTION'S AMOUNT");
                         }
-                        else amountFromAllocations += allocation.amount;
-                    })
-                    if (amountFromAllocations !== transaction.amount) {
-                        result = false
-                        errorList.push("EXPENCE: ASSET ALLOCATIONS AMOUNTS NOT CORRESPONDING TO TRANSACTION'S AMOUNT");
                     }
                 }
                 break;
@@ -91,18 +96,23 @@ export default class TransactionsController extends Controller {
                     errorList.push("MISSING MANDATORY FIELDS: toAssets");
                 }
                 else {
-                    let amountFromAllocations = 0;
-                    transaction.toAssets.forEach((allocation) => {
-                        if (!this.assets.find((asset) => asset.id === allocation.assetId)
-                            || !allocation.amount || allocation.amount <= 0) {
+                    if (transaction.toAssets.length === 1) {
+                        transaction.toAssets[0].amount = transaction.amount
+                    }
+                    else {
+                        let amountFromAllocations = 0;
+                        transaction.toAssets.forEach((allocation) => {
+                            if (!this.assets.find((asset) => asset.id === allocation.assetId)
+                                || !allocation.amount || allocation.amount <= 0) {
+                                result = false
+                                errorList.push("INCOME: MISSING, INCOMPLETE OR INCORRECT ASSET ALLOCATIONS");
+                            }
+                            else amountFromAllocations += allocation.amount;
+                        })
+                        if (amountFromAllocations !== transaction.amount) {
                             result = false
-                            errorList.push("INCOME: MISSING, INCOMPLETE OR INCORRECT ASSET ALLOCATIONS");
+                            errorList.push("INCOME: ASSET ALLOCATIONS AMOUNTS NOT CORRESPONDING TO TRANSACTION'S AMOUNT");
                         }
-                        else amountFromAllocations += allocation.amount;
-                    })
-                    if (amountFromAllocations !== transaction.amount) {
-                        result = false
-                        errorList.push("INCOME: ASSET ALLOCATIONS AMOUNTS NOT CORRESPONDING TO TRANSACTION'S AMOUNT");
                     }
                 }
                 break;
@@ -120,13 +130,15 @@ export default class TransactionsController extends Controller {
                 break;
         }
 
-        if (!result && errorMonitor) 
-            errorMonitor(errorList);
+        errorMonitor(errorList);
         
         return result;
     }
     
     async CreateTransaction (transaction: Transaction) {
+        Object.keys(transaction).forEach(key => transaction[key as keyof Transaction] === undefined ? delete transaction[key as keyof Transaction] : {});
+        console.log(transaction);
+        
         try {
             const transactionCollectionRef = collection(db, 'Users', transaction.uid, "Transactions").withConverter(transactionConverter);
 

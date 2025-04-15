@@ -24,6 +24,8 @@
 **yarn-error.log*
 **firebase-debug.log*
 
+**/.vscode
+
 **/.firebase
 **.firebaserc
 

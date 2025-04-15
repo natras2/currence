@@ -25,7 +25,7 @@ export default function Transactions() {
                     : (transactions.length > 0)
                         ? (
                             <>
-                                <h3 className="page-title">Wallet</h3>
+                                <h3 className="page-title">Transactions</h3>
                                 <div className="body">
                                     <div className="transactions-list">
                                         <div className="label">Today</div>
