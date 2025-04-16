@@ -21,7 +21,7 @@ export default function Dashboard() {
                         <div className="total-balance">
                             <div>
                                 <div className="label">Total balance</div>
-                                <div className="balance">{(user.hiddenBalance) ? <span style={{ filter: "blur(4px)" }}>{currencyFormat(919)}</span> : currencyFormat(user.totalBalance)}</div>
+                                <div className="balance">{(user.hiddenBalance) ? <span style={{ filter: "blur(6px)" }}>{currencyFormat(919)}</span> : currencyFormat(user.totalBalance)}</div>
                             </div>
                             {/*<div className="icon"><BsCashCoin /></div>*/}
                         </div>
