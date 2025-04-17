@@ -9,7 +9,7 @@ import { ThemeContext, TranslationContext } from "../../../App";
 import { BackButton } from "../../../assets/components/Utils";
 import { BalanceTrend } from "../../../assets/components/charts/BalanceTrend";
 
-export default function WalletComposition() {
+export default function BalanceTrendPage() {
     const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
     const i18t = useContext(TranslationContext);
 
@@ -45,7 +45,7 @@ export default function WalletComposition() {
             <div className="h-100 d-flex flex-column">
                 <div className="d-flex justify-content-between">
                     <BackButton close link=".." />
-                    <div className="page-title" style={{ marginTop: 1 }}>Wallet composition</div>
+                    <div className="page-title" style={{ marginTop: 1 }}>Balance trend</div>
                     <div style={{ width: "31px" }}></div>
                 </div>
                 <div className="body" style={{ height: 500 }} >

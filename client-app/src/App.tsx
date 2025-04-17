@@ -17,9 +17,7 @@ import Stats from './app/PersonalArea/Stats';
 import { createContext, useEffect, useState } from 'react';
 import AddTransaction, { AddTransactionCategory, AssetsAllocationSetter, InvolvedAssetsSelector, TransactionCategorySelector, TransactionDateTimeSelector, TransactionNotesInput } from './app/PersonalArea/Transactions/AddTransaction';
 import { useTranslation } from 'react-i18next';
-import { i18n as I18nType, TFunction } from 'i18next';
-import i18n from './i18nConfig';
-import WalletComposition from './app/PersonalArea/Stats/WalletComposition';
+import BalanceTrendPage from './app/PersonalArea/Stats/BalanceTrendPage';
 
 export const ThemeContext = createContext('light');
 export const TranslationContext = createContext({} as any);
@@ -138,7 +136,7 @@ function App() {
                             <Route path='evener' element={<Evener />} />
                             <Route path='stats' >
                                 <Route index element={<Stats />} />
-                                <Route path='wallet-composition' element={<WalletComposition />} />
+                                <Route path='balance-trend' element={<BalanceTrendPage />} />
                             </Route>
                             <Route path='settings' element={<Settings changeTheme={setToggleTheme} />} />
                         </Route>

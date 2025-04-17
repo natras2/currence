@@ -22,7 +22,7 @@ export default function Stats() {
                     ? <SplashFirstAccess userName={user.fullName.split(" ")[0]} />
                     : (<>
                         <h3 className="page-title">Stats</h3>
-                        <div style={{marginTop: 30}}><Link to="./wallet-composition" className="btn btn-secondary">Wallet composition chart</Link></div>
+                        <div style={{marginTop: 30}}><Link to="./balance-trend" className="btn btn-secondary">Balance trend chart</Link></div>
                     </>)
                 }
             </div>
