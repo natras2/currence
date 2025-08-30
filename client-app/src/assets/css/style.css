@@ -59,7 +59,7 @@ body.dark-mode .page {
     --search-input-icon: #b0b2b6;
     --empty-pickers-background: #4b4e51;
     --bs-btn-hover-bg: #424649;
-    --income-background: #348140;
+    --income-background: #274f29;
     --transfer-background: #3f7b8d;
 }
 
@@ -455,7 +455,7 @@ form .input-guide {
 .personal-area.page #dashboard .recent-transactions > .label {
     font-size: 20px;
     font-weight: 600;
-    margin: 20px 0 -10px 0
+    margin: 20px 0 -10px 0;
 }
 
 /************ SETTINGS *************/
@@ -1827,6 +1827,47 @@ body.dark-mode .btn-outline-warning {
 }
 
 /************ TRANSACTIONS *************/
+
+#transactions .filter-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .3rem;
+}
+#transactions .filter-wrapper .filter-type {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-bottom: 0;
+}
+#transactions .filter-wrapper .filter-type > li {
+    font-size: 14px;
+    padding: 3px 14px;
+    border-radius: 50px;
+    border: .5px solid var(--text-color);
+    cursor: pointer;
+}
+#transactions .filter-wrapper .filter-type > li.active {
+    background: linear-gradient(0.4turn, var(--palette-blue-3), var(--palette-blue-2));
+    font-weight: bold;
+    border: .5px solid transparent;
+}
+#transactions .filter-wrapper .filter-icon {
+    position: relative;
+    font-size: 20px;
+    cursor: pointer;
+}
+#transactions .filter-wrapper .filter-icon-badge {
+    position: absolute;
+    font-size: large;
+    height: 6px;
+    width: 6px;
+    background-color: red;
+    border-radius: 10px;
+    top:5px;
+}
 
 #transactions-list .label {
     font-size: 18px;

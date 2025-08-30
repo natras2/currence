@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import User from "../../assets/model/User";
@@ -6,9 +6,15 @@ import { ControllersContext, DataContext, PersonalAreaContext, PersonalAreaConte
 import Transaction, { TransactionType } from "../../assets/model/Transaction";
 import { ThemeContext, TranslationContext } from "../../App";
 
-import { LuPlus } from "react-icons/lu";
-import { capitalize, capitalizeFirst, currencyFormat, getCurrentLocale, groupAndSort, GroupedStructure } from "../../assets/libraries/Utils";
+import { LuPlus, LuSettings2 } from "react-icons/lu";
+import { capitalizeFirst, currencyFormat, getCurrentLocale, groupAndSort, GroupedStructure } from "../../assets/libraries/Utils";
 import { defaultCategoryIconBase } from "../../assets/components/Utils";
+
+export interface FilterContext {
+    activeExpence: boolean,
+    activeIncome: boolean,
+    activeTransfer: boolean
+}
 
 function TransactionsListLabel({ dateString }: {
     dateString: string
@@ -64,22 +70,30 @@ function TransactionItem({ data, transaction }: {
     </>);
 }
 
-export function TransactionsRender({ data, controllers }: {
+export function TransactionsRender({ data, controllers, showAll = true, filters }: {
     data: DataContext,
-    controllers: ControllersContext
+    controllers: ControllersContext,
+    showAll?: boolean,
+    filters?: FilterContext
 }) {
-    const [visibleExpence, setVisibleExpence] = useState(true);
-    const [visibleIncome, setVisibleIncome] = useState(true);
-    const [visibleTransfer, setVisibleTransfer] = useState(true);
-    
-    const transactionGroups: GroupedStructure<Transaction> = groupAndSort(data.transactions, "date", false)
+
+    const filteredTransactions = data.transactions.filter(transaction => {
+        if (!showAll && filters) {
+            if (filters.activeExpence && transaction.type === TransactionType.EXPENCE) return true;
+            if (filters.activeIncome && transaction.type === TransactionType.INCOME) return true;
+            if (filters.activeTransfer && transaction.type === TransactionType.TRANSFER) return true;
+            return false;
+        }
+        return true;
+    })
+    const transactionGroups: GroupedStructure<Transaction> = groupAndSort(filteredTransactions, "date", false)
 
     const Render = Object.entries(transactionGroups).map(
         ([groupName, items]) => (
             <React.Fragment key={groupName}>
                 <TransactionsListLabel dateString={groupName} />
                 <div className="items">
-                    {items.map((transaction, i) => (
+                    { items.map((transaction, i) => (
                         <div key={i} className="item d-flex">
                             <TransactionItem data={data} transaction={transaction} />
                         </div>
@@ -94,14 +108,47 @@ export function TransactionsRender({ data, controllers }: {
 }
 
 function TransactionsList(data: DataContext, controllers: ControllersContext) {
-    const transactions: Transaction[] = data.transactions;
+    const i18n = useContext(TranslationContext);
+
+    const [filtering, setFiltering] = useState(false);
+
+    const [allUnselected, setAllUnselected] = useState(true);
+    const [activeExpence, setActiveExpence] = useState(false);
+    const [activeIncome, setActiveIncome] = useState(false);
+    const [activeTransfer, setActiveTransfer] = useState(false);
+
+    useEffect(() => {
+        if (activeExpence || activeIncome || activeTransfer) {
+            setAllUnselected(false);
+            setFiltering(true);
+        }
+        else {
+            setAllUnselected(true);
+            setFiltering(false);
+        }
+    }, [activeExpence, activeIncome, activeTransfer])
+
+    const filters: FilterContext = {
+        activeExpence, activeIncome, activeTransfer
+    }
 
     return (
         <>
             <h3 className="page-title">Transactions</h3>
             <div className="body">
+                <div className="filter-wrapper">
+                    <ul className="filter-type">
+                        <li className={`${!allUnselected && activeExpence ? "active" : ""}`} onClick={() => setActiveExpence(!activeExpence)}>{i18n.t(TransactionType.EXPENCE)}</li>
+                        <li className={`${!allUnselected && activeIncome ? "active" : ""}`} onClick={() => setActiveIncome(!activeIncome)}>{i18n.t(TransactionType.INCOME)}</li>
+                        <li className={`${!allUnselected && activeTransfer ? "active" : ""}`} onClick={() => setActiveTransfer(!activeTransfer)}>{i18n.t(TransactionType.TRANSFER)}</li>
+                    </ul>
+                    <div className="filter-icon">
+                        <LuSettings2 />
+                        {filtering && <div className="filter-icon-badge"></div>}
+                    </div>
+                </div>
                 <div id="transactions-list">
-                    {<TransactionsRender data={data} controllers={controllers} />}
+                    {<TransactionsRender data={data} controllers={controllers} showAll={allUnselected} filters={filters} />}
                 </div>
             </div>
         </>
