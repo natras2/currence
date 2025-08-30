@@ -24,6 +24,8 @@
     --search-input-icon: #585c5e;
     --empty-pickers-background: #e4e4e4;
     --bs-btn-hover-bg: #424649;
+    --income-background: #89df96;
+    --transfer-background: #a1ddef;
 }
 
 html:not(.dark-mode) {
@@ -57,6 +59,8 @@ body.dark-mode .page {
     --search-input-icon: #b0b2b6;
     --empty-pickers-background: #4b4e51;
     --bs-btn-hover-bg: #424649;
+    --income-background: #348140;
+    --transfer-background: #3f7b8d;
 }
 
 html,
@@ -446,6 +450,12 @@ form .input-guide {
 .personal-area.page #dashboard .balance-trend > canvas {
     height: 180px !important;
     text-align: center;
+}
+
+.personal-area.page #dashboard .recent-transactions > .label {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 20px 0 -10px 0
 }
 
 /************ SETTINGS *************/
@@ -1100,6 +1110,8 @@ body.dark-mode .btn-outline-warning {
 #add-asset #select-asset-type .asset-type-list>.asset-type:hover>.asset-type-icon {
     background-color: #9a7300;
 }
+
+/************ ADD TRANSACTION *************/
 
 #add-transaction .sub.page .body {
     margin-top: 0;
@@ -1812,4 +1824,59 @@ body.dark-mode .btn-outline-warning {
     position: absolute;
     bottom: 0;
     right: 0;
+}
+
+/************ TRANSACTIONS *************/
+
+#transactions-list .label {
+    font-size: 18px;
+    font-weight: 300;
+    margin: 1em 0 .25em;
+}
+
+#transactions-list .items {
+    margin: 0 -1.2rem;
+    background-color: var(--list-background);
+}
+#transactions-list .items > .item {
+    height: 64px;
+    padding: 0 1.2rem;
+    justify-content: space-between;
+    align-items: center;
+    border-top: .5px solid var(--empty-pickers-background);
+}
+#transactions-list .items > .item:nth-child(1) {
+    border-top: 0px !important;
+}
+#transactions-list .items > .item .transaction-icon {
+    display: flex;
+    width:50px;
+    height:50px;
+    font-size: 20px;
+    margin-left: -15px;
+    margin-right: 5px;
+    justify-content: center;
+    align-items: center;
+
+}
+#transactions-list .items > .item .transaction-description {
+    font-weight: 600;
+}
+#transactions-list .items > .item .transaction-category {
+    margin-top: -2px;
+    font-size: 13px;
+    font-weight: 300;
+}
+#transactions-list .items > .item .transaction-amount {
+    font-size: 15px;
+    padding: 4px 7px;
+    border-radius: 3px;
+    margin-right: -7px;
+    font-weight: 600;
+}
+#transactions-list .items > .item .transaction-amount.income {
+    background-color: var(--income-background);
+}
+#transactions-list .items > .item .transaction-amount.transfer {
+    background-color: var(--transfer-background);
 }

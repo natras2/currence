@@ -26,6 +26,10 @@
             "general": "Generale",
             "other": "Altro"
         },
+        "date": {
+            "today": "Oggi",
+            "yesterday": "Ieri"
+        },
         "incomecategory": {
             "salary": {
                 "name": "Stipendio e bonus",
@@ -60,7 +64,8 @@
                 "name": "Regali e donazioni"
             },
             "other": {
-                "name": "Altro"
+                "name": "Altro",
+                "fullname": "Altre entrate"
             }
         },
         "outcomecategory": {
@@ -114,7 +119,8 @@
                 }
             },
             "other": {
-                "name": "Altro"
+                "name": "Altro",
+                "fullname": "Altre spese"
             }
         }
     },

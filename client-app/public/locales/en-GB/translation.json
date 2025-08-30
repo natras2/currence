@@ -26,6 +26,10 @@
             "general": "General",
             "other": "Other"
         },
+        "date": {
+            "today": "Today",
+            "yesterday": "Yesterday"
+        },
         "incomecategory": {
             "salary": {
                 "name": "Salary & bonuses",
@@ -60,7 +64,8 @@
                 "name": "Gifts & donations"
             },
             "other": {
-                "name": "Other"
+                "name": "Other",
+                "fullname": "Other income"
             }
         },
         "outcomecategory": {
@@ -114,7 +119,8 @@
                 }
             },
             "other": {
-                "name": "Other"
+                "name": "Other",
+                "fullname": "Other expences"
             }
         }
     },

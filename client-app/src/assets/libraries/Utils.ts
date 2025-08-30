@@ -1,6 +1,8 @@
 import { getAuth } from 'firebase/auth';
+import { Timestamp } from 'firebase/firestore';
 import { sha256 } from 'js-sha256';
 import { useCallback, useRef, useState } from "react";
+import Transaction from '../model/Transaction';
 
 const useLongPress = (
     onLongPress: any,
@@ -70,6 +72,14 @@ export function capitalize(inputString: string) {
     return inputString.replace(/\b\w/g, char => char.toUpperCase());
 }
 
+export function capitalizeFirst(inputString: string) {
+    return inputString.charAt(0).toUpperCase() + inputString.slice(1);
+}
+
+export function getCurrentLocale(language?: string) {
+    return (language && language.startsWith("en")) ? "en-GB" : "it-IT"
+}
+
 export function titleCase(string: string) {
     return string[0].toUpperCase() + string.slice(1).toLowerCase();
 }
@@ -80,6 +90,43 @@ export const encryptPassword = (password: string) => {
 
 export function currencyFormat(num: number) {
     return '€ ' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,').replace(",", "-").replace(".", ",").replace("-", ".");
+}
+
+export interface GroupedStructure<T> {
+    [key: string]: T[];
+}
+
+/**
+ * Groups and sorts an array of objects by a given attribute. 
+ * If the attribute is a date, the function groups the element by the calendar date exclusively (using date ISO format as key), and not by time.
+ * 
+ * @param {Array} data - The array of objects to process
+ * @param {string} key - The attribute to group by
+ * @param {boolean} [sortAsc=true] - Whether to sort ascending (true) or descending (false)
+ * @returns {Object} An object with keys as attribute values and values as grouped arrays
+ */
+export function groupAndSort(data: any, key: string, sortAsc: boolean = true): GroupedStructure<any> {
+    if (!Array.isArray(data)) return {};
+
+    // Sort the array based on the key
+    const sorted = [...data].sort((a, b) => {
+        if (a[key] < b[key]) return sortAsc ? -1 : 1;
+        if (a[key] > b[key]) return sortAsc ? 1 : -1;
+        return 0;
+    });
+
+    // Group by the key
+    return sorted.reduce((groups, item) => {
+        const groupKey = (key === "date")
+            ? (item[key] as Timestamp).toDate().toISOString().split("T")[0] as any
+            : item[key]
+
+        if (!groups[groupKey]) {
+            groups[groupKey] = [];
+        }
+        groups[groupKey].push(item);
+        return groups;
+    }, {});
 }
 
 

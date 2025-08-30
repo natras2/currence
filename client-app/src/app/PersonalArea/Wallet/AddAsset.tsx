@@ -16,7 +16,7 @@ import { IoClose } from "react-icons/io5";
 import { HiMiniBanknotes } from "react-icons/hi2";
 import InputField from "../../../assets/components/InputField";
 
-import { AnimatePresence, motion, delay } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 /*
 const NumericInputWithDotAsComma = () => {
@@ -376,7 +376,7 @@ export default function AddAsset(props: any) {
                                             />*/}
                                             <InputField
                                                 type={"text"}
-                                                typeaheadProps={{...inputProps}}
+                                                typeaheadProps={{ ...inputProps }}
                                                 innerRef={(node: any) => {
                                                     inputRef(node);
                                                     referenceElementRef(node);
@@ -402,21 +402,22 @@ export default function AddAsset(props: any) {
                                 />
                                 <AnimatePresence>
                                     {assetType && (<>
-                                        <motion.div 
-                                            initial= {{ height: 0}}
-                                            animate= {{ height: (assetType.name && assetType.name.length > 0) ? 58 : 38}}
-                                            exit= {{ height: 0 }}
+                                        <motion.div
+                                            initial={{ height: 0 }}
+                                            animate={{ height: (assetType.name && assetType.name.length > 0) ? 58 : 38 }}
+                                            exit={{ height: 0 }}
                                         ></motion.div>
-                                        <motion.div 
-                                            initial= {{ opacity: 0}}
-                                            animate= {{ 
-                                                opacity: 1, 
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{
+                                                opacity: 1,
                                                 transition: {
-                                                    display: {delay: 0.9}
-                                                }}}
-                                            exit= {{ opacity: 0 }}
+                                                    display: { delay: 0.9 }
+                                                }
+                                            }}
+                                            exit={{ opacity: 0 }}
                                             className="py-2 px-3 d-flex justify-content-between align-items-center position-absolute"
-                                            style={{ marginTop: (assetType.name && assetType.name.length > 0) ? -58 : -38, width: "100%"}}
+                                            style={{ marginTop: (assetType.name && assetType.name.length > 0) ? -58 : -38, width: "100%" }}
                                         >
                                             <div>
                                                 {(assetType.name && assetType.name.length > 0) && <div className="pe-3" style={{ fontWeight: 700, marginBottom: -3 }}>{assetType.name}</div>}
@@ -433,12 +434,12 @@ export default function AddAsset(props: any) {
                             </div>
                         </div>
                         <div className="mb-3">
-                            <InputField 
-                                type="textarea" 
-                                name="new-asset-description" 
-                                rows={3} 
-                                handleChange={handleChange} 
-                                autoComplete="off" 
+                            <InputField
+                                type="textarea"
+                                name="new-asset-description"
+                                rows={3}
+                                handleChange={handleChange}
+                                autoComplete="off"
                                 value={formData["new-asset-description"]}
                                 label={"Description"}
                                 wide

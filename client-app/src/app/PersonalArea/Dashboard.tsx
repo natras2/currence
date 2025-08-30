@@ -6,6 +6,7 @@ import { PersonalAreaContext, PersonalAreaContextInterface } from "../PersonalAr
 import { BsCashCoin } from "react-icons/bs";
 import { BalanceTrend } from "../../assets/components/charts/BalanceTrend";
 import { Link } from "react-router-dom";
+import { TransactionsRender } from "./Transactions";
 
 export default function Dashboard() {
     const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
@@ -27,6 +28,12 @@ export default function Dashboard() {
                             {/*<div className="icon"><BsCashCoin /></div>*/}
                         </div>
                         <Link to="/stats/balance-trend" className="balance-trend"><BalanceTrend /></Link>
+                        <div className="recent-transactions">
+                            <div className="label">Recent transactions</div>
+                            <div id="transactions-list">
+                                <TransactionsRender data={data} controllers={controllers} />
+                            </div>
+                        </div>
                     </>
                 }
             </div>
