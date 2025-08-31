@@ -52,22 +52,28 @@ function TransactionItem({ data, transaction }: {
 
     const i18n = useContext(TranslationContext);
 
-    return (<>
+    return (
         <>
-            <div className="d-flex align-items-center">
-                <div className="transaction-icon">
-                    {((!transaction.category.parent)
-                        ? (defaultCategoryIconBase[JSON.parse(transaction.category.icon!).name as keyof typeof defaultCategoryIconBase])
-                        : (defaultCategoryIconBase[JSON.parse(transaction.category.parent.icon!).name as keyof typeof defaultCategoryIconBase]))}
+            <div className="transaction-tags">
+                <div className="type tile">{(i18n.t(transaction.type) as string).toUpperCase()}</div>
+                <div className="asset tile">{(transaction.type === TransactionType.EXPENCE) ? data.assets.find(asset => asset.id === transaction.fromAssets![0].assetId)?.name : ""}</div>
+            </div> 
+            <div className="transaction-body">
+                <div className="d-flex align-items-center">
+                    <div className="transaction-icon">
+                        {((!transaction.category.parent)
+                            ? (defaultCategoryIconBase[JSON.parse(transaction.category.icon!).name as keyof typeof defaultCategoryIconBase])
+                            : (defaultCategoryIconBase[JSON.parse(transaction.category.parent.icon!).name as keyof typeof defaultCategoryIconBase]))}
+                    </div>
+                    <div>
+                        <div className="transaction-description">{transaction.description}</div>
+                        <div className="transaction-category">{/*(i18n.t(transaction.type) as string).toUpperCase()} &middot; {*/(!transaction.category.i18n_selector || transaction.category.isUpdated) ? transaction.category.name : (transaction.category.i18n_selector.endsWith("other.name") ? i18n.t(transaction.category.i18n_selector.replace("other.name", "other.fullname")) : i18n.t(transaction.category.i18n_selector))}</div>
+                    </div>
                 </div>
-                <div>
-                    <div className="transaction-description">{transaction.description}</div>
-                    <div className="transaction-category">{/*(i18n.t(transaction.type) as string).toUpperCase()} &middot; {*/(!transaction.category.i18n_selector || transaction.category.isUpdated) ? transaction.category.name : (transaction.category.i18n_selector.endsWith("other.name") ? i18n.t(transaction.category.i18n_selector.replace("other.name", "other.fullname")) : i18n.t(transaction.category.i18n_selector))}</div>
-                </div>
+                <div className="transaction-amount">{(data.user.hiddenBalance) ? <span style={{ filter: "blur(6px)" }}>{currencyFormat(919)}</span> : `${transaction.type === TransactionType.EXPENCE ? "- " : ""}${currencyFormat(transaction.amount)}`}</div>
             </div>
-            <div className={`transaction-amount ${transaction.type === TransactionType.TRANSFER ? "transfer" : transaction.type === TransactionType.INCOME ? "income" : transaction.type === TransactionType.EXPENCE ? "expence" : transaction.type === TransactionType.MANAGEASSETS ? "manageassets" : ""}`}>{(data.user.hiddenBalance) ? <span style={{ filter: "blur(6px)" }}>{currencyFormat(919)}</span> : `${transaction.type === TransactionType.EXPENCE ? "- " : ""}${currencyFormat(transaction.amount)}`}</div>
         </>
-    </>);
+    );
 }
 
 export function TransactionsRender({ data, controllers, showAll = true, filters, maxResult }: {
@@ -100,7 +106,7 @@ export function TransactionsRender({ data, controllers, showAll = true, filters,
                         {items.map((transaction) => {
                             if (maxResult && cont === maxResult) return;
                             return (
-                                <div key={cont++} className="item d-flex">
+                                <div key={cont++} className={`item ${transaction.type === TransactionType.TRANSFER ? "transfer" : transaction.type === TransactionType.INCOME ? "income" : transaction.type === TransactionType.EXPENCE ? "expence" : transaction.type === TransactionType.MANAGEASSETS ? "manageassets" : ""}`}>
                                     <TransactionItem data={data} transaction={transaction} />
                                 </div>
                             )
