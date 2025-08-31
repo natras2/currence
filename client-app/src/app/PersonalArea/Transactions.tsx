@@ -93,8 +93,8 @@ export function TransactionsRender({ data, controllers, showAll = true, filters 
             <React.Fragment key={groupName}>
                 <TransactionsListLabel dateString={groupName} />
                 <div className="items">
-                    { items.map((transaction, i) => (
-                        <div key={i} className="item d-flex">
+                    { items.map((transaction) => (
+                        <div key={transaction.id} className="item d-flex">
                             <TransactionItem data={data} transaction={transaction} />
                         </div>
                     ))}

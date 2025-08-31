@@ -1851,6 +1851,7 @@ body.dark-mode .btn-outline-warning {
 }
 #transactions .filter-wrapper .filter-type > li.active {
     background: linear-gradient(0.4turn, var(--palette-blue-3), var(--palette-blue-2));
+    color: #f0f0f0;
     font-weight: bold;
     border: .5px solid transparent;
 }

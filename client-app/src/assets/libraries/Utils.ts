@@ -2,7 +2,7 @@ import { getAuth } from 'firebase/auth';
 import { Timestamp } from 'firebase/firestore';
 import { sha256 } from 'js-sha256';
 import { useCallback, useRef, useState } from "react";
-import Transaction from '../model/Transaction';
+import { formatInTimeZone } from 'date-fns-tz'
 
 const useLongPress = (
     onLongPress: any,
@@ -117,8 +117,9 @@ export function groupAndSort(data: any, key: string, sortAsc: boolean = true): G
 
     // Group by the key
     return sorted.reduce((groups, item) => {
+        console.log((item.date as Timestamp).toDate())
         const groupKey = (key === "date")
-            ? (item[key] as Timestamp).toDate().toISOString().split("T")[0] as any
+            ? formatInTimeZone((item[key] as Timestamp).toDate(), Intl.DateTimeFormat().resolvedOptions().timeZone, "yyyy-MM-dd") as any
             : item[key]
 
         if (!groups[groupKey]) {
