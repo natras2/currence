@@ -70,11 +70,12 @@ function TransactionItem({ data, transaction }: {
     </>);
 }
 
-export function TransactionsRender({ data, controllers, showAll = true, filters }: {
+export function TransactionsRender({ data, controllers, showAll = true, filters, maxResult }: {
     data: DataContext,
     controllers: ControllersContext,
     showAll?: boolean,
-    filters?: FilterContext
+    filters?: FilterContext,
+    maxResult?: number
 }) {
 
     const filteredTransactions = data.transactions.filter(transaction => {
@@ -88,19 +89,26 @@ export function TransactionsRender({ data, controllers, showAll = true, filters 
     })
     const transactionGroups: GroupedStructure<Transaction> = groupAndSort(filteredTransactions, "date", false)
 
+    var cont = 0
     const Render = Object.entries(transactionGroups).map(
-        ([groupName, items]) => (
-            <React.Fragment key={groupName}>
-                <TransactionsListLabel dateString={groupName} />
-                <div className="items">
-                    { items.map((transaction) => (
-                        <div key={transaction.id} className="item d-flex">
-                            <TransactionItem data={data} transaction={transaction} />
-                        </div>
-                    ))}
-                </div>
-            </React.Fragment>
-        )
+        ([groupName, items]) => {
+            if (maxResult && cont === maxResult) return;
+            return (
+                <React.Fragment key={groupName}>
+                    <TransactionsListLabel dateString={groupName} />
+                    <div className="items">
+                        {items.map((transaction) => {
+                            if (maxResult && cont === maxResult) return;
+                            return (
+                                <div key={cont++} className="item d-flex">
+                                    <TransactionItem data={data} transaction={transaction} />
+                                </div>
+                            )
+                        })}
+                    </div>
+                </React.Fragment>
+            )
+        }
     );
 
     return <>{Render}</>;
@@ -150,15 +158,18 @@ function TransactionsList(data: DataContext, controllers: ControllersContext) {
                 <div id="transactions-list">
                     {<TransactionsRender data={data} controllers={controllers} showAll={allUnselected} filters={filters} />}
                 </div>
+                <CreateTransactionButton />
             </div>
         </>
     )
 }
 
 function EmptyTransactionsList({ theme }: any) {
+    const i18n = useContext(TranslationContext);
+
     return (
         <>
-            <h3 className="page-title">Transactions</h3>
+            <h3 className="page-title">{i18n.t("pages.transactions.title")}</h3>
             <div className="empty-content mt-5">
                 <div className={`title fs-1 fw-bolder ${(theme === "dark") ? "text-white-50" : "text-black-50"}`}>Hey! It seems like there's nothing to show here</div>
                 <Link to={"./create"} className="btn border btn-primary rounded-4 shadow-sm btn-lg px-3 py-3 w-100 d-flex gap-3 justify-content-center mt-4">
@@ -168,6 +179,17 @@ function EmptyTransactionsList({ theme }: any) {
             </div>
         </>
     )
+}
+
+export function CreateTransactionButton() {
+    const i18n = useContext(TranslationContext);
+
+    return (
+        <Link to={"/transactions/create"} id="create-transaction-button">
+            <div className="icon"><LuPlus /></div>
+            <div className="text">{i18n.t("default.buttons.newtransaction")}</div>
+        </Link>
+    );
 }
 
 export default function Transactions() {

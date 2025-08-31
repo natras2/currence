@@ -24,11 +24,15 @@
     "default": {
         "glossary": {
             "general": "Generale",
-            "other": "Altro"
+            "other": "Altro",
+            "optional": "Opzionale"
         },
         "date": {
             "today": "Oggi",
             "yesterday": "Ieri"
+        },
+        "buttons": {
+            "newtransaction": "Nuova transazione"
         },
         "incomecategory": {
             "salary": {
@@ -125,7 +129,33 @@
         }
     },
     "pages": {
+        "dashboard": {
+            "title": "Dashboard",
+            "totalbalance": "Bilancio",
+            "recenttransactions": "Transazioni recenti"
+        },
+        "transactions": {
+            "title": "Transazioni"
+        },
         "addtransaction": {
+            "form": {
+                "selectcategory": "Seleziona la categoria",
+                "selectasset": "Seleziona un asset",
+                "description": "Descrizione",
+                "datetime": "Data e ora",
+                "notes": "Note",
+                "create": "Crea"
+            },
+            "selectcategory": {
+                "title": "Categorie",
+                "addsubcategory": "Aggiungi una sotto-categoria"
+            },
+            "selectasset": {
+                "title": "Asset",
+                "search": "Cerca un asset",
+                "selectasset": "Seleziona un asset",
+                "addasset": "Aggiungi un nuovo asset"
+            },
             "transactioncategoryselector": {
                 "labels": {
                     "type": "Tipo",

@@ -121,7 +121,7 @@ function TopRightButtons(props: any) {
         },
         {
             id: "addTransaction",
-            page: ["Transactions"],
+            page: [],
             icon: <LuPlus />,
             link: "/transactions/create",
             index: 5

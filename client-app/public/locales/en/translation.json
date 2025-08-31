@@ -24,11 +24,15 @@
     "default": {
         "glossary": {
             "general": "General",
-            "other": "Other"
+            "other": "Other",
+            "optional": "Optional"
         },
         "date": {
             "today": "Today",
             "yesterday": "Yesterday"
+        },
+        "buttons": {
+            "newtransaction": "New transaction"
         },
         "incomecategory": {
             "salary": {
@@ -125,7 +129,33 @@
         }
     },
     "pages": {
+        "dashboard": {
+            "title": "Dashboard",
+            "totalbalance": "Total balance",
+            "recenttransactions": "Recent transactions"
+        },
+        "transactions": {
+            "title": "Transactions"
+        },
         "addtransaction": {
+            "form": {
+                "selectcategory": "Select the category",
+                "selectasset": "Select an asset",
+                "description": "Description",
+                "datetime": "Date and time",
+                "notes": "Notes",
+                "create": "Create"
+            },
+            "selectcategory": {
+                "title": "Categories",
+                "addsubcategory": "Add a sub-category"
+            },
+            "selectasset": {
+                "title": "Assets",
+                "search": "Search your asset",
+                "selectasset": "Select an asset",
+                "addasset": "Add a new asset"
+            },
             "transactioncategoryselector": {
                 "labels": {
                     "type": "Category type",

@@ -429,11 +429,13 @@ form .input-guide {
     justify-content: space-between;
     align-items: center;
 }
+
 .personal-area.page #dashboard .total-balance .label {
     font-weight: 300;
     font-size: 14px;
     margin-bottom: -4px
 }
+
 .personal-area.page #dashboard .total-balance .balance {
     /*font-family: "Baloo Da 2", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
         'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';*/
@@ -447,12 +449,13 @@ form .input-guide {
     margin-right: calc(-1.2rem - 6px);
     display: block;
 }
-.personal-area.page #dashboard .balance-trend > canvas {
+
+.personal-area.page #dashboard .balance-trend>canvas {
     height: 180px !important;
     text-align: center;
 }
 
-.personal-area.page #dashboard .recent-transactions > .label {
+.personal-area.page #dashboard .recent-transactions>.label {
     font-size: 20px;
     font-weight: 600;
     margin: 20px 0 -10px 0;
@@ -809,6 +812,7 @@ body.dark-mode input.currency-input::placeholder {
     display: flex;
     gap: 10px;
 }
+
 .personal-area.page #asset-detail .asset-header>* {
     display: flex;
     flex-shrink: 0;
@@ -849,7 +853,8 @@ body.dark-mode input.currency-input::placeholder {
     font-size: 28px;
     margin-right: 10px;
 }
-.personal-area.page #asset-detail .asset-header>.set-starred .icon, 
+
+.personal-area.page #asset-detail .asset-header>.set-starred .icon,
 .personal-area.page #asset-detail .asset-header>.set-hidden-from-total .icon {
     display: flex;
     align-items: center;
@@ -1834,6 +1839,7 @@ body.dark-mode .btn-outline-warning {
     align-items: center;
     margin-bottom: .3rem;
 }
+
 #transactions .filter-wrapper .filter-type {
     list-style-type: none;
     padding: 0;
@@ -1842,24 +1848,28 @@ body.dark-mode .btn-outline-warning {
     align-items: center;
     margin-bottom: 0;
 }
-#transactions .filter-wrapper .filter-type > li {
+
+#transactions .filter-wrapper .filter-type>li {
     font-size: 14px;
     padding: 3px 14px;
     border-radius: 50px;
     border: .5px solid var(--text-color);
     cursor: pointer;
 }
-#transactions .filter-wrapper .filter-type > li.active {
+
+#transactions .filter-wrapper .filter-type>li.active {
     background: linear-gradient(0.4turn, var(--palette-blue-3), var(--palette-blue-2));
     color: #f0f0f0;
     font-weight: bold;
     border: .5px solid transparent;
 }
+
 #transactions .filter-wrapper .filter-icon {
     position: relative;
     font-size: 20px;
     cursor: pointer;
 }
+
 #transactions .filter-wrapper .filter-icon-badge {
     position: absolute;
     font-size: large;
@@ -1867,33 +1877,50 @@ body.dark-mode .btn-outline-warning {
     width: 6px;
     background-color: red;
     border-radius: 10px;
-    top:5px;
+    top: 5px;
+}
+
+#transactions #transactions-list {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: calc(100vh - 5.3rem - 90px);
+    padding-bottom: 130px;
+}
+
+#transactions #transactions-list::-webkit-scrollbar {
+    display: none;
+}
+
+#transactions-list {
+    margin: 0 -1.2rem;
 }
 
 #transactions-list .label {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 300;
-    margin: 1em 0 .25em;
+    margin: 1em 1.2rem .25em;
 }
 
 #transactions-list .items {
-    margin: 0 -1.2rem;
     background-color: var(--list-background);
 }
-#transactions-list .items > .item {
+
+#transactions-list .items>.item {
     height: 64px;
     padding: 0 1.2rem;
     justify-content: space-between;
     align-items: center;
     border-top: .5px solid var(--empty-pickers-background);
 }
-#transactions-list .items > .item:nth-child(1) {
+
+#transactions-list .items>.item:nth-child(1) {
     border-top: 0px !important;
 }
-#transactions-list .items > .item .transaction-icon {
+
+#transactions-list .items>.item .transaction-icon {
     display: flex;
-    width:50px;
-    height:50px;
+    width: 50px;
+    height: 50px;
     font-size: 20px;
     margin-left: -15px;
     margin-right: 5px;
@@ -1901,24 +1928,69 @@ body.dark-mode .btn-outline-warning {
     align-items: center;
 
 }
-#transactions-list .items > .item .transaction-description {
+
+#transactions-list .items>.item .transaction-description {
     font-weight: 600;
 }
-#transactions-list .items > .item .transaction-category {
+
+#transactions-list .items>.item .transaction-category {
     margin-top: -2px;
     font-size: 13px;
     font-weight: 300;
 }
-#transactions-list .items > .item .transaction-amount {
+
+#transactions-list .items>.item .transaction-amount {
     font-size: 15px;
     padding: 4px 7px;
     border-radius: 3px;
     margin-right: -7px;
     font-weight: 600;
 }
-#transactions-list .items > .item .transaction-amount.income {
+
+#transactions-list .items>.item .transaction-amount.income {
     background-color: var(--income-background);
 }
-#transactions-list .items > .item .transaction-amount.transfer {
+
+#transactions-list .items>.item .transaction-amount.transfer {
     background-color: var(--transfer-background);
+}
+
+@property --gradientColor1 {
+    syntax: '<color>';
+    initial-value: #0052ff;
+    inherits: false;
+}
+
+@property --gradientColor2 {
+    syntax: '<color>';
+    initial-value: #01a0ff;
+    inherits: false;
+}
+
+#create-transaction-button {
+    position: absolute;
+    bottom: calc(100px - 2.5em);
+    right:0;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    color: #ffffff;
+    background: linear-gradient(0.4turn, var(--gradientColor1), var(--gradientColor2));
+    text-decoration: none;
+    gap: 10px;
+    padding: 0 20px 0 15px;
+    border-radius: 100px;
+    transition: --gradientColor1 .5s, --gradientColor2 .5s;
+    font-weight: 500;
+    box-shadow: 0px 0px 11px rgba(0, 0, 0, .25);
+}
+
+#create-transaction-button:hover {
+    --gradientColor1: var(--palette-blue-2);
+    --gradientColor2: var(--palette-blue-3);
+}
+
+#create-transaction-button .icon {
+    font-size: 28px;
+    margin-bottom: 5px;
 }

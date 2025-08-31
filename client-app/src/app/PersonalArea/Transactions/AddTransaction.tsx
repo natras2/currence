@@ -118,7 +118,7 @@ function CategoryPicker({ data, formData, setFormData }: CategoryPickerType) {
 
     var name = <></>
     if (emptyCategory)
-        name = <>Select the category</>
+        name = <>{i18n.t("pages.addtransaction.form.selectcategory")}</>
     else {
         /*if (category.parent) {
             name = <><span style={{ fontSize: 12 }}>{(!category.parent.i18n_selector || category.parent.isUpdated) ? category.parent.name : i18n.t(category.parent.i18n_selector)} </span><br /></>
@@ -142,6 +142,8 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
     const data: DataContext = dataContext;
     const location = useLocation();
 
+    const i18n: TranslationContextType = useContext(TranslationContext);
+
     /*  This script empties assets allocation collection whether we navigate to the add transaction main page 
         with more than 1 asset, unless they've been correctly allocated
     */
@@ -159,7 +161,7 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
         return (
             <Link to={"./select-asset"} state={{ isSingularSelect: true, isFrom: isFrom }} className="asset-picker list-0">
                 <div style={{ marginTop: -3, marginRight: 5, transform: "scale(1.4)" }}><BiPlus /></div>
-                <div>Select an asset</div>
+                <div>{i18n.t("pages.addtransaction.form.selectasset")}</div>
             </Link>
         );
     }
@@ -171,7 +173,9 @@ function AssetPicker({ data: dataContext, isAllocated, assetsAllocations, setAss
                     ? <OneAllocation />
                     : <MultipleAllocations />
                 }
-                {/*<PlusButton />*/}
+                {/* If visible, it allows to select multiple assets: REMEMBER! The CSS must be adapted accordingly (width:95%)
+                
+                <PlusButton />*/}
             </>
         );
     }
@@ -562,6 +566,8 @@ export function InvolvedAssetsSelector() {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const i18n: TranslationContextType = useContext(TranslationContext);
+
     const isFrom: boolean = (formData["new-transtaction-type"] === TransactionType.EXPENCE || (location.state && location.state.isFrom))
 
     //define the dataset to operate on
@@ -652,7 +658,7 @@ export function InvolvedAssetsSelector() {
 
         return (
             <>
-                {(assets.length > 0) && <div className="mb-2 mt-4">Select an asset</div>}
+                {(assets.length > 0) && <div className="mb-2 mt-4">{i18n.t("pages.addtransaction.selectasset.selectasset")}</div>}
                 <div className="asset-list">
                     {assets.map((asset, i) => {
                         const isDisabled = () => { return (isFrom) ? !!toAssetsAllocations.find((allocation) => allocation.assetId === asset.id) : !!fromAssetsAllocations.find((allocation) => allocation.assetId === asset.id) }
@@ -668,14 +674,14 @@ export function InvolvedAssetsSelector() {
             <div className="h-100 d-flex flex-column">
                 <div className="d-flex justify-content-between">
                     <BackButton close link=".." replace />
-                    <div className="page-title" style={{ marginTop: 1 }}>Assets</div>
+                    <div className="page-title" style={{ marginTop: 1 }}>{i18n.t("pages.addtransaction.selectasset.title")}</div>
                     <div style={{ width: "31px" }}></div>
                 </div>
                 <div className="body h-100 d-flex flex-column justify-content-between">
                     <div>
                         <InputField
                             type="search"
-                            placeholder={"Search your asset"}
+                            placeholder={i18n.t("pages.addtransaction.selectasset.search")}
                             name="search"
                             handleChange={(e: any) => setSearchString(e.target.value)}
                             isRegistering='false'
@@ -688,7 +694,7 @@ export function InvolvedAssetsSelector() {
                         {isSingularSelect && <>
                             <AssetsList />
                         </>}
-                        <Link to="./create" className="add-asset-button"><BiPlus /> Add a new asset</Link>
+                        <Link to="./create" className="add-asset-button"><BiPlus /> {i18n.t("pages.addtransaction.selectasset.addasset")}</Link>
                     </div>
                     {assetsAllocations.length > 0 && <div className={`confirm-button btn border fw-bold text-center btn-primary rounded-pill shadow-sm p-0 pop-in ${(initialSelectionLength === 0) ? "pop-in" : ""}`} style={{ width: "fit-content", marginLeft: "auto" }}>
                         {assetsAllocations.length === 1 && <div className="d-flex align-items-center justify-content-center gap-1" style={{ height: 60, width: 140, paddingLeft: 10 }} onClick={() => navigate("..", { replace: true })}>Confirm <MdDone style={{ fontSize: 25 }} /></div>}
@@ -701,12 +707,14 @@ export function InvolvedAssetsSelector() {
 }
 
 export function TransactionDateTimeSelector() {
+    const i18n: TranslationContextType = useContext(TranslationContext);
+
     return (
         <div id="select-transaction-datetime" className="callout page sub">
             <div className="h-100 d-flex flex-column">
                 <div className="d-flex justify-content-between">
                     <BackButton close link=".." replace />
-                    <div className="page-title" style={{ marginTop: 1 }}>Date and time</div>
+                    <div className="page-title" style={{ marginTop: 1 }}>{i18n.t("pages.addtransaction.form.datetime")}</div>
                     <div style={{ width: "31px" }}></div>
                 </div>
                 <div className="body"></div>
@@ -717,19 +725,20 @@ export function TransactionDateTimeSelector() {
 
 export function TransactionNotesInput() {
     const { handleChange, data } = useOutletContext<AddTransactionContext>();
+    const i18n: TranslationContextType = useContext(TranslationContext);
 
     return (
         <div id="select-transaction-datetime" className="callout page sub">
             <div className="h-100 d-flex flex-column">
                 <div className="d-flex justify-content-between">
                     <BackButton close link=".." replace />
-                    <div className="page-title" style={{ marginTop: 1 }}>Notes</div>
+                    <div className="page-title" style={{ marginTop: 1 }}>{i18n.t("pages.addtransaction.form.notes")}</div>
                     <div style={{ width: "31px" }}></div>
                 </div>
                 <div className="body">
                     <div className="">
-                        <label className="form-label">Notes</label>
-                        <textarea className="form-control" name="new-transaction-notes" rows={3} placeholder="Optional" onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={data["new-transaction-notes"]}></textarea>
+                        <label className="form-label">{i18n.t("pages.addtransaction.form.notes")}</label>
+                        <textarea className="form-control" name="new-transaction-notes" rows={3} placeholder={i18n.t("default.glossary.optional")} onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={data["new-transaction-notes"]}></textarea>
                     </div>
                 </div>
             </div>
@@ -907,8 +916,8 @@ export default function AddTransaction() {
                 <form onSubmit={handleSubmit} className="h-100 d-flex flex-column justify-content-between">
                     <div>
                         <div className="d-flex justify-content-between">
-                            <BackButton link={".."} />
-                            <div className="page-title" style={{ marginTop: -.5 }}>New transaction</div>
+                            <BackButton handler={() => navigate(-1)} />
+                            <div className="page-title" style={{ marginTop: -.5 }}>{i18n.t("default.buttons.newtransaction")}</div>
                             <div style={{ width: "31px" }}></div>
                         </div>
                         <div className="type-selector" style={{ marginBottom: "1.5rem" }}>
@@ -969,7 +978,7 @@ export default function AddTransaction() {
                                                 handleChange={handleChange}
                                                 isRegistering='false'
                                                 value={formData["new-transaction-description"] || ""}
-                                                label={"Description"}
+                                                label={i18n.t("pages.addtransaction.form.description")}
                                                 wide
                                             />
                                         </div>
@@ -1008,7 +1017,7 @@ export default function AddTransaction() {
                             <Link to={"./select-date"} className="near-create-button"><BiCalendar /></Link>
                             <Link to={"./add-notes"} className="near-create-button"><PiNotePencilFill /></Link>
                             <button type='submit' className="btn w-100 border fw-bold text-center btn-primary rounded-pill shadow-sm" style={{ height: 50 }}>
-                                Create
+                                {i18n.t("pages.addtransaction.form.create")}
                             </button>
                         </div>
                     </div>
