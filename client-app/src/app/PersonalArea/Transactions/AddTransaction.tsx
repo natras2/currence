@@ -244,7 +244,7 @@ function LongPressedSubcategory({ name, i18n_selector, progressive, isUpdated, p
     }
 
     return (
-        <div id="longpressed-subcategory-editor" className={"category-" + progressive}>
+        <div id="longpressed-subcategory-editor" className={(type === TransactionType.EXPENCE ? "expence" : (type === TransactionType.INCOME ? "income" : "")) + " category-" + progressive}>
             <div>
                 <div className="elipse"></div>
                 <div className="name mt-3 mb-4">
@@ -382,11 +382,13 @@ export function TransactionCategorySelector() {
     const i18n: TranslationContextType = useContext(TranslationContext);
     const navigate = useNavigate();
 
-    const isExpense = (formData["new-transaction-type"] as TransactionType) === TransactionType.EXPENCE;
-    const categoryList = isExpense ? data.user.expenceCategories : data.user.incomeCategories;
+    const isExpence = (formData["new-transaction-type"] as TransactionType) === TransactionType.EXPENCE;
+    const categoryList = isExpence ? data.user.expenceCategories : data.user.incomeCategories;
 
     const [selected, setSelected] = useState<SelectedCategory>(formData["new-transaction-category"]);
     const [openSubcategoryOf, setOpenSubcategoryOf] = useState("");
+
+    const type = isExpence ? "expence" : "income"
 
     useEffect(() => {
         if (!!selected)
@@ -457,7 +459,7 @@ export function TransactionCategorySelector() {
                                     );
                                 });
                             return (
-                                <div key={i} className={`category ${openSubcategoryOf ? ((openSubcategoryOf === category.name) ? ((category.name === selected.name && selected.name === "Other") ? "other" : "active") : ((openSubcategoryOf === "Other" && selected.name === "Other") ? "" : "blurred")) : ""}`}>
+                                <div key={i} className={`${type} category ${openSubcategoryOf ? ((openSubcategoryOf === category.name) ? ((category.name === selected.name && selected.name === "Other") ? "other" : "active") : ((openSubcategoryOf === "Other" && selected.name === "Other") ? "" : "blurred")) : ""}`}>
                                     <div className="parent" onClick={(category.isOther) ? () => { selectCategory({ category: category, subcategory: null, progressive: i + 1 }) } : () => { }}>
                                         <div className="logo" onClick={() => onClickParent(category.name, true)}>{(openSubcategoryOf === category.name && !category.isOther) ? <MdClose /> : (defaultCategoryIconBase[JSON.parse(category.icon!).name as keyof typeof defaultCategoryIconBase])}</div>
                                         <div className={`name-wrapper ${(!!selected && !selected.parent && selected.name === category.name) ? "selected" : ""}`} onClick={(openSubcategoryOf === category.name) ? () => { selectCategory({ category: category, subcategory: null, progressive: i + 1 }) } : () => { }}>

@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import User from "../../assets/model/User";
 import { ControllersContext, DataContext, PersonalAreaContext, PersonalAreaContextInterface } from "../PersonalArea";
-import Transaction, { TransactionType } from "../../assets/model/Transaction";
+import Transaction, { AssetAllocation, TransactionType } from "../../assets/model/Transaction";
 import { ThemeContext, TranslationContext } from "../../App";
 
 import { LuPlus, LuSettings2 } from "react-icons/lu";
 import { capitalizeFirst, currencyFormat, getCurrentLocale, groupAndSort, GroupedStructure } from "../../assets/libraries/Utils";
-import { defaultCategoryIconBase } from "../../assets/components/Utils";
+import { defaultAssetTypeIconBase, defaultCategoryIconBase } from "../../assets/components/Utils";
+import Asset from "../../assets/model/Asset";
 
 export interface FilterContext {
     activeExpence: boolean,
@@ -51,26 +52,179 @@ function TransactionItem({ data, transaction }: {
 }) {
 
     const i18n = useContext(TranslationContext);
+    const theme = useContext(ThemeContext);
+
+    const isExpence = transaction.type === TransactionType.EXPENCE
+    const isIncome = transaction.type === TransactionType.INCOME
+    const isTransfer = transaction.type === TransactionType.TRANSFER
+
+    const itemAllocations = (maxItems?: number) => {
+        const assets: Asset[] = []
+        var num = 0;
+        if (isExpence && !!transaction.fromAssets) {
+            transaction.fromAssets.forEach((allocation) => {
+                var asset = data.assets.find(asset => asset.id === allocation.assetId)
+                if (asset) {
+                    if (!maxItems || assets.length < maxItems) assets.push(asset)
+                    num++;
+                }
+            })
+        }
+        else if (isIncome && !!transaction.toAssets) {
+            transaction.toAssets.forEach((allocation) => {
+                var asset = data.assets.find(asset => asset.id === allocation.assetId)
+                if (asset) {
+                    if (!maxItems || assets.length < maxItems) assets.push(asset)
+                    num++;
+                }
+            })
+        }
+        return {
+            num: num,
+            assets: assets
+        } as ItemAssetAllocations;
+    }
+
+    interface ItemAssetAllocations {
+        num: number,
+        assets: Asset[]
+    }
+    const itemAssetAllocations = React.useMemo(() => itemAllocations(), [isExpence, transaction, data]) /*{
+        num: 4, assets: [
+            {
+                "id": "3Jy4mh0LEXFS64qZG0Eo",
+                "uid": "nDY5dsQx8bbQ0NkSgmqToUKGQ9g2",
+                "name": "Conto corrente N26",
+                "attributes": {
+                    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/N26_logo.svg",
+                    "type": "static.assetType.bankaccount",
+                    "sourceName": "N26"
+                },
+                "description": "",
+                "starred": false,
+                "balance": 120.88,
+                "hiddenFromTotal": false,
+                "creationTime": 1741903722791
+            },
+            {
+                "id": "qt9oYclmV0uFzJ6m8wiM",
+                "uid": "nDY5dsQx8bbQ0NkSgmqToUKGQ9g2",
+                "name": "Savings N26",
+                "attributes": {
+                    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/N26_logo.svg",
+                    "type": "static.assetType.bankaccount",
+                    "sourceName": "N26"
+                },
+                "description": "",
+                "starred": true,
+                "balance": 1078.68,
+                "hiddenFromTotal": false,
+                "creationTime": 1741903701762
+            },
+            {
+                "id": "uEij6Dk4mS8vBm4ClHAs",
+                "uid": "nDY5dsQx8bbQ0NkSgmqToUKGQ9g2",
+                "name": "PayPal",
+                "attributes": {
+                    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg",
+                    "sourceName": "PayPal",
+                    "type": "static.assetType.ewallet"
+                },
+                "description": "",
+                "starred": false,
+                "balance": 3.039999999999999,
+                "hiddenFromTotal": false,
+                "creationTime": 1741903748963
+            },
+            {
+                "id": "68NjV4k9ysb5kVSw9KgH",
+                "uid": "nDY5dsQx8bbQ0NkSgmqToUKGQ9g2",
+                "name": "Conto corrente Revolut",
+                "attributes": {
+                    "sourceName": "Revolut",
+                    "type": "static.assetType.bankaccount",
+                    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/73/Revolut_logo.svg"
+                },
+                "description": "",
+                "starred": false,
+                "balance": 134.70999999999998,
+                "hiddenFromTotal": false,
+                "creationTime": 1742066560698
+            }
+        ]
+    } as ItemAssetAllocations */
 
     return (
         <>
             <div className="transaction-tags">
                 <div className="type tile">{(i18n.t(transaction.type) as string).toUpperCase()}</div>
-                <div className="asset tile">{(transaction.type === TransactionType.EXPENCE) ? data.assets.find(asset => asset.id === transaction.fromAssets![0].assetId)?.name : ""}</div>
-            </div> 
+                {<div className="asset tile">{isExpence ? data.assets.find(asset => asset.id === transaction.fromAssets![0].assetId)?.name : ""}</div>}
+            </div>
             <div className="transaction-body">
-                <div className="d-flex align-items-center">
-                    <div className="transaction-icon">
-                        {((!transaction.category.parent)
-                            ? (defaultCategoryIconBase[JSON.parse(transaction.category.icon!).name as keyof typeof defaultCategoryIconBase])
-                            : (defaultCategoryIconBase[JSON.parse(transaction.category.parent.icon!).name as keyof typeof defaultCategoryIconBase]))}
+                <div className="transaction-body-content">
+                    <div className="transaction-icon-wrapper">
+                        <div
+                            className={`transaction-icon ${transaction.type === TransactionType.EXPENCE ? "expence" : (transaction.type === TransactionType.INCOME ? "income" : "")} prog-${transaction.category.progressive}`}
+                            style={
+                                {
+                                    backgroundColor: "var(--" + (theme === "dark" ? "darker-" : "") + "category-color)",
+                                    color: "var(--" + (theme === "light" ? "darker-" : "") + "category-color)"
+                                }
+                            }>
+                            {((!transaction.category.parent)
+                                ? (defaultCategoryIconBase[JSON.parse(transaction.category.icon!).name as keyof typeof defaultCategoryIconBase])
+                                : (defaultCategoryIconBase[JSON.parse(transaction.category.parent.icon!).name as keyof typeof defaultCategoryIconBase]))}
+                        </div>
+                        <div className="transaction-asset-badges">
+                            {
+                                isTransfer
+                                    ? ""
+                                    : itemAssetAllocations.assets.map((asset, i) => {
+                                        if (i < 2 || (i == 2 && itemAssetAllocations.num == 3)) return (
+                                            <>
+                                                {!!asset.attributes && <div key={asset.id} className="asset-logo">
+                                                    {(asset.attributes.sourceName !== "")
+                                                        ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
+                                                        : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
+                                                    }
+                                                </div>}
+                                            </>
+                                        )
+                                    })
+                            }
+                            {
+                                isTransfer
+                                    ? ""
+                                    : (
+                                        itemAssetAllocations.num > 3
+                                            ? <div className="asset-logo allocation-number"><div className="type-icon">+{itemAssetAllocations.num - 2}</div></div>
+                                            : <></>
+                                    )
+                            }
+                        </div>
                     </div>
                     <div>
                         <div className="transaction-description">{transaction.description}</div>
-                        <div className="transaction-category">{/*(i18n.t(transaction.type) as string).toUpperCase()} &middot; {*/(!transaction.category.i18n_selector || transaction.category.isUpdated) ? transaction.category.name : (transaction.category.i18n_selector.endsWith("other.name") ? i18n.t(transaction.category.i18n_selector.replace("other.name", "other.fullname")) : i18n.t(transaction.category.i18n_selector))}</div>
+                        <div className="transaction-details">
+                            <div className="transaction-category">
+                                {(!transaction.category.i18n_selector || transaction.category.isUpdated) ? transaction.category.name : (transaction.category.i18n_selector.endsWith("other.name") ? i18n.t(transaction.category.i18n_selector.replace("other.name", "other.fullname")) : i18n.t(transaction.category.i18n_selector))}
+                                <span style={{ fontSize: "inherit", padding: "0 4px" }}>&middot;</span>
+                            </div>
+                            <div className="transaction-asset-list">
+                                {
+                                    isTransfer
+                                        ? ""
+                                        : itemAssetAllocations.assets.map((asset) => {
+                                            return (<div><div key={asset.id} className="asset-name">{asset.name}</div></div>)
+                                        })
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="transaction-amount">{(data.user.hiddenBalance) ? <span style={{ filter: "blur(6px)" }}>{currencyFormat(919)}</span> : `${transaction.type === TransactionType.EXPENCE ? "- " : ""}${currencyFormat(transaction.amount)}`}</div>
+                <div className="transaction-amount-wrapper">
+                    <div className="transaction-amount">{(data.user.hiddenBalance) ? <span style={{ filter: "blur(6px)" }}>{currencyFormat(919)}</span> : `${isExpence ? "- " : ""}${currencyFormat(transaction.amount)}`}</div>
+                </div>
             </div>
         </>
     );
