@@ -58,6 +58,11 @@ function TransactionItem({ data, transaction }: {
     const isIncome = transaction.type === TransactionType.INCOME
     const isTransfer = transaction.type === TransactionType.TRANSFER
 
+    interface ItemAssetAllocations {
+        num: number,
+        assets: Asset[]
+    }
+
     const itemAllocations = (maxItems?: number) => {
         const assets: Asset[] = []
         var num = 0;
@@ -85,10 +90,6 @@ function TransactionItem({ data, transaction }: {
         } as ItemAssetAllocations;
     }
 
-    interface ItemAssetAllocations {
-        num: number,
-        assets: Asset[]
-    }
     const itemAssetAllocations = React.useMemo(() => itemAllocations(), [isExpence, transaction, data]) /*{
         num: 4, assets: [
             {
@@ -164,7 +165,7 @@ function TransactionItem({ data, transaction }: {
                 <div className="transaction-body-content">
                     <div className="transaction-icon-wrapper">
                         <div
-                            className={`transaction-icon ${transaction.type === TransactionType.EXPENCE ? "expence" : (transaction.type === TransactionType.INCOME ? "income" : "")} prog-${transaction.category.progressive}`}
+                            className={`transaction-icon prog-${transaction.category.progressive}`}
                             style={
                                 {
                                     backgroundColor: "var(--" + (theme === "dark" ? "darker-" : "") + "category-color)",
@@ -208,7 +209,7 @@ function TransactionItem({ data, transaction }: {
                         <div className="transaction-details">
                             <div className="transaction-category">
                                 {(!transaction.category.i18n_selector || transaction.category.isUpdated) ? transaction.category.name : (transaction.category.i18n_selector.endsWith("other.name") ? i18n.t(transaction.category.i18n_selector.replace("other.name", "other.fullname")) : i18n.t(transaction.category.i18n_selector))}
-                                <span style={{ fontSize: "inherit", padding: "0 4px" }}>&middot;</span>
+                                {/*<span style={{ fontSize: "inherit", padding: "0 4px" }}>&middot;</span>
                             </div>
                             <div className="transaction-asset-list">
                                 {
@@ -217,7 +218,7 @@ function TransactionItem({ data, transaction }: {
                                         : itemAssetAllocations.assets.map((asset) => {
                                             return (<div><div key={asset.id} className="asset-name">{asset.name}</div></div>)
                                         })
-                                }
+                                }*/}
                             </div>
                         </div>
                     </div>

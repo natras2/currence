@@ -110,6 +110,10 @@ function CategoryPicker({ data, formData, setFormData }: CategoryPickerType) {
     const category: SelectedCategory = formData["new-transaction-category"];
     const emptyCategory = !category.name;
 
+    const isExpence = (formData["new-transaction-type"] as TransactionType) === TransactionType.EXPENCE;
+    const type = isExpence ? "expence" : "income"
+
+
     const icon = (emptyCategory)
         ? <BiPlus />
         : ((!category.parent)
@@ -128,7 +132,7 @@ function CategoryPicker({ data, formData, setFormData }: CategoryPickerType) {
 
     return (
         <>
-            <Link to={"./select-category"} className={`category-picker ${emptyCategory ? "empty" : "category-" + category.progressive}`}>
+            <Link to={"./select-category"} className={`${type} category-picker ${emptyCategory ? "empty" : "category-" + category.progressive}`}>
                 <div className="d-flex align-items-center">
                     <div className="circle ms-1" style={{ transform: "scale(1.1)", marginRight: 12 }}>{icon}</div>
                     <div className="category-name" style={{ lineHeight: 1.3, fontWeight: 600 }}>{name}</div>
