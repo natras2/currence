@@ -17,6 +17,7 @@ import { BiCalendar, BiPencil, BiPlus, BiTrash } from "react-icons/bi";
 import { PiNotePencilFill } from "react-icons/pi";
 import { MdArrowForward, MdClose, MdDone } from "react-icons/md";
 import { GiConsoleController } from "react-icons/gi";
+import { RiLoopLeftLine } from "react-icons/ri";
 
 
 interface AddTransactionContext {
@@ -762,6 +763,9 @@ export default function AddTransaction() {
     const [fromAssetsAllocations, setFromAssetsAllocations] = useState<AssetAllocation[]>([]);
     const [toAssetsAllocations, setToAssetsAllocations] = useState<AssetAllocation[]>([]);
 
+    const loopButton = useRef<any>(null);
+    const loopButtonClicks = useRef<number>(0)
+
     const user: User = data.user;
     const navigate = useNavigate();
 
@@ -836,7 +840,8 @@ export default function AddTransaction() {
         }));
 
         // Check if the transaction field is well formed
-        if (!formData["new-transaction-description"] || !formData["new-transaction-amount"]) {
+        if ((formData["new-transaction-type"] !== TransactionType.TRANSFER && !formData["new-transaction-description"]) 
+            || !formData["new-transaction-amount"]) {
             setProcessing(false);
             console.error("Empty required fields");
             return;
@@ -915,6 +920,15 @@ export default function AddTransaction() {
 
     };
 
+    const invertTransferAssets = (event: any) => {
+        var temp = [...fromAssetsAllocations]
+        setFromAssetsAllocations([...toAssetsAllocations])
+        setToAssetsAllocations([...temp])
+
+        if (loopButton.current)
+            loopButton.current.style.transform = "rotate(-" + ++loopButtonClicks.current * 180 + "deg)"
+    }
+
 
     return (
         <>
@@ -976,7 +990,6 @@ export default function AddTransaction() {
                                             />
                                         </div>
                                         <div className="">
-                                            {/*<label className="form-label">Description</label>*/}
                                             <InputField
                                                 type="text"
                                                 placeholder={""}//`E.g. "${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "Monthly rent" : ((formData["new-transaction-type"] === TransactionType.INCOME) ? "Salary" : ((formData["new-transaction-type"] === TransactionType.TRANSFER) ? "Transfer" : ""))}"`}
@@ -999,7 +1012,7 @@ export default function AddTransaction() {
                                         animate={{opacity: 1}}
                                         exit={{opacity: 0}}
                                         >
-                                        <div className="asset-picker-wrapper mb-2">
+                                        <div className="asset-picker-wrapper mb-2 position-relative">
                                             {/*<label className="form-label">Asset</label>*/}
                                             <AssetPicker 
                                                 data={data} 
@@ -1007,7 +1020,8 @@ export default function AddTransaction() {
                                                 assetsAllocations={fromAssetsAllocations} 
                                                 setAssetsAllocations={setFromAssetsAllocations}
                                                 isFrom={true} />
-                                            <hr/>
+                                            <div style={{height: ".5rem"}}></div>
+                                            <div className="transfer-asset-inverter" ref={loopButton} onClick={invertTransferAssets}><RiLoopLeftLine /></div>
                                             <AssetPicker 
                                                 data={data} 
                                                 isAllocated={isAllocated} 
@@ -1015,6 +1029,18 @@ export default function AddTransaction() {
                                                 setAssetsAllocations={setToAssetsAllocations}
                                                 isFrom={false} />
                                         </div>
+                                        {/*<div className="">
+                                            <InputField
+                                                type="text"
+                                                placeholder={""}//`E.g. "${(formData["new-transaction-type"] === TransactionType.EXPENCE) ? "Monthly rent" : ((formData["new-transaction-type"] === TransactionType.INCOME) ? "Salary" : ((formData["new-transaction-type"] === TransactionType.TRANSFER) ? "Transfer" : ""))}"`}
+                                                name="new-transaction-description"
+                                                handleChange={handleChange}
+                                                isRegistering='false'
+                                                value={formData["new-transaction-description"] || ""}
+                                                label={i18n.t("pages.addtransaction.form.description")}
+                                                wide
+                                            />
+                                        </div>*/}
                                     </motion.div>
                                 }
                             </AnimatePresence>

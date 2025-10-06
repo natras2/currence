@@ -117,7 +117,6 @@ export function groupAndSort(data: any, key: string, sortAsc: boolean = true): G
 
     // Group by the key
     return sorted.reduce((groups, item) => {
-        console.log((item.date as Timestamp).toDate())
         const groupKey = (key === "date")
             ? formatInTimeZone((item[key] as Timestamp).toDate(), Intl.DateTimeFormat().resolvedOptions().timeZone, "yyyy-MM-dd") as any
             : item[key]

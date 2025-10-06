@@ -10,6 +10,7 @@ import { LuPlus, LuSettings2 } from "react-icons/lu";
 import { capitalizeFirst, currencyFormat, getCurrentLocale, groupAndSort, GroupedStructure } from "../../assets/libraries/Utils";
 import { defaultAssetTypeIconBase, defaultCategoryIconBase } from "../../assets/components/Utils";
 import Asset from "../../assets/model/Asset";
+import { FaArrowRight } from "react-icons/fa6";
 
 export interface FilterContext {
     activeExpence: boolean,
@@ -46,6 +47,10 @@ function TransactionsListLabel({ dateString }: {
     </>);
 }
 
+export function TransactionItemContent(props: any) {
+
+}
+
 function TransactionItem({ data, transaction }: {
     data: DataContext,
     transaction: Transaction
@@ -58,28 +63,32 @@ function TransactionItem({ data, transaction }: {
     const isIncome = transaction.type === TransactionType.INCOME
     const isTransfer = transaction.type === TransactionType.TRANSFER
 
+    interface InvolvedAsset {
+        dir: string,
+        asset: Asset
+    }
     interface ItemAssetAllocations {
         num: number,
-        assets: Asset[]
+        assets: InvolvedAsset[]
     }
 
     const itemAllocations = (maxItems?: number) => {
-        const assets: Asset[] = []
+        const assets: InvolvedAsset[] = []
         var num = 0;
-        if (isExpence && !!transaction.fromAssets) {
+        if ((isExpence || isTransfer) && !!transaction.fromAssets) {
             transaction.fromAssets.forEach((allocation) => {
                 var asset = data.assets.find(asset => asset.id === allocation.assetId)
                 if (asset) {
-                    if (!maxItems || assets.length < maxItems) assets.push(asset)
+                    if (!maxItems || assets.length < maxItems) assets.push({ dir: "from", asset })
                     num++;
                 }
             })
         }
-        else if (isIncome && !!transaction.toAssets) {
+        if ((isIncome || isTransfer) && !!transaction.toAssets) {
             transaction.toAssets.forEach((allocation) => {
                 var asset = data.assets.find(asset => asset.id === allocation.assetId)
                 if (asset) {
-                    if (!maxItems || assets.length < maxItems) assets.push(asset)
+                    if (!maxItems || assets.length < maxItems) assets.push({ dir: "to", asset })
                     num++;
                 }
             })
@@ -155,73 +164,138 @@ function TransactionItem({ data, transaction }: {
         ]
     } as ItemAssetAllocations */
 
-    return (
-        <>
-            <div className="transaction-tags">
-                <div className="type tile">{(i18n.t(transaction.type) as string).toUpperCase()}</div>
-                {<div className="asset tile">{isExpence ? data.assets.find(asset => asset.id === transaction.fromAssets![0].assetId)?.name : ""}</div>}
-            </div>
-            <div className="transaction-body">
-                <div className="transaction-body-content">
-                    <div className="transaction-icon-wrapper">
-                        <div
-                            className={`transaction-icon prog-${transaction.category.progressive}`}
-                            style={
-                                {
-                                    backgroundColor: "var(--" + (theme === "dark" ? "darker-" : "") + "category-color)",
-                                    color: "var(--" + (theme === "light" ? "darker-" : "") + "category-color)"
-                                }
-                            }>
-                            {((!transaction.category.parent)
-                                ? (defaultCategoryIconBase[JSON.parse(transaction.category.icon!).name as keyof typeof defaultCategoryIconBase])
-                                : (defaultCategoryIconBase[JSON.parse(transaction.category.parent.icon!).name as keyof typeof defaultCategoryIconBase]))}
-                        </div>
-                        <div className="transaction-asset-badges">
+    const ExpenceIncomeTransactionContent = () => {
+        return (
+            <>
+                <div className="transaction-icon-wrapper">
+                    <div
+                        className={`transaction-icon prog-${transaction.category.progressive}`}
+                        style={
                             {
-                                isTransfer
-                                    ? ""
-                                    : itemAssetAllocations.assets.map((asset, i) => {
-                                        if (i < 2 || (i == 2 && itemAssetAllocations.num == 3)) return (
-                                            <>
-                                                {!!asset.attributes && <div key={asset.id} className="asset-logo">
-                                                    {(asset.attributes.sourceName !== "")
-                                                        ? <img src={asset.attributes.logo} alt={asset.attributes.sourceName} className="source-logo" />
-                                                        : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
-                                                    }
-                                                </div>}
-                                            </>
-                                        )
-                                    })
+                                backgroundColor: "var(--" + (theme === "dark" ? "darker-" : "") + "category-color)",
+                                color: "var(--" + (theme === "light" ? "darker-" : "") + "category-color)"
                             }
-                            {
-                                isTransfer
-                                    ? ""
-                                    : (
-                                        itemAssetAllocations.num > 3
-                                            ? <div className="asset-logo allocation-number"><div className="type-icon">+{itemAssetAllocations.num - 2}</div></div>
-                                            : <></>
-                                    )
-                            }
-                        </div>
+                        }>
+                        {((!transaction.category.parent)
+                            ? (defaultCategoryIconBase[JSON.parse(transaction.category.icon!).name as keyof typeof defaultCategoryIconBase])
+                            : (defaultCategoryIconBase[JSON.parse(transaction.category.parent.icon!).name as keyof typeof defaultCategoryIconBase]))}
                     </div>
-                    <div>
-                        <div className="transaction-description">{transaction.description}</div>
-                        <div className="transaction-details">
-                            <div className="transaction-category">
-                                {(!transaction.category.i18n_selector || transaction.category.isUpdated) ? transaction.category.name : (transaction.category.i18n_selector.endsWith("other.name") ? i18n.t(transaction.category.i18n_selector.replace("other.name", "other.fullname")) : i18n.t(transaction.category.i18n_selector))}
-                                {/*<span style={{ fontSize: "inherit", padding: "0 4px" }}>&middot;</span>
+                    <div className="transaction-asset-badges">
+                        {
+                            itemAssetAllocations.assets.map((asset, i) => {
+                                if (i < 2 || (i == 2 && itemAssetAllocations.num == 3)) return (
+                                    <>
+                                        {!!asset.asset.attributes && <div key={i} className="asset-logo">
+                                            {(asset.asset.attributes.sourceName !== "")
+                                                ? <img src={asset.asset.attributes.logo} alt={asset.asset.attributes.sourceName} className="source-logo" />
+                                                : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(asset.asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
+                                            }
+                                        </div>}
+                                    </>
+                                )
+                            })
+                        }
+                        {
+                            itemAssetAllocations.num > 3
+                                ? <div className="asset-logo allocation-number"><div className="type-icon">+{itemAssetAllocations.num - 2}</div></div>
+                                : <></>
+                        }
+                    </div>
+                </div>
+                <div>
+                    <div className="transaction-description">{transaction.description}</div>
+                    <div className="transaction-details">
+                        <div className="transaction-category">
+                            {(!transaction.category.i18n_selector || transaction.category.isUpdated) ? transaction.category.name : (transaction.category.i18n_selector.endsWith("other.name") ? i18n.t(transaction.category.i18n_selector.replace("other.name", "other.fullname")) : i18n.t(transaction.category.i18n_selector))}
+                            {/* Uncomment the following to list the assets involved ("allocated") in the transaction */}
+                            {/*<span style={{ fontSize: "inherit", padding: "0 4px" }}>&middot;</span>
                             </div>
                             <div className="transaction-asset-list">
                                 {
-                                    isTransfer
-                                        ? ""
-                                        : itemAssetAllocations.assets.map((asset) => {
-                                            return (<div><div key={asset.id} className="asset-name">{asset.name}</div></div>)
-                                        })
+                                    itemAssetAllocations.assets.map((asset, i) => {
+                                        return (<div><div key={i} className="asset-name">{asset.asset.name}</div></div>)
+                                    })
                                 }*/}
-                            </div>
                         </div>
                     </div>
+                </div>
+            </>
+        );
+    }
+    const TransferTransactionContent = () => {
+        const fromAssetAllocations = {
+            ...itemAssetAllocations,
+            assets: itemAssetAllocations.assets.filter(asset => asset.dir === "from")
+        };
+        fromAssetAllocations.num = fromAssetAllocations.assets.length
+
+        const toAssetAllocations = {
+            ...itemAssetAllocations,
+            assets: itemAssetAllocations.assets.filter(asset => asset.dir === "to")
+        };
+        toAssetAllocations.num = toAssetAllocations.assets.length
+
+        return (
+            <>
+                <div className="transaction-asset-badges">
+                    {
+                        fromAssetAllocations.assets.map((a) => {
+                            return (
+                                <>
+                                    {!!a.asset.attributes && <div key={a.asset.id} className="asset-logo from-allocation">
+                                        {(a.asset.attributes.sourceName !== "")
+                                            ? <img src={a.asset.attributes.logo} alt={a.asset.attributes.sourceName} className="source-logo" />
+                                            : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(a.asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
+                                        }
+                                    </div>}
+                                </>
+                            )
+                        })
+                    }
+                    {
+                        toAssetAllocations.assets.map((a) => {
+                            return (
+                                <>
+                                    {!!a.asset.attributes && <div key={a.asset.id} className="asset-logo to-allocation">
+                                        {(a.asset.attributes.sourceName !== "")
+                                            ? <img src={a.asset.attributes.logo} alt={a.asset.attributes.sourceName} className="source-logo" />
+                                            : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(a.asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
+                                        }
+                                    </div>}
+                                </>
+                            )
+                        })
+                    }
+                </div>
+                <div>
+                    <div className="transaction-description">{i18n.t(TransactionType.TRANSFER)}</div>
+                    <div className="transaction-details">
+                        <div className="from transaction-asset-list">
+                            {
+                                fromAssetAllocations.assets.map((a, i) => {
+                                    return (<div><div key={i} className="asset-name">{a.asset.name}</div></div>)
+                                })
+                            }
+                        </div>
+                        <FaArrowRight style={{flexShrink: 0}}/>
+                        <div className="to transaction-asset-list">
+                            {
+                                toAssetAllocations.assets.map((a, i) => {
+                                    return (<div><div key={i} className="asset-name">{a.asset.name}</div></div>)
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
+            </>
+        );
+    }
+    return (
+        <>
+            <div className="transaction-body">
+                <div className="transaction-body-content">
+                    {(isExpence || isIncome) && <ExpenceIncomeTransactionContent />}
+                    {isTransfer && <TransferTransactionContent />}
                 </div>
                 <div className="transaction-amount-wrapper">
                     <div className="transaction-amount">{(data.user.hiddenBalance) ? <span style={{ filter: "blur(6px)" }}>{currencyFormat(919)}</span> : `${isExpence ? "- " : ""}${currencyFormat(transaction.amount)}`}</div>

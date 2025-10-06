@@ -28,7 +28,7 @@ export default class TransactionsController extends Controller {
         return unsubscribe;
     }
 
-    CheckTransaction (transaction: Transaction, errorMonitor: (errorsList : string[]) => void): boolean {
+    CheckTransaction(transaction: Transaction, errorMonitor: (errorsList: string[]) => void): boolean {
         let result = true;
         let errorList: string[] = [];
 
@@ -45,7 +45,7 @@ export default class TransactionsController extends Controller {
             result = false;
             errorList.push("MISSING MANDATORY FIELDS: date");
         }
-        if (!transaction.description) {
+        if (transaction.type !== TransactionType.TRANSFER && !transaction.description) {
             result = false;
             errorList.push("MISSING MANDATORY FIELDS: description");
         }
@@ -63,8 +63,8 @@ export default class TransactionsController extends Controller {
         }
 
         //CHECK FOR MISSING ASSET ALLOCATIONS AND ALLOCATION COHERENCE TO TOTAL AMOUNT
-        switch(transaction.type) {
-            case TransactionType.EXPENCE: 
+        switch (transaction.type) {
+            case TransactionType.EXPENCE:
                 if (!transaction.fromAssets) {
                     result = false
                     errorList.push("MISSING MANDATORY FIELDS: fromAssets");
@@ -90,7 +90,7 @@ export default class TransactionsController extends Controller {
                     }
                 }
                 break;
-            case TransactionType.INCOME:  
+            case TransactionType.INCOME:
                 if (!transaction.toAssets) {
                     result = false
                     errorList.push("MISSING MANDATORY FIELDS: toAssets");
@@ -116,58 +116,88 @@ export default class TransactionsController extends Controller {
                     }
                 }
                 break;
-            case TransactionType.TRANSFER: 
-                if (!transaction.fromAssets 
-                    || !transaction.toAssets 
-                    || !transaction.fromAssets[0] 
+            case TransactionType.TRANSFER:
+                if (!transaction.fromAssets
+                    || !transaction.toAssets
+                    || !transaction.fromAssets[0]
                     || !transaction.toAssets[0]
                     || !transaction.fromAssets[0].assetId || !this.assets.find((asset) => asset.id === transaction.fromAssets![0].assetId)
-                    || !transaction.toAssets[0].assetId || !this.assets.find((asset) => asset.id === transaction.toAssets![0].assetId)
-                    || !transaction.fromAssets[0].amount || transaction.fromAssets[0].amount !== transaction.amount
-                    || !transaction.toAssets[0].amount || transaction.toAssets[0].amount !== transaction.amount) {
-                    errorList.push("TRANSFER: MISSING, INCOMPLETE OR INCORRECT ASSET ALLOCATIONS");
+                    || !transaction.toAssets[0].assetId || !this.assets.find((asset) => asset.id === transaction.toAssets![0].assetId)) {
+                    result = false
+                    errorList.push("TRANSFER: MISSING ASSET ALLOCATIONS");
                 }
+                else {
+                    if (transaction.fromAssets.length === 1 && transaction.toAssets.length === 1) {
+                        transaction.fromAssets[0].amount = transaction.amount
+                        transaction.toAssets[0].amount = transaction.amount
+                    }
+                    else {
+                        let amountFromAllocations = 0;
+                        let amountToAllocations = 0;
+                        transaction.fromAssets.forEach((allocation) => {
+                            if (!this.assets.find((asset) => asset.id === allocation.assetId)
+                                || !allocation.amount || allocation.amount <= 0) {
+                                result = false
+                                errorList.push("TRANSFER: INCOMPLETE OR INCORRECT ASSET ALLOCATIONS");
+                            }
+                            else amountFromAllocations += allocation.amount;
+                        })
+                        transaction.toAssets.forEach((allocation) => {
+                            if (!this.assets.find((asset) => asset.id === allocation.assetId)
+                                || !allocation.amount || allocation.amount <= 0) {
+                                result = false
+                                errorList.push("TRANSFER: INCOMPLETE OR INCORRECT ASSET ALLOCATIONS");
+                            }
+                            else amountToAllocations += allocation.amount;
+                        })
+                        if (amountFromAllocations !== transaction.amount) {
+                            result = false
+                            errorList.push("TRANSFER: ASSET ALLOCATIONS AMOUNTS NOT CORRESPONDING TO TRANSACTION'S AMOUNT");
+                        }
+                    }
+                }
+
                 break;
         }
 
         errorMonitor(errorList);
-        
+
         return result;
     }
-    
-    async CreateTransaction (transaction: Transaction) {
+
+    async CreateTransaction(transaction: Transaction) {
         Object.keys(transaction).forEach(key => transaction[key as keyof Transaction] === undefined ? delete transaction[key as keyof Transaction] : {});
         console.log(transaction);
-        
+
         try {
             const transactionCollectionRef = collection(db, 'Users', transaction.uid, "Transactions").withConverter(transactionConverter);
 
             const addedDoc = await addDoc(transactionCollectionRef, transaction);
 
             // update involved asset balance
-            switch(transaction.type) {
-                case TransactionType.EXPENCE: 
+            switch (transaction.type) {
+                case TransactionType.EXPENCE:
                     if (transaction.fromAssets && transaction.fromAssets.length > 0) {
                         transaction.fromAssets.forEach(async (allocation) => {
                             await this.assetsController?.UpdateBalance(allocation.assetId, allocation.amount * -1)
                         })
                     }
-                    else throw(new Error("EXPENCE: Mandatory field [fromAssetId] has not been fulfilled properly"))
+                    else throw (new Error("EXPENCE: Mandatory field [fromAssetId] has not been fulfilled properly"))
                     break;
-                case TransactionType.INCOME: 
+                case TransactionType.INCOME:
                     if (transaction.toAssets && transaction.toAssets.length > 0) {
                         transaction.toAssets.forEach(async (allocation) => {
                             await this.assetsController?.UpdateBalance(allocation.assetId, allocation.amount)
                         })
                     }
-                    else throw(new Error("INCOME: Mandatory field [toAssetId] has not been fulfilled properly"))
+                    else throw (new Error("INCOME: Mandatory field [toAssetId] has not been fulfilled properly"))
                     break;
-                case TransactionType.TRANSFER: 
+                case TransactionType.TRANSFER:
                     if (transaction.fromAssets && transaction.toAssets) {
                         await this.assetsController?.UpdateBalance(transaction.fromAssets[0].assetId, transaction.fromAssets[0].amount * -1)
                         await this.assetsController?.UpdateBalance(transaction.toAssets[0].assetId, transaction.toAssets[0].amount)
                     }
-                    else throw(new Error("TRANSFER: Mandatory fields [fromAssetId, toAssetId] have not been fulfilled properly"))
+                    else throw (new Error("TRANSFER: Mandatory fields [fromAssetId, toAssetId] have not been fulfilled properly"))
                     break;
             }
 
@@ -180,17 +210,17 @@ export default class TransactionsController extends Controller {
             return null;
         }
     }
-    
-    async UpdateTransaction (updatedTransaction: Transaction) {
-    
+
+    async UpdateTransaction(updatedTransaction: Transaction) {
+
     }
-    
-    async RemoveTransaction (transaction: Transaction) {
-    
+
+    async RemoveTransaction(transaction: Transaction) {
+
     }
-    
-    async CreateNewCategory (transactionType: TransactionType, category: SelectedCategory) {
-        
+
+    async CreateNewCategory(transactionType: TransactionType, category: SelectedCategory) {
+
     }
 
 }
