@@ -2076,6 +2076,9 @@ body.dark-mode .btn-outline-warning {
 #transactions-list .items>.item .transaction-description {
     font-size: 15px;
     font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #transactions-list .items>.item .transaction-details {
@@ -2084,6 +2087,9 @@ body.dark-mode .btn-outline-warning {
     font-weight: 500;
     color: var(--lighter-text);
     display: flex;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 #transactions-list .items>.item .transaction-details>.transaction-category,
 #transactions-list .items>.item .transaction-details>.transaction-asset-list {
@@ -2100,7 +2106,7 @@ body.dark-mode .btn-outline-warning {
     font-weight: 600;
     padding: 1px 6px;
     border-radius: 4px;
-    width: fit-content;
+    max-width: fit-content;
 }
 #transactions-list .items>.item .transaction-amount-wrapper {
     min-height: 43.5px;
@@ -2181,6 +2187,11 @@ body.dark-mode .btn-outline-warning {
     align-items: center;
     font-size: 11px;
     gap: 3px
+}
+#transactions-list .items>.item.transfer .to.transaction-asset-list>.asset-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 @property --gradientColor1 {

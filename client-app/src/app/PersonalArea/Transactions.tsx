@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { SplashFirstAccess } from "../../assets/components/SplashFirstScreen";
 import User from "../../assets/model/User";
 import { ControllersContext, DataContext, PersonalAreaContext, PersonalAreaContextInterface } from "../PersonalArea";
@@ -59,6 +59,14 @@ function TransactionItem({ data, transaction }: {
     const i18n = useContext(TranslationContext);
     const theme = useContext(ThemeContext);
 
+    const location = useLocation();
+
+    const amountWidget = useRef<any>(null)
+    const descriptionWidget = useRef<any>(null)
+    const transferAssetsBadgesWidget = useRef<any>(null)
+    const fromTransactionList = useRef<any>(null)
+    const toTransactionList = useRef<any>(null)
+
     const isExpence = transaction.type === TransactionType.EXPENCE
     const isIncome = transaction.type === TransactionType.INCOME
     const isTransfer = transaction.type === TransactionType.TRANSFER
@@ -98,6 +106,47 @@ function TransactionItem({ data, transaction }: {
             assets: assets
         } as ItemAssetAllocations;
     }
+
+    // set the width of the description and details containers
+    useEffect(() => {
+        let frameId: number;
+        let timeoutId: number;
+
+        const measureWidths = () => {
+            const displayWidth = document.body.offsetWidth;
+            const amountWidth = amountWidget.current?.offsetWidth ?? 0;
+            const transferAssetsBadgesWidth = transferAssetsBadgesWidget.current?.offsetWidth ?? 0;
+            const fromTransactionWidth = fromTransactionList.current?.offsetWidth ?? 0;
+
+            const descriptionWidth =
+                Math.min(414, displayWidth) -
+                15 -
+                3 * (16 * 1.2) -
+                amountWidth -
+                (isTransfer ? transferAssetsBadgesWidth + 10 : 48.5);
+
+            const toTransactionWidth = descriptionWidth - fromTransactionWidth - 17;
+
+            if (descriptionWidget.current)
+                descriptionWidget.current.style.width = `${descriptionWidth}px`;
+            if (toTransactionList.current)
+                toTransactionList.current.style.width = `${toTransactionWidth}px`;
+        };
+
+        // wait for layout to stabilize
+        timeoutId = window.setTimeout(() => {
+            frameId = requestAnimationFrame(measureWidths);
+        }, 0);
+
+        // also re-run on resize
+        window.addEventListener("resize", measureWidths);
+
+        return () => {
+            cancelAnimationFrame(frameId);
+            clearTimeout(timeoutId);
+            window.removeEventListener("resize", measureWidths);
+        };
+    }, [location.key, isTransfer]); // location.key is safer than pathname
 
     const itemAssetAllocations = React.useMemo(() => itemAllocations(), [isExpence, transaction, data]) /*{
         num: 4, assets: [
@@ -202,7 +251,7 @@ function TransactionItem({ data, transaction }: {
                         }
                     </div>
                 </div>
-                <div>
+                <div ref={descriptionWidget}>
                     <div className="transaction-description">{transaction.description}</div>
                     <div className="transaction-details">
                         <div className="transaction-category">
@@ -237,7 +286,7 @@ function TransactionItem({ data, transaction }: {
 
         return (
             <>
-                <div className="transaction-asset-badges">
+                <div className="transaction-asset-badges" ref={transferAssetsBadgesWidget}>
                     {
                         fromAssetAllocations.assets.map((a) => {
                             return (
@@ -267,21 +316,21 @@ function TransactionItem({ data, transaction }: {
                         })
                     }
                 </div>
-                <div>
+                <div ref={descriptionWidget}>
                     <div className="transaction-description">{i18n.t(TransactionType.TRANSFER)}</div>
                     <div className="transaction-details">
-                        <div className="from transaction-asset-list">
+                        <div className="from transaction-asset-list" ref={fromTransactionList}>
                             {
                                 fromAssetAllocations.assets.map((a, i) => {
-                                    return (<div><div key={i} className="asset-name">{a.asset.name}</div></div>)
+                                    return (<div key={i} className="asset-name">{a.asset.name}</div>)
                                 })
                             }
                         </div>
-                        <FaArrowRight style={{flexShrink: 0}}/>
-                        <div className="to transaction-asset-list">
+                        <FaArrowRight style={{ flexShrink: 0 }} />
+                        <div className="to transaction-asset-list" ref={toTransactionList}>
                             {
                                 toAssetAllocations.assets.map((a, i) => {
-                                    return (<div><div key={i} className="asset-name">{a.asset.name}</div></div>)
+                                    return (<div key={i} className="asset-name">{a.asset.name}</div>)
                                 })
                             }
                         </div>
@@ -297,7 +346,7 @@ function TransactionItem({ data, transaction }: {
                     {(isExpence || isIncome) && <ExpenceIncomeTransactionContent />}
                     {isTransfer && <TransferTransactionContent />}
                 </div>
-                <div className="transaction-amount-wrapper">
+                <div className="transaction-amount-wrapper" ref={amountWidget}>
                     <div className="transaction-amount">{(data.user.hiddenBalance) ? <span style={{ filter: "blur(6px)" }}>{currencyFormat(919)}</span> : `${isExpence ? "- " : ""}${currencyFormat(transaction.amount)}`}</div>
                 </div>
             </div>
