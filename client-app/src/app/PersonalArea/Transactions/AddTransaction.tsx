@@ -18,7 +18,12 @@ import { PiNotePencilFill } from "react-icons/pi";
 import { MdArrowForward, MdClose, MdDone } from "react-icons/md";
 import { GiConsoleController } from "react-icons/gi";
 import { RiLoopLeftLine } from "react-icons/ri";
-
+import { LocalizationProvider, MobileDateTimePicker, StaticDateTimePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from "dayjs";
+import 'dayjs/locale/it';
+import 'dayjs/locale/en';
+import { createTheme, PaletteMode, ThemeProvider } from "@mui/material";
 
 interface AddTransactionContext {
     data: any,
@@ -282,7 +287,7 @@ function LongPressedSubcategory({ name, i18n_selector, progressive, isUpdated, p
                         className="parent-category"
                         value={parentName}
                         label={i18n.t("pages.addtransaction.transactioncategoryselector.labels.parent")}
-                        style={{backgroundColor: "var(--bs-body-bg)"}}
+                        style={{ backgroundColor: "var(--bs-body-bg)" }}
                         disabled
                         wide
                     />
@@ -296,14 +301,14 @@ function LongPressedSubcategory({ name, i18n_selector, progressive, isUpdated, p
                     className={`delete-button btn btn-danger ${clicked ? "clicked" : ""}`}
                 >
                     <AnimatePresence initial={false}>
-                        {(!clicked) && 
-                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: .5 }}} className="delete-button-closed" onClick={() => setClicked(!clicked)}>
-                                <BiTrash/>
+                        {(!clicked) &&
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: .5 } }} className="delete-button-closed" onClick={() => setClicked(!clicked)}>
+                                <BiTrash />
                             </motion.div>}
                     </AnimatePresence>
                     <AnimatePresence>
-                        {(clicked) && 
-                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: .5 }}} exit={{ opacity: 0, transition: {duration: 0}}} className="delete-content d-flex flex-column gap-3">
+                        {(clicked) &&
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: .5 } }} exit={{ opacity: 0, transition: { duration: 0 } }} className="delete-content d-flex flex-column gap-3">
                                 <div className="delete-text">{i18n.t("pages.addtransaction.transactioncategoryselector.deletetext")}</div>
                                 <div className="d-flex gap-1">
                                     <div className="delete-cancel-button w-100 btn btn-outline-light d-flex align-items-center justify-content-center rounded-pill" onClick={() => setClicked(!clicked)}>{i18n.t("static.buttons.cancel")}</div>
@@ -714,7 +719,15 @@ export function InvolvedAssetsSelector() {
 }
 
 export function TransactionDateTimeSelector() {
+    const { handleChange, data } = useOutletContext<AddTransactionContext>();
     const i18n: TranslationContextType = useContext(TranslationContext);
+    const theme = useContext(ThemeContext);
+
+    const darkTheme = createTheme({
+        palette: {
+            mode: theme as PaletteMode,
+        },
+    });
 
     return (
         <div id="select-transaction-datetime" className="callout page sub">
@@ -724,7 +737,13 @@ export function TransactionDateTimeSelector() {
                     <div className="page-title" style={{ marginTop: 1 }}>{i18n.t("pages.addtransaction.form.datetime")}</div>
                     <div style={{ width: "31px" }}></div>
                 </div>
-                <div className="body"></div>
+                <div className="body">
+                    <ThemeProvider theme={darkTheme}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={i18n.i18n.language.split("-")[0]} >
+                            <MobileDateTimePicker onChange={(value) => handleChange({ target: { name: "new-transaction-date", value: value?.toDate()} })} defaultValue={dayjs(data["new-transaction-date"])} maxDateTime={dayjs(new Date())} />
+                        </LocalizationProvider>
+                    </ThemeProvider>
+                </div>
             </div>
         </div>
     );
@@ -775,7 +794,7 @@ export default function AddTransaction() {
             "new-transaction-category": { name: '' } as SelectedCategory,
             "new-transaction-description": '',
             "new-transaction-amount": '0.00',
-            "new-transaction-date": undefined,
+            "new-transaction-date": new Date(),
             "new-transaction-notes": ''
         }
     }
@@ -840,7 +859,7 @@ export default function AddTransaction() {
         }));
 
         // Check if the transaction field is well formed
-        if ((formData["new-transaction-type"] !== TransactionType.TRANSFER && !formData["new-transaction-description"]) 
+        if ((formData["new-transaction-type"] !== TransactionType.TRANSFER && !formData["new-transaction-description"])
             || !formData["new-transaction-amount"]) {
             setProcessing(false);
             console.error("Empty required fields");
@@ -866,7 +885,7 @@ export default function AddTransaction() {
         const checkResult = controllers.transactionsController.CheckTransaction(transaction, (errorList) => {
             console.log(errorList)
         })
-        
+
         if (checkResult) {
             //Add the new transaction to Firestore
             var result = await controllers.transactionsController.CreateTransaction(transaction);
@@ -966,26 +985,26 @@ export default function AddTransaction() {
                         />
                     </div>
                     <div>
-                        <div style={{position: "relative"}}>
+                        <div style={{ position: "relative" }}>
                             <AnimatePresence initial={false}>
                                 {(formData["new-transaction-type"] === TransactionType.EXPENCE || formData["new-transaction-type"] === TransactionType.INCOME) &&
-                                    <motion.div 
-                                        style={{position: "absolute", bottom: 0, width: "100%"}}
-                                        initial={{opacity: 0}}
-                                        animate={{opacity: 1}}
-                                        exit={{opacity: 0}}
-                                        >
+                                    <motion.div
+                                        style={{ position: "absolute", bottom: 0, width: "100%" }}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                    >
                                         <div className="category-picker-wrapper mb-3">
                                             {/*<label className="form-label">Category</label>*/}
                                             <CategoryPicker data={data} formData={formData} setFormData={setFormData} />
                                         </div>
                                         <div className="asset-picker-wrapper mb-2">
                                             {/*<label className="form-label">Asset</label>*/}
-                                            <AssetPicker 
-                                                data={data} 
-                                                isAllocated={isAllocated} 
-                                                assetsAllocations={(formData["new-transaction-type"] === TransactionType.EXPENCE) ? fromAssetsAllocations : toAssetsAllocations} 
-                                                setAssetsAllocations={(formData["new-transaction-type"] === TransactionType.EXPENCE) ? setFromAssetsAllocations : setToAssetsAllocations} 
+                                            <AssetPicker
+                                                data={data}
+                                                isAllocated={isAllocated}
+                                                assetsAllocations={(formData["new-transaction-type"] === TransactionType.EXPENCE) ? fromAssetsAllocations : toAssetsAllocations}
+                                                setAssetsAllocations={(formData["new-transaction-type"] === TransactionType.EXPENCE) ? setFromAssetsAllocations : setToAssetsAllocations}
                                                 isFrom={(formData["new-transaction-type"] === TransactionType.EXPENCE)}
                                             />
                                         </div>
@@ -1006,26 +1025,26 @@ export default function AddTransaction() {
                             </AnimatePresence>
                             <AnimatePresence>
                                 {(formData["new-transaction-type"] === TransactionType.TRANSFER) &&
-                                    <motion.div 
-                                        style={{position: "absolute", bottom: 0, width: "100%"}}
-                                        initial={{opacity: 0}}
-                                        animate={{opacity: 1}}
-                                        exit={{opacity: 0}}
-                                        >
+                                    <motion.div
+                                        style={{ position: "absolute", bottom: 0, width: "100%" }}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                    >
                                         <div className="asset-picker-wrapper mb-2 position-relative">
                                             {/*<label className="form-label">Asset</label>*/}
-                                            <AssetPicker 
-                                                data={data} 
-                                                isAllocated={isAllocated} 
-                                                assetsAllocations={fromAssetsAllocations} 
+                                            <AssetPicker
+                                                data={data}
+                                                isAllocated={isAllocated}
+                                                assetsAllocations={fromAssetsAllocations}
                                                 setAssetsAllocations={setFromAssetsAllocations}
                                                 isFrom={true} />
-                                            <div style={{height: ".5rem"}}></div>
+                                            <div style={{ height: ".5rem" }}></div>
                                             <div className="transfer-asset-inverter" ref={loopButton} onClick={invertTransferAssets}><RiLoopLeftLine /></div>
-                                            <AssetPicker 
-                                                data={data} 
-                                                isAllocated={isAllocated} 
-                                                assetsAllocations={toAssetsAllocations} 
+                                            <AssetPicker
+                                                data={data}
+                                                isAllocated={isAllocated}
+                                                assetsAllocations={toAssetsAllocations}
                                                 setAssetsAllocations={setToAssetsAllocations}
                                                 isFrom={false} />
                                         </div>

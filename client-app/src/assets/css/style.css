@@ -1756,6 +1756,12 @@ body.dark-mode .btn-outline-warning {
     flex-shrink: 0;
 }
 
+.MuiPickersToolbar-root, 
+.MuiPickersLayout-actionBar, 
+.MuiPickersLayout-toolbar {
+    display: none !important;
+}
+
 /*
 #select-transaction-category .category .child.no-sub {
     margin-left: 3px;
