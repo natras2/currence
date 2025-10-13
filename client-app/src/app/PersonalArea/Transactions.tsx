@@ -36,10 +36,10 @@ function TransactionsListLabel({ dateString }: {
 
     formatted = capitalizeFirst(formatted);
 
-    if (dateString === new Date().toISOString().split("T")[0])
+    if (date.toLocaleDateString(currentLocale) === new Date().toLocaleDateString(currentLocale))
         formatted = i18n.t("default.date.today")
 
-    if (dateString === new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split("T")[0])
+    if (date.toLocaleDateString(currentLocale) === new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString(currentLocale))
         formatted = i18n.t("default.date.yesterday")
 
     return (<>
