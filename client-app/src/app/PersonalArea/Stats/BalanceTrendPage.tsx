@@ -1,13 +1,12 @@
-import { useContext } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useContext, useState } from "react";
 import { PersonalAreaContext, PersonalAreaContextInterface } from "../../PersonalArea";
 import Asset from "../../../assets/model/Asset";
 import { ChartData } from "../Stats";
 import User from "../../../assets/model/User";
-import { currencyFormat } from "../../../assets/libraries/Utils";
 import { ThemeContext, TranslationContext } from "../../../App";
 import { BackButton } from "../../../assets/components/Utils";
 import { BalanceTrend } from "../../../assets/components/charts/BalanceTrend";
+import { BalanceTrend2 } from "../../../assets/components/charts/BalanceTrend2";
 
 export default function BalanceTrendPage() {
     const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
@@ -17,6 +16,9 @@ export default function BalanceTrendPage() {
     const assets: Asset[] = data.assets;
 
     const theme = useContext(ThemeContext);
+    const [selectedDays, setSelectedDays] = useState<7 | 30 | 90>(7);
+
+    // Nei pulsanti
 
     // the chart doesn't show assets that have a balance lower than 2% of the total 
     const filteredAssets = assets.filter((asset) => asset.balance / user.totalBalance > 0.02);
@@ -49,7 +51,17 @@ export default function BalanceTrendPage() {
                     <div style={{ width: "31px" }}></div>
                 </div>
                 <div className="body" style={{ height: 500 }} >
-                    <BalanceTrend />
+
+                    <button onClick={() => setSelectedDays(7)}>7 giorni</button>
+                    <button onClick={() => setSelectedDays(30)}>30 giorni</button>
+                    <button onClick={() => setSelectedDays(90)}>90 giorni</button>
+
+                    <BalanceTrend2
+                        transactions={data.transactions}
+                        totalBalance={user.totalBalance}
+                        theme={theme}
+                        days={selectedDays}
+                    />
                     {/*<PieChart
                         colors={cheerfulFiestaPaletteDark}
                         series={[

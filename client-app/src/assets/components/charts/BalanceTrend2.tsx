@@ -35,7 +35,7 @@ interface BalanceTrendProps {
     days?: 7 | 30 | 90;
 }
 
-export function BalanceTrend({ transactions = [], totalBalance = 0, theme = 'light', days = 7 }: BalanceTrendProps) {
+export function BalanceTrend2({ transactions = [], totalBalance = 0, theme = 'light', days = 7 }: BalanceTrendProps) {
     const [gradient, setGradient] = useState<string | CanvasGradient>("rgba(53, 162, 235, 0.5)");
     const chartRef = useRef<any>(null);
 
@@ -44,12 +44,18 @@ export function BalanceTrend({ transactions = [], totalBalance = 0, theme = 'lig
 
         if (chart) {
             const ctx = chart.ctx;
-            const gradient = ctx.createLinearGradient(0, 0, 0, 180);
-            gradient.addColorStop(0, 'rgba(53, 162, 235, 1)');
-            gradient.addColorStop(1, (theme === "dark") ? 'rgba(51, 51, 51, .2)' : 'rgba(241, 243, 246, .2)');
-            setGradient(gradient);
+            const chartArea = chart.chartArea;
+            
+            if (chartArea) {
+                // Crea un gradient che diventa trasparente verso il basso
+                const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                gradient.addColorStop(0, 'rgba(53, 162, 235, 0.5)');
+                gradient.addColorStop(0.7, 'rgba(53, 162, 235, 0.1)');
+                gradient.addColorStop(1, 'rgba(53, 162, 235, 0)');
+                setGradient(gradient);
+            }
         }
-    }, [theme]);
+    }, [theme, days]);
 
     // Funzione per convertire Timestamp Firestore in Date
     const convertToDate = (date: any): Date => {
@@ -72,13 +78,26 @@ export function BalanceTrend({ transactions = [], totalBalance = 0, theme = 'lig
         return new Date(date);
     };
 
+    // Funzione per normalizzare la data alla mezzanotte locale
+    const normalizeDate = (date: Date): Date => {
+        const normalized = new Date(date);
+        normalized.setHours(0, 0, 0, 0);
+        return normalized;
+    };
+
+    // Funzione per ottenere la chiave della data in formato locale
+    const getLocalDateKey = (date: Date): string => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     // Funzione per calcolare il bilancio giornaliero
     const calculateDailyBalance = (): DailyBalanceData[] => {
-        const today = new Date();
-        today.setHours(23, 59, 59, 999);
+        const today = normalizeDate(new Date());
         const startDate = new Date(today);
         startDate.setDate(today.getDate() - days);
-        startDate.setHours(0, 0, 0, 0);
 
         console.log('Total balance:', totalBalance);
         console.log('Total transactions:', transactions.length);
@@ -86,7 +105,7 @@ export function BalanceTrend({ transactions = [], totalBalance = 0, theme = 'lig
 
         // Filtra transazioni del periodo selezionato
         const recentTransactions: Transaction[] = transactions.filter((t: Transaction) => {
-            const transactionDate = convertToDate(t.date);
+            const transactionDate = normalizeDate(convertToDate(t.date));
             const isInRange = transactionDate >= startDate && transactionDate <= today;
             return isInRange;
         });
@@ -107,8 +126,7 @@ export function BalanceTrend({ transactions = [], totalBalance = 0, theme = 'lig
         for (let i = 0; i <= days; i++) {
             const date = new Date(startDate);
             date.setDate(startDate.getDate() + i);
-            date.setHours(12, 0, 0, 0); // Mezza giornata per evitare problemi timezone
-            const dateKey = date.toISOString().split('T')[0];
+            const dateKey = getLocalDateKey(date);
             const dayData: DailyBalanceData = { date, balance: 0, transactions: [] };
             dateMap.set(dateKey, dayData);
             dailyData.push(dayData);
@@ -116,8 +134,8 @@ export function BalanceTrend({ transactions = [], totalBalance = 0, theme = 'lig
 
         // Aggrega le transazioni per giorno
         recentTransactions.forEach((transaction: Transaction) => {
-            const transactionDate = convertToDate(transaction.date);
-            const dateKey = transactionDate.toISOString().split('T')[0];
+            const transactionDate = normalizeDate(convertToDate(transaction.date));
+            const dateKey = getLocalDateKey(transactionDate);
             
             if (dateMap.has(dateKey)) {
                 dateMap.get(dateKey)!.transactions.push(transaction);
@@ -161,7 +179,7 @@ export function BalanceTrend({ transactions = [], totalBalance = 0, theme = 'lig
             day.balance = runningBalance;
             
             if (dayTransactions.length > 0) {
-                console.log(`Day ${index}: ${day.date.toISOString().split('T')[0]}, transactions: ${dayTransactions.length}, balance: ${day.balance}`);
+                console.log(`Day ${index}: ${getLocalDateKey(day.date)}, transactions: ${dayTransactions.length}, balance: ${day.balance}`);
             }
         });
 
@@ -185,19 +203,45 @@ export function BalanceTrend({ transactions = [], totalBalance = 0, theme = 'lig
             },
             tooltip: {
                 enabled: true,
-                backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                backgroundColor: theme === 'dark' ? 'rgba(30, 30, 30, 0.98)' : 'rgba(255, 255, 255, 0.98)',
                 titleColor: theme === 'dark' ? '#fff' : '#333',
-                bodyColor: theme === 'dark' ? '#fff' : '#333',
+                bodyColor: theme === 'dark' ? '#ccc' : '#666',
                 borderColor: theme === 'dark' ? '#555' : '#ddd',
                 borderWidth: 1,
-                padding: 12,
+                padding: 16,
                 displayColors: false,
+                titleFont: {
+                    size: 14,
+                    weight: '600'
+                },
+                bodyFont: {
+                    size: 16,
+                    weight: '500'
+                },
+                bodySpacing: 6,
                 callbacks: {
+                    title: function(context: any) {
+                        const dataIndex = context[0].dataIndex;
+                        const date = dailyBalance[dataIndex].date;
+                        return date.toLocaleDateString('it-IT', { 
+                            weekday: 'long', 
+                            day: 'numeric', 
+                            month: 'long' 
+                        });
+                    },
                     label: function(context: any) {
-                        return '€ ' + context.parsed.y.toLocaleString('it-IT', {
+                        return 'Bilancio: €' + context.parsed.y.toLocaleString('it-IT', {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2
                         });
+                    },
+                    afterLabel: function(context: any) {
+                        const dataIndex = context.dataIndex;
+                        const transactions = dailyBalance[dataIndex].transactions;
+                        if (transactions.length > 0) {
+                            return `\n${transactions.length} transazion${transactions.length === 1 ? 'e' : 'i'}`;
+                        }
+                        return '';
                     }
                 }
             },
@@ -208,14 +252,15 @@ export function BalanceTrend({ transactions = [], totalBalance = 0, theme = 'lig
         elements: {
             point: {
                 radius: 0,
-                hitRadius: 10,
-                hoverRadius: 5,
+                hitRadius: 15,
+                hoverRadius: 6,
                 hoverBackgroundColor: 'rgb(53, 162, 235)',
                 hoverBorderColor: '#fff',
-                hoverBorderWidth: 2
+                hoverBorderWidth: 3
             },
             line: {
-                borderWidth: 2
+                borderWidth: 3,
+                cubicInterpolationMode: 'monotone'
             }
         },
         scales: {
@@ -236,33 +281,15 @@ export function BalanceTrend({ transactions = [], totalBalance = 0, theme = 'lig
                 }
             },
             y: {
-                display: true,
-                grid: {
-                    color: theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
-                    drawBorder: false
-                },
-                ticks: {
-                    color: theme === 'dark' ? '#999' : '#666',
-                    font: {
-                        size: 10
-                    },
-                    callback: function(value: any) {
-                        return '€ ' + value.toLocaleString('it-IT', {
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0
-                        });
-                    },
-                    maxTicksLimit: 5
-                }
+                display: false
             }
         },
         interaction: {
             intersect: false,
             mode: 'index'
         },
-        maintainAspectRatio: false,
-        cubicInterpolationMode: 'monotone',
-        tension: 1
+        tension: 0,
+        maintainAspectRatio: false
     };
 
     const data = {
