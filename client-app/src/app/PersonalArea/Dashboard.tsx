@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 import { CreateTransactionButton, TransactionsRender } from "./Transactions";
 import { ThemeContext, TranslationContext } from "../../App";
 import { LuPlus } from "react-icons/lu";
-import { BalanceTrend2 } from "../../assets/components/charts/BalanceTrend2";
 
 export default function Dashboard() {
     const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);

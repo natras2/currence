@@ -6,7 +6,6 @@ import User from "../../../assets/model/User";
 import { ThemeContext, TranslationContext } from "../../../App";
 import { BackButton } from "../../../assets/components/Utils";
 import { BalanceTrend } from "../../../assets/components/charts/BalanceTrend";
-import { BalanceTrend2 } from "../../../assets/components/charts/BalanceTrend2";
 
 export default function BalanceTrendPage() {
     const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
@@ -16,7 +15,7 @@ export default function BalanceTrendPage() {
     const assets: Asset[] = data.assets;
 
     const theme = useContext(ThemeContext);
-    const [selectedDays, setSelectedDays] = useState<7 | 30 | 90>(7);
+    const [selectedDays, setSelectedDays] = useState<8 | 30 | 90>(8);
 
     // Nei pulsanti
 
@@ -52,11 +51,11 @@ export default function BalanceTrendPage() {
                 </div>
                 <div className="body" style={{ height: 500 }} >
 
-                    <button onClick={() => setSelectedDays(7)}>7 giorni</button>
+                    <button onClick={() => setSelectedDays(8)}>8 giorni</button>
                     <button onClick={() => setSelectedDays(30)}>30 giorni</button>
                     <button onClick={() => setSelectedDays(90)}>90 giorni</button>
 
-                    <BalanceTrend2
+                    <BalanceTrend
                         transactions={data.transactions}
                         totalBalance={user.totalBalance}
                         theme={theme}
