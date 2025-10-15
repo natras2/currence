@@ -11,6 +11,7 @@ import { capitalizeFirst, currencyFormat, getCurrentLocale, groupAndSort, Groupe
 import { defaultAssetTypeIconBase, defaultCategoryIconBase } from "../../assets/components/Utils";
 import Asset from "../../assets/model/Asset";
 import { FaArrowRight } from "react-icons/fa6";
+import { Timestamp } from "firebase/firestore";
 
 export interface FilterContext {
     activeExpence: boolean,
@@ -45,10 +46,6 @@ function TransactionsListLabel({ dateString }: {
     return (<>
         <div className="label">{formatted}</div>
     </>);
-}
-
-export function TransactionItemContent(props: any) {
-
 }
 
 function TransactionItem({ data, transaction }: {
@@ -146,72 +143,9 @@ function TransactionItem({ data, transaction }: {
             clearTimeout(timeoutId);
             window.removeEventListener("resize", measureWidths);
         };
-    }, [location.key, isTransfer]); // location.key is safer than pathname
+    }, [location.key, isTransfer, data.transactions]); // location.key is safer than pathname
 
-    const itemAssetAllocations = React.useMemo(() => itemAllocations(), [isExpence, transaction, data]) /*{
-        num: 4, assets: [
-            {
-                "id": "3Jy4mh0LEXFS64qZG0Eo",
-                "uid": "nDY5dsQx8bbQ0NkSgmqToUKGQ9g2",
-                "name": "Conto corrente N26",
-                "attributes": {
-                    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/N26_logo.svg",
-                    "type": "static.assetType.bankaccount",
-                    "sourceName": "N26"
-                },
-                "description": "",
-                "starred": false,
-                "balance": 120.88,
-                "hiddenFromTotal": false,
-                "creationTime": 1741903722791
-            },
-            {
-                "id": "qt9oYclmV0uFzJ6m8wiM",
-                "uid": "nDY5dsQx8bbQ0NkSgmqToUKGQ9g2",
-                "name": "Savings N26",
-                "attributes": {
-                    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/N26_logo.svg",
-                    "type": "static.assetType.bankaccount",
-                    "sourceName": "N26"
-                },
-                "description": "",
-                "starred": true,
-                "balance": 1078.68,
-                "hiddenFromTotal": false,
-                "creationTime": 1741903701762
-            },
-            {
-                "id": "uEij6Dk4mS8vBm4ClHAs",
-                "uid": "nDY5dsQx8bbQ0NkSgmqToUKGQ9g2",
-                "name": "PayPal",
-                "attributes": {
-                    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg",
-                    "sourceName": "PayPal",
-                    "type": "static.assetType.ewallet"
-                },
-                "description": "",
-                "starred": false,
-                "balance": 3.039999999999999,
-                "hiddenFromTotal": false,
-                "creationTime": 1741903748963
-            },
-            {
-                "id": "68NjV4k9ysb5kVSw9KgH",
-                "uid": "nDY5dsQx8bbQ0NkSgmqToUKGQ9g2",
-                "name": "Conto corrente Revolut",
-                "attributes": {
-                    "sourceName": "Revolut",
-                    "type": "static.assetType.bankaccount",
-                    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/73/Revolut_logo.svg"
-                },
-                "description": "",
-                "starred": false,
-                "balance": 134.70999999999998,
-                "hiddenFromTotal": false,
-                "creationTime": 1742066560698
-            }
-        ]
-    } as ItemAssetAllocations */
+    const itemAssetAllocations = React.useMemo(() => itemAllocations(), [isExpence, transaction, data])
 
     const ExpenceIncomeTransactionContent = () => {
         return (
@@ -233,14 +167,14 @@ function TransactionItem({ data, transaction }: {
                         {
                             itemAssetAllocations.assets.map((asset, i) => {
                                 if (i < 2 || (i == 2 && itemAssetAllocations.num == 3)) return (
-                                    <>
-                                        {!!asset.asset.attributes && <div key={i} className="asset-logo">
+                                    <React.Fragment key={asset.asset.id}>
+                                        {!!asset.asset.attributes && <div className="asset-logo">
                                             {(asset.asset.attributes.sourceName !== "")
                                                 ? <img src={asset.asset.attributes.logo} alt={asset.asset.attributes.sourceName} className="source-logo" />
                                                 : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(asset.asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
                                             }
                                         </div>}
-                                    </>
+                                    </React.Fragment>
                                 )
                             })
                         }
@@ -290,28 +224,28 @@ function TransactionItem({ data, transaction }: {
                     {
                         fromAssetAllocations.assets.map((a) => {
                             return (
-                                <>
-                                    {!!a.asset.attributes && <div key={a.asset.id} className="asset-logo from-allocation">
+                                <React.Fragment key={a.asset.id}>
+                                    {!!a.asset.attributes && <div className="asset-logo from-allocation">
                                         {(a.asset.attributes.sourceName !== "")
                                             ? <img src={a.asset.attributes.logo} alt={a.asset.attributes.sourceName} className="source-logo" />
                                             : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(a.asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
                                         }
                                     </div>}
-                                </>
+                                </React.Fragment>
                             )
                         })
                     }
                     {
                         toAssetAllocations.assets.map((a) => {
                             return (
-                                <>
-                                    {!!a.asset.attributes && <div key={a.asset.id} className="asset-logo to-allocation">
+                                <React.Fragment key={a.asset.id}>
+                                    {!!a.asset.attributes && <div className="asset-logo to-allocation">
                                         {(a.asset.attributes.sourceName !== "")
                                             ? <img src={a.asset.attributes.logo} alt={a.asset.attributes.sourceName} className="source-logo" />
                                             : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(a.asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
                                         }
                                     </div>}
-                                </>
+                                </React.Fragment>
                             )
                         })
                     }
@@ -321,16 +255,16 @@ function TransactionItem({ data, transaction }: {
                     <div className="transaction-details">
                         <div className="from transaction-asset-list" ref={fromTransactionList}>
                             {
-                                fromAssetAllocations.assets.map((a, i) => {
-                                    return (<div key={i} className="asset-name">{a.asset.name}</div>)
+                                fromAssetAllocations.assets.map((a) => {
+                                    return (<div key={a.asset.id} className="asset-name">{a.asset.name}</div>)
                                 })
                             }
                         </div>
                         <FaArrowRight style={{ flexShrink: 0 }} />
                         <div className="to transaction-asset-list" ref={toTransactionList}>
                             {
-                                toAssetAllocations.assets.map((a, i) => {
-                                    return (<div key={i} className="asset-name">{a.asset.name}</div>)
+                                toAssetAllocations.assets.map((a) => {
+                                    return (<div key={a.asset.id} className="asset-name">{a.asset.name}</div>)
                                 })
                             }
                         </div>
@@ -354,9 +288,8 @@ function TransactionItem({ data, transaction }: {
     );
 }
 
-export function TransactionsRender({ data, controllers, showAll = true, filters, maxResult }: {
+export function TransactionsRender({ data, showAll = true, filters, maxResult }: {
     data: DataContext,
-    controllers: ControllersContext,
     showAll?: boolean,
     filters?: FilterContext,
     maxResult?: number
@@ -383,8 +316,9 @@ export function TransactionsRender({ data, controllers, showAll = true, filters,
                     <div className="items">
                         {items.map((transaction) => {
                             if (maxResult && cont === maxResult) return;
+                            cont++;
                             return (
-                                <div key={cont++} className={`item ${transaction.type === TransactionType.TRANSFER ? "transfer" : transaction.type === TransactionType.INCOME ? "income" : transaction.type === TransactionType.EXPENCE ? "expence" : transaction.type === TransactionType.MANAGEASSETS ? "manageassets" : ""}`}>
+                                <div key={transaction.id} className={`item ${transaction.type === TransactionType.TRANSFER ? "transfer" : transaction.type === TransactionType.INCOME ? "income" : transaction.type === TransactionType.EXPENCE ? "expence" : transaction.type === TransactionType.MANAGEASSETS ? "manageassets" : ""}`}>
                                     <TransactionItem data={data} transaction={transaction} />
                                 </div>
                             )
@@ -399,7 +333,7 @@ export function TransactionsRender({ data, controllers, showAll = true, filters,
 
 }
 
-function TransactionsList(data: DataContext, controllers: ControllersContext) {
+function TransactionsList({ data, controllers }: { data: DataContext, controllers: ControllersContext }) {
     const i18n = useContext(TranslationContext);
 
     const [filtering, setFiltering] = useState(false);
@@ -408,6 +342,16 @@ function TransactionsList(data: DataContext, controllers: ControllersContext) {
     const [activeExpence, setActiveExpence] = useState(false);
     const [activeIncome, setActiveIncome] = useState(false);
     const [activeTransfer, setActiveTransfer] = useState(false);
+
+    // State for loading older transactions
+    const [olderTransactions, setOlderTransactions] = useState<Transaction[]>([]);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const [allTransactions, setAllTransactions] = useState<Transaction[]>([...data.transactions])
+
+    const filters: FilterContext = {
+        activeExpence, activeIncome, activeTransfer
+    }
 
     useEffect(() => {
         if (activeExpence || activeIncome || activeTransfer) {
@@ -420,9 +364,42 @@ function TransactionsList(data: DataContext, controllers: ControllersContext) {
         }
     }, [activeExpence, activeIncome, activeTransfer])
 
-    const filters: FilterContext = {
-        activeExpence, activeIncome, activeTransfer
-    }
+    useEffect(() => {
+        setAllTransactions([...data.transactions, ...olderTransactions])
+        data.setTransactions([...data.transactions, ...olderTransactions])
+    }, [olderTransactions])
+    
+    // Load older transactions function
+    const loadOlderTransactions = async () => {
+        if (loadingMore || !hasMore || allTransactions.length === 0) return;
+        
+        setLoadingMore(true);
+        
+        // Get the oldest transaction date from current list
+        const oldestTransaction = allTransactions[allTransactions.length - 1];
+        const oldestDate = (oldestTransaction.date as unknown as Timestamp).toDate();
+
+        const olderTransactionLimit = 50
+        
+        // Load more transactions before that date
+        const older = await controllers.transactionsController.GetOlderTransactions(
+            data.user.uid,
+            oldestDate,
+            olderTransactionLimit
+        );
+        
+        if (older.length < olderTransactionLimit) {
+            setHasMore(false);
+        
+        if (older.length > 0)
+            setOlderTransactions([...olderTransactions, ...older]);
+            console.log("length:", older.length)
+            console.log("older:", older)
+            console.log("all:", allTransactions)
+        }
+        
+        setLoadingMore(false);
+    };
 
     return (
         <>
@@ -440,7 +417,19 @@ function TransactionsList(data: DataContext, controllers: ControllersContext) {
                     </div>
                 </div>
                 <div id="transactions-list">
-                    {<TransactionsRender data={data} controllers={controllers} showAll={allUnselected} filters={filters} />}
+                    {<TransactionsRender data={data} showAll={allUnselected} filters={filters} />}
+                    {hasMore && allTransactions.length > 0 && (
+                        <div style={{ padding: '1rem', textAlign: 'center' }}>
+                            <button 
+                                onClick={loadOlderTransactions} 
+                                disabled={loadingMore}
+                                className="btn btn-outline-secondary w-100"
+                                style={{ marginBottom: '80px' }}
+                            >
+                                {loadingMore ? i18n.t("default.loading") || 'Loading...' : i18n.t("default.buttons.loadmore") || 'Load Older Transactions'}
+                            </button>
+                        </div>
+                    )}
                 </div>
                 <CreateTransactionButton />
             </div>
@@ -491,7 +480,7 @@ export default function Transactions() {
                 {(user.firstAccess)
                     ? <SplashFirstAccess userName={user.fullName.split(" ")[0]} />
                     : (transactions.length > 0)
-                        ? <TransactionsList {...data} {...controllers} />
+                        ? <TransactionsList data={data} controllers={controllers} />
                         : <EmptyTransactionsList theme={theme} />
                 }
             </div>

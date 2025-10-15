@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useMemo, useState } from "react";
 import UserController from "../assets/controllers/UserController";
 import { getAuth } from "firebase/auth";
 import { app } from "../firebase/firebaseConfig";
@@ -39,7 +39,8 @@ export interface DataContext {
     transactions: Transaction[],
     userProcessing: boolean,
     assetsProcessing: boolean,
-    transactionsProcessing: boolean
+    transactionsProcessing: boolean,
+    setTransactions: Dispatch<SetStateAction<Transaction[]>>
 }
 
 export interface ControllersContext {
@@ -192,7 +193,8 @@ export default function PersonalArea() {
         transactions: transactions,
         userProcessing: userProcessing,
         assetsProcessing: assetsProcessing,
-        transactionsProcessing: transactionsProcessing
+        transactionsProcessing: transactionsProcessing,
+        setTransactions: setTransactions
     } as DataContext;
 
     const controllers = useMemo(() => ({
@@ -257,20 +259,21 @@ export default function PersonalArea() {
     }, [user?.uid]); // Depend only on user.uid
 
     useEffect(() => {
-        if (!user) return; // Only start listening for transactions when the user is available
+        if (!user) return;
 
-        const unsubscribeTransactions = controllers.transactionsController.ListenForTransactionUpdates(
+        // Fetch recent 30 days transactions
+        const unsubscribeTransactions = controllers.transactionsController.ListenForRecentTransactions(
             user.uid,
+            30,
             (updatedTransactions) => {
-                console.log("Updated transactions")
+                console.log("Updated recent transactions")
                 setTransactions(updatedTransactions);
                 setTransactionsProcessing(false);
             }
         );
 
-        // Cleanup transactions listener
         return () => unsubscribeTransactions();
-    }, [user?.uid]); // Depend only on user.uid
+    }, [user?.uid]);
 
     useEffect(() => {
         if (!user) return;
@@ -284,7 +287,7 @@ export default function PersonalArea() {
         }
         if (updatedTotalBalance !== user.totalBalance) {
             console.log("Updated total balance");
-             controllers.userController.UpdateTotalBalance(updatedTotalBalance);
+            controllers.userController.UpdateTotalBalance(updatedTotalBalance);
         }
 
     }, [assets]);

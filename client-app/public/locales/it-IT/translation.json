@@ -32,7 +32,8 @@
             "yesterday": "Ieri"
         },
         "buttons": {
-            "newtransaction": "Nuova transazione"
+            "newtransaction": "Nuova transazione",
+            "loadmore": "Mostra di più"
         },
         "incomecategory": {
             "salary": {

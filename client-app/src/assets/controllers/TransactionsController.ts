@@ -1,7 +1,6 @@
-import { doc, getDoc, setDoc, getDocs, collection, onSnapshot, addDoc, updateDoc, increment } from "firebase/firestore";
-import { app, db } from "../../firebase/firebaseConfig";
+import { getDoc, getDocs, collection, onSnapshot, addDoc, query, Timestamp, where, orderBy, limit } from "firebase/firestore";
+import { db } from "../../firebase/firebaseConfig";
 import Transaction, { SelectedCategory, transactionConverter, TransactionType } from "../model/Transaction";
-import { getAuth } from "firebase/auth";
 import Controller from "./Controller";
 import { DataContext } from "../../app/PersonalArea";
 import UserController from "./UserController";
@@ -26,6 +25,75 @@ export default class TransactionsController extends Controller {
 
         // Return the unsubscribe function for cleanup
         return unsubscribe;
+    }
+
+    // Listen only to recent transactions
+    ListenForRecentTransactions(uid: string, daysBack: number = 60, onUpdate: (transactions: Transaction[]) => void
+    ): () => void {
+        const cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - daysBack);
+
+        const transactionsQuery = query(
+            collection(db, 'Users', uid, 'Transactions').withConverter(transactionConverter),
+            where('date', '>=', Timestamp.fromDate(cutoffDate)),
+            orderBy('date', 'desc')
+        );
+
+        const unsubscribe = onSnapshot(transactionsQuery, (querySnapshot) => {
+            const retrievedTransactions = querySnapshot.docs.map((doc) => doc.data());
+            onUpdate(retrievedTransactions);
+        });
+
+        return unsubscribe;
+    }
+
+    // Load older transactions on demand (for "Load More" functionality)
+    async GetOlderTransactions(
+        uid: string,
+        beforeDate: Date,
+        limitCount: number = 50
+    ): Promise<Transaction[]> {
+        try {
+            const snapshot = await getDocs(
+                query(
+                    collection(db, 'Users', uid, 'Transactions').withConverter(transactionConverter),
+                    where('date', '<', Timestamp.fromDate(beforeDate)),
+                    orderBy('date', 'desc'),
+                    limit(limitCount)
+                )
+            );
+
+            const transactions = snapshot.docs.map(doc => doc.data());
+            console.log(`Loaded ${transactions.length} older transactions`);
+            return transactions;
+        } catch (error) {
+            console.error("Error loading older transactions:", error);
+            return [];
+        }
+    }
+
+    async GetTransactionsForDateRange(
+        uid: string,
+        startDate: Date,
+        endDate: Date
+    ): Promise<Transaction[]> {
+        try {
+            const snapshot = await getDocs(
+                query(
+                    collection(db, 'Users', uid, 'Transactions').withConverter(transactionConverter),
+                    where('date', '>=', Timestamp.fromDate(startDate)),
+                    where('date', '<=', Timestamp.fromDate(endDate)),
+                    orderBy('date', 'asc')
+                )
+            );
+
+            const transactions = snapshot.docs.map(doc => doc.data());
+            console.log(`Loaded ${transactions.length} transactions for chart (${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()})`);
+            return transactions;
+        } catch (error) {
+            console.error("Error loading transactions for date range:", error);
+            return [];
+        }
     }
 
     CheckTransaction(transaction: Transaction, errorMonitor: (errorsList: string[]) => void): boolean {

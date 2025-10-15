@@ -45,7 +45,7 @@ export default function Dashboard() {
                                 ? (
                                     <>
                                         <div id="transactions-list">
-                                            <TransactionsRender data={data} controllers={controllers} maxResult={3} />
+                                            <TransactionsRender data={data} maxResult={3} />
                                         </div>
                                         <CreateTransactionButton />
                                     </>
