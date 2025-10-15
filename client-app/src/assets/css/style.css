@@ -2189,15 +2189,75 @@ body.dark-mode .btn-outline-warning {
     height: 36px;
     width: 36px;
 }
+
+#transactions-list .items>.item.transfer .transaction-body-content {
+    align-items: center;
+    gap: 10px;
+    min-width: 0; /* ADD THIS */
+    flex: 1; /* ADD THIS */
+}
+
+/* The wrapper div (containing description + details) needs flex properties */
+#transactions-list .items>.item.transfer .transaction-body-content > div:not(.transaction-asset-badges) {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Transaction details container */
 #transactions-list .items>.item.transfer .transaction-details {
+    display: flex;
     align-items: center;
     font-size: 11px;
-    gap: 3px
+    gap: 3px;
+    min-width: 0;
 }
+
+/* Asset badges should not shrink */
+#transactions-list .items>.item.transfer .transaction-asset-badges {
+    display: flex;
+    flex-shrink: 0; /* ADD THIS */
+}
+
+#transactions-list .items>.item.transfer .transaction-asset-badges .asset-logo>* {
+    padding: 5px;
+    height: 36px;
+    width: 36px;
+}
+
+/* Both from and to lists need proper flex properties */
+#transactions-list .items>.item.transfer .transaction-details>.transaction-asset-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+    flex-shrink: 1;
+}
+
+/* From list should not grow */
+#transactions-list .items>.item.transfer .from.transaction-asset-list {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+/* To list takes remaining space and truncates */
+#transactions-list .items>.item.transfer .to.transaction-asset-list {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+/* Asset names in the 'to' list should truncate */
 #transactions-list .items>.item.transfer .to.transaction-asset-list>.asset-name {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    min-width: 0;
+}
+
+/* Arrow should not shrink */
+#transactions-list .items>.item.transfer .transaction-details .arrow-icon {
+    flex-shrink: 0;
 }
 
 @property --gradientColor1 {

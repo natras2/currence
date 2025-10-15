@@ -56,13 +56,8 @@ function TransactionItem({ data, transaction }: {
     const i18n = useContext(TranslationContext);
     const theme = useContext(ThemeContext);
 
-    const location = useLocation();
 
     const amountWidget = useRef<any>(null)
-    const descriptionWidget = useRef<any>(null)
-    const transferAssetsBadgesWidget = useRef<any>(null)
-    const fromTransactionList = useRef<any>(null)
-    const toTransactionList = useRef<any>(null)
 
     const isExpence = transaction.type === TransactionType.EXPENCE
     const isIncome = transaction.type === TransactionType.INCOME
@@ -104,47 +99,6 @@ function TransactionItem({ data, transaction }: {
         } as ItemAssetAllocations;
     }
 
-    // set the width of the description and details containers
-    useEffect(() => {
-        let frameId: number;
-        let timeoutId: number;
-
-        const measureWidths = () => {
-            const displayWidth = document.body.offsetWidth;
-            const amountWidth = amountWidget.current?.offsetWidth ?? 0;
-            const transferAssetsBadgesWidth = transferAssetsBadgesWidget.current?.offsetWidth ?? 0;
-            const fromTransactionWidth = fromTransactionList.current?.offsetWidth ?? 0;
-
-            const descriptionWidth =
-                Math.min(414, displayWidth) -
-                15 -
-                3 * (16 * 1.2) -
-                amountWidth -
-                (isTransfer ? transferAssetsBadgesWidth + 10 : 48.5);
-
-            const toTransactionWidth = descriptionWidth - fromTransactionWidth - 17;
-
-            if (descriptionWidget.current)
-                descriptionWidget.current.style.width = `${descriptionWidth}px`;
-            if (toTransactionList.current)
-                toTransactionList.current.style.width = `${toTransactionWidth}px`;
-        };
-
-        // wait for layout to stabilize
-        timeoutId = window.setTimeout(() => {
-            frameId = requestAnimationFrame(measureWidths);
-        }, 0);
-
-        // also re-run on resize
-        window.addEventListener("resize", measureWidths);
-
-        return () => {
-            cancelAnimationFrame(frameId);
-            clearTimeout(timeoutId);
-            window.removeEventListener("resize", measureWidths);
-        };
-    }, [location.key, isTransfer, data.transactions]); // location.key is safer than pathname
-
     const itemAssetAllocations = React.useMemo(() => itemAllocations(), [isExpence, transaction, data])
 
     const ExpenceIncomeTransactionContent = () => {
@@ -185,7 +139,7 @@ function TransactionItem({ data, transaction }: {
                         }
                     </div>
                 </div>
-                <div ref={descriptionWidget}>
+                <div>
                     <div className="transaction-description">{transaction.description}</div>
                     <div className="transaction-details">
                         <div className="transaction-category">
@@ -220,59 +174,58 @@ function TransactionItem({ data, transaction }: {
 
         return (
             <>
-                <div className="transaction-asset-badges" ref={transferAssetsBadgesWidget}>
-                    {
-                        fromAssetAllocations.assets.map((a) => {
-                            return (
-                                <React.Fragment key={a.asset.id}>
-                                    {!!a.asset.attributes && <div className="asset-logo from-allocation">
-                                        {(a.asset.attributes.sourceName !== "")
-                                            ? <img src={a.asset.attributes.logo} alt={a.asset.attributes.sourceName} className="source-logo" />
-                                            : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(a.asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
-                                        }
-                                    </div>}
-                                </React.Fragment>
-                            )
-                        })
-                    }
-                    {
-                        toAssetAllocations.assets.map((a) => {
-                            return (
-                                <React.Fragment key={a.asset.id}>
-                                    {!!a.asset.attributes && <div className="asset-logo to-allocation">
-                                        {(a.asset.attributes.sourceName !== "")
-                                            ? <img src={a.asset.attributes.logo} alt={a.asset.attributes.sourceName} className="source-logo" />
-                                            : <div className="type-icon">{defaultAssetTypeIconBase[JSON.parse(a.asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}</div>
-                                        }
-                                    </div>}
-                                </React.Fragment>
-                            )
-                        })
-                    }
+                <div className="transaction-asset-badges">
+                    {fromAssetAllocations.assets.map((a) => (
+                        <React.Fragment key={a.asset.id}>
+                            {!!a.asset.attributes && (
+                                <div className="asset-logo from-allocation">
+                                    {a.asset.attributes.sourceName !== "" ? (
+                                        <img src={a.asset.attributes.logo} alt={a.asset.attributes.sourceName} className="source-logo" />
+                                    ) : (
+                                        <div className="type-icon">
+                                            {defaultAssetTypeIconBase[JSON.parse(a.asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </React.Fragment>
+                    ))}
+                    {toAssetAllocations.assets.map((a) => (
+                        <React.Fragment key={a.asset.id}>
+                            {!!a.asset.attributes && (
+                                <div className="asset-logo to-allocation">
+                                    {a.asset.attributes.sourceName !== "" ? (
+                                        <img src={a.asset.attributes.logo} alt={a.asset.attributes.sourceName} className="source-logo" />
+                                    ) : (
+                                        <div className="type-icon">
+                                            {defaultAssetTypeIconBase[JSON.parse(a.asset.attributes.logo).name as keyof typeof defaultAssetTypeIconBase]}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </React.Fragment>
+                    ))}
                 </div>
-                <div ref={descriptionWidget}>
+                <div className="transaction-info">
                     <div className="transaction-description">{i18n.t(TransactionType.TRANSFER)}</div>
                     <div className="transaction-details">
-                        <div className="from transaction-asset-list" ref={fromTransactionList}>
-                            {
-                                fromAssetAllocations.assets.map((a) => {
-                                    return (<div key={a.asset.id} className="asset-name">{a.asset.name}</div>)
-                                })
-                            }
+                        <div className="from transaction-asset-list">
+                            {fromAssetAllocations.assets.map((a, i) => (
+                                <div key={i} className="asset-name">{a.asset.name}</div>
+                            ))}
                         </div>
-                        <FaArrowRight style={{ flexShrink: 0 }} />
-                        <div className="to transaction-asset-list" ref={toTransactionList}>
-                            {
-                                toAssetAllocations.assets.map((a) => {
-                                    return (<div key={a.asset.id} className="asset-name">{a.asset.name}</div>)
-                                })
-                            }
+                        <FaArrowRight className="arrow-icon" />
+                        <div className="to transaction-asset-list">
+                            {toAssetAllocations.assets.map((a, i) => (
+                                <div key={i} className="asset-name">{a.asset.name}</div>
+                            ))}
                         </div>
                     </div>
                 </div>
             </>
         );
     }
+
     return (
         <>
             <div className="transaction-body">
@@ -368,36 +321,36 @@ function TransactionsList({ data, controllers }: { data: DataContext, controller
         setAllTransactions([...data.transactions, ...olderTransactions])
         data.setTransactions([...data.transactions, ...olderTransactions])
     }, [olderTransactions])
-    
+
     // Load older transactions function
     const loadOlderTransactions = async () => {
         if (loadingMore || !hasMore || allTransactions.length === 0) return;
-        
+
         setLoadingMore(true);
-        
+
         // Get the oldest transaction date from current list
         const oldestTransaction = allTransactions[allTransactions.length - 1];
         const oldestDate = (oldestTransaction.date as unknown as Timestamp).toDate();
 
         const olderTransactionLimit = 50
-        
+
         // Load more transactions before that date
         const older = await controllers.transactionsController.GetOlderTransactions(
             data.user.uid,
             oldestDate,
             olderTransactionLimit
         );
-        
+
         if (older.length < olderTransactionLimit) {
             setHasMore(false);
-        
-        if (older.length > 0)
-            setOlderTransactions([...olderTransactions, ...older]);
+
+            if (older.length > 0)
+                setOlderTransactions([...olderTransactions, ...older]);
             console.log("length:", older.length)
             console.log("older:", older)
             console.log("all:", allTransactions)
         }
-        
+
         setLoadingMore(false);
     };
 
@@ -420,8 +373,8 @@ function TransactionsList({ data, controllers }: { data: DataContext, controller
                     {<TransactionsRender data={data} showAll={allUnselected} filters={filters} />}
                     {hasMore && allTransactions.length > 0 && (
                         <div style={{ padding: '1rem', textAlign: 'center' }}>
-                            <button 
-                                onClick={loadOlderTransactions} 
+                            <button
+                                onClick={loadOlderTransactions}
                                 disabled={loadingMore}
                                 className="btn btn-outline-secondary w-100"
                                 style={{ marginBottom: '80px' }}
