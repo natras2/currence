@@ -18,6 +18,7 @@ import { createContext, useEffect, useState } from 'react';
 import AddTransaction, { AddTransactionCategory, AssetsAllocationSetter, InvolvedAssetsSelector, TransactionCategorySelector, TransactionDateTimeSelector, TransactionNotesInput } from './app/PersonalArea/Transactions/AddTransaction';
 import { useTranslation } from 'react-i18next';
 import BalanceTrendPage from './app/PersonalArea/Stats/BalanceTrendPage';
+import ServiceWorkerUpdate from './components/ServiceWorkerUpdate';
 
 export const ThemeContext = createContext('light');
 export const TranslationContext = createContext({} as any);
@@ -95,6 +96,7 @@ function App() {
     return (
         <TranslationContext.Provider value={translationContext}>
             <ThemeContext.Provider value={theme}>
+                <ServiceWorkerUpdate />
                 <Router>
                     <Routes>
                         {/* App routes */}
