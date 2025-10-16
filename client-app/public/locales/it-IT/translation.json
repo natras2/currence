@@ -28,6 +28,14 @@
             "optional": "Opzionale"
         },
         "date": {
+            "day": {
+                "s": "giorno",
+                "p": "giorni"
+            },
+            "year": {
+                "s": "anno",
+                "p": "anni"
+            },
             "today": "Oggi",
             "yesterday": "Ieri"
         },

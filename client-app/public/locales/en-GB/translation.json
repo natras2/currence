@@ -28,6 +28,14 @@
             "optional": "Optional"
         },
         "date": {
+            "day": {
+                "s": "day",
+                "p": "days"
+            },
+            "year": {
+                "s": "year",
+                "p": "years"
+            },
             "today": "Today",
             "yesterday": "Yesterday"
         },
