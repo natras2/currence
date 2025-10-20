@@ -2303,15 +2303,23 @@ body.dark-mode .btn-outline-warning {
 #stats .period-selector-wrapper {
     position: absolute;
     top: 0;
-    height: 35px;
-    width: 100%;
+    height: 45px;
+    width: calc(100% + 2.4rem);
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding-right: 40px;
+    top: -5px;
+    left: -1.2rem;
+    padding-right: 3.6rem;
     gap: 2px;
+    z-index: 999;
+    transition: all .5s;
 }
-
+#stats .period-selector-wrapper.open {
+    background: #33333399;
+    -webkit-backdrop-filter: blur(3.5px);
+    backdrop-filter: blur(3.5px);
+}
 #stats .period-selector-wrapper > .period-selector {
     display: flex;
     align-items: center;
@@ -2319,20 +2327,28 @@ body.dark-mode .btn-outline-warning {
     border: 1px solid var(--list-background);
     background-color: var(--highlight-background);
     border-radius: 15px;
+    overflow: hidden;
+    transition: width .5s, padding .3s, border-width .2s, background-color .1s;
 }
 
 #stats .period-selector>.selector {
-    flex: 1 0 25px;
+    flex: 1 0;
+    max-width: 35px;
     border-radius: 10px;
-    height: 25px;
+    height: 35px;
     display: flex;
-    padding: 0 8px;
+    padding: 0 10px;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
+    font-size: 14px;
     cursor: pointer;
-    transition: background-color .2s, font-weight .2s;
+    overflow: hidden;
     white-space: nowrap;
+    transition: background-color .2s, font-weight .2s, max-width .5s, padding .5s, color .1s;
+}
+#stats .period-selector>.selector.active,
+#stats .period-selector>.selector.grey {
+    max-width: 80px;
 }
 
 #stats .period-selector>.selector.active {
@@ -2347,4 +2363,57 @@ body.dark-mode .btn-outline-warning {
 
 #stats .period-selector>.selector.active:hover {
     background-color: var(--palette-blue-3);
+}
+#stats .period-selector-wrapper > .close-button {
+    height: 31px;
+    width: 31px;
+    border-radius: 100%;
+    border: 1px solid var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 2px;
+    margin-left: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    position: absolute;
+    right: 1.2rem;
+    transition: all .5s;
+}
+#stats .period-selector-wrapper > .close-button:hover {
+    background: var(--text-color);
+}
+
+#stats .period-selector-wrapper.close {
+    z-index: 0;
+    padding-right: 4.6rem;
+}
+#stats .period-selector-wrapper.close > .period-selector:not(.active) {
+    padding: 3px 0;
+    border: none;
+    background-color: var(--background);
+}
+#stats .period-selector-wrapper.close > .period-selector.active {
+    z-index: 10;
+}
+#stats .period-selector-wrapper.close > .period-selector:not(.active) > .selector {
+    max-width: 0px;
+    padding: 3px 0;
+    color: var(--background);
+}
+#stats .period-selector-wrapper.close > .period-selector.active > .selector:not(.active) {
+    max-width: 0px;
+    padding: 3px 0;
+    color: var(--highlight-background);
+}
+#stats .period-selector-wrapper.close > .close-button {
+    height: 43px;
+    width: 44px;
+    right: 3.6rem;
+    border-radius: 15px;
+    border: 0px;
+    background: var(--highlight-background);
+    justify-content: right;    
+    padding-right: 4px;
+    margin-right: 5px;
 }
