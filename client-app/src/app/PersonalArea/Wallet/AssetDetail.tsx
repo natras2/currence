@@ -1,24 +1,38 @@
 import Asset from "../../../assets/model/Asset";
 import { BackButton } from "../../../assets/components/Utils";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ControllersContext, DataContext, PersonalAreaContext, PersonalAreaContextInterface } from "../../PersonalArea";
 import ErrorPage from "../../../Error";
 import { currencyFormat } from "../../../assets/libraries/Utils";
 import { useContext, useState } from "react";
 import Loader from "../../../assets/components/Loader";
-import { ThemeContext } from "../../../App";
+import { ThemeContext, TranslationContext } from "../../../App";
 
 import { FaRegStar, FaStar } from "react-icons/fa6";
 import { LuEye, LuEyeOff } from "react-icons/lu";
+import { TransactionsRender } from "../Transactions";
 
 interface DisplayAssetDetailType {
     data: DataContext,
     controllers: ControllersContext,
     asset: Asset,
     setDeleteProcessing: React.Dispatch<React.SetStateAction<boolean>>
+    theme: string,
+    i18n: any
 }
 
-function DisplayAssetDetail({ data, controllers, asset, setDeleteProcessing }: DisplayAssetDetailType) {
+function AssetTransactions({ data, asset }: {
+    data: DataContext,
+    asset: Asset
+}) {
+    return (<>
+        <div id="transactions-list">
+            <TransactionsRender data={data} filters={{ activeAsset: asset.id }} />
+        </div>
+    </>)
+}
+
+function DisplayAssetDetail({ data, controllers, asset, setDeleteProcessing, theme, i18n }: DisplayAssetDetailType) {
     const navigate = useNavigate();
 
     const backHandler = () => {
@@ -60,7 +74,7 @@ function DisplayAssetDetail({ data, controllers, asset, setDeleteProcessing }: D
                         </div>
                     </div>
                     <div className={`set-starred ${(asset.starred) ? "is-starred" : "is-not-starred"}`} onClick={handlerFavorite}>
-                    {(!asset.starred)
+                        {(!asset.starred)
                             ? <>
                                 <div className="icon"><FaRegStar /></div>
                                 <div className="label">Add to favorites</div>
@@ -84,6 +98,18 @@ function DisplayAssetDetail({ data, controllers, asset, setDeleteProcessing }: D
                         }
                     </div>
                 </div>
+                <div className="asset-transactions">
+                    <div className="label">{i18n.t("pages.transactions.title")}</div>
+                    {(data.transactions.length > 0)
+                        ? <AssetTransactions data={data} asset={asset} />
+                        : (
+                            <div className="empty-content mt-4">
+                                <div className={`title fs-1 fw-bolder ${(theme === "dark") ? "text-white-50" : "text-black-50"}`}>Hey! It seems like there's nothing to show here</div>
+                            </div>
+                        )
+                    }
+                </div>
+
             </div>
             <div>
                 <button onClick={handlerDeleteAsset} className="btn w-100 btn-lg btn-outline-danger"><small>Delete asset</small></button>
@@ -98,6 +124,7 @@ export default function AssetDetail() {
     const { id } = useParams();
 
     const theme = useContext(ThemeContext);
+    const i18n = useContext(TranslationContext);
 
     const assets = data.assets;
     var rendered;
@@ -117,7 +144,7 @@ export default function AssetDetail() {
         }
     }
     else {
-        rendered = <DisplayAssetDetail data={data} controllers={controllers} asset={currentAsset} setDeleteProcessing={setDeleteProcessing} />
+        rendered = <DisplayAssetDetail data={data} controllers={controllers} asset={currentAsset} setDeleteProcessing={setDeleteProcessing} theme={theme} i18n={i18n} />
     }
 
     return (

@@ -897,6 +897,12 @@ body.dark-mode input.currency-input::placeholder {
     color: #ffe2e2;
     font-weight: 500;
 }
+.personal-area.page #asset-detail .asset-transactions>.label {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 20px 0 -10px 0;
+}
+
 
 @media screen and (max-width: 414px) {
     #wallet .starred .cards>*>.no-favorites>.no-favorites-image {
@@ -2338,9 +2344,9 @@ body.dark-mode .btn-outline-warning {
 
 #stats .period-selector>.selector {
     flex: 1 0;
-    max-width: 35px;
+    max-width: 31px;
     border-radius: 10px;
-    height: 35px;
+    height: 31px;
     display: flex;
     padding: 0 10px;
     align-items: center;
@@ -2413,7 +2419,7 @@ body.dark-mode .btn-outline-warning {
     color: var(--highlight-background);
 }
 #stats .period-selector-wrapper.close > .close-button {
-    height: 43px;
+    height: 39px;
     width: 44px;
     right: 3.6rem;
     border-radius: 15px;

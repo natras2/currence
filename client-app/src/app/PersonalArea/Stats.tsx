@@ -14,14 +14,17 @@ export interface ChartData {
 }
 
 function PeriodSelector({period, setPeriod}: {
-    period: 0 | 7 | 30 | 90 | 365,
-    setPeriod: Dispatch<SetStateAction<0 | 7 | 30 | 90 | 365>>
+    period: 0 | 7 | 30 | 90 | 365 | 0,
+    setPeriod: Dispatch<SetStateAction<0 | 7 | 30 | 90 | 365 | 0>>
 }) {
     const [isOpen, setIsOpen] = useState(false)
 
     return (
         <>
-            <div className={`period-selector-wrapper ${isOpen ? "open" : "close"}`}>
+            <div className={`period-selector-wrapper ${isOpen ? "open" : "close"}`} onClick={isOpen ? undefined : () => {setIsOpen(!isOpen)}}>
+                <div className={`period-selector ${period === 0 ? "active" : ""}`}>
+                    <div className={`selector ${period === 0 ? "active" : ""} ${period === 7 || period === 30 || period === 90 || period === 365 ? "grey" : ""}`} onClick={() => setPeriod(0)}>{i18n.t("default.glossary.overview")}</div>
+                </div>
                 <div className={`period-selector ${period === 7 || period === 30 || period === 90 ? "active" : ""}`}>
                     <div className={`selector ${period === 7 ? "active" : ""}`} onClick={() => setPeriod(7)}>7 {period === 7 ? i18n.t("default.date.day.p") : ""}</div>
                     <div className={`selector ${period === 30 ? "active" : ""} ${period === 365 || period === 0 ? "grey" : ""}`} onClick={() => setPeriod(30)}>30 {period === 30 || period === 365 || period === 0 ? i18n.t("default.date.day.p") : ""}</div>
@@ -33,7 +36,7 @@ function PeriodSelector({period, setPeriod}: {
                 <div className="period-selector">
                     <div className={`selector p-0`} onClick={() => { }}><FaFilter style={{ width: 35 }} /></div>
                 </div>
-                <div className="close-button" onClick={() => setIsOpen(!isOpen)}>
+                <div className="close-button" onClick={!isOpen ? undefined : () => {setIsOpen(!isOpen)}}>
                     {
                         isOpen ? <GrClose /> : <FaChevronRight />
                     }
@@ -45,7 +48,7 @@ function PeriodSelector({period, setPeriod}: {
 export default function Stats() {
     const { data, controllers } = useContext<PersonalAreaContextInterface>(PersonalAreaContext);
 
-    const [period, setPeriod] = useState<7 | 30 | 90 | 365 | 0>(30)
+    const [period, setPeriod] = useState<7 | 30 | 90 | 365 | 0>(0)
 
     const user: User = data.user;
 

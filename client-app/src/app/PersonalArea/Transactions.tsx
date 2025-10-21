@@ -14,9 +14,10 @@ import { FaArrowRight } from "react-icons/fa6";
 import { Timestamp } from "firebase/firestore";
 
 export interface FilterContext {
-    activeExpence: boolean,
-    activeIncome: boolean,
-    activeTransfer: boolean
+    activeExpence?: boolean,
+    activeIncome?: boolean,
+    activeTransfer?: boolean,
+    activeAsset?: string
 }
 
 function TransactionsListLabel({ dateString }: {
@@ -241,18 +242,24 @@ function TransactionItem({ data, transaction }: {
     );
 }
 
-export function TransactionsRender({ data, showAll = true, filters, maxResult }: {
+export function TransactionsRender({ data, showAll = false, filters, maxResult }: {
     data: DataContext,
     showAll?: boolean,
     filters?: FilterContext,
     maxResult?: number
 }) {
 
+    console.log(filters)
+
     const filteredTransactions = data.transactions.filter(transaction => {
         if (!showAll && filters) {
             if (filters.activeExpence && transaction.type === TransactionType.EXPENCE) return true;
             if (filters.activeIncome && transaction.type === TransactionType.INCOME) return true;
             if (filters.activeTransfer && transaction.type === TransactionType.TRANSFER) return true;
+            if (filters.activeAsset) {
+                if (transaction.fromAssets && transaction.fromAssets.filter(allocation => allocation.assetId === filters.activeAsset).length > 0) return true;
+                if (transaction.toAssets && transaction.toAssets.filter(allocation => allocation.assetId === filters.activeAsset).length > 0) return true;
+            }
             return false;
         }
         return true;

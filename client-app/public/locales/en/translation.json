@@ -25,7 +25,8 @@
         "glossary": {
             "general": "General",
             "other": "Other",
-            "optional": "Optional"
+            "optional": "Optional",
+            "overview": "Overview"
         },
         "date": {
             "day": {
