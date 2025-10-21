@@ -6,6 +6,7 @@
     --highlight-background: #ffffff;
     --text-color: #212529;
     --inverse-text-color: #d8d8d8;
+    --inverse-text-color-rgb: 216, 216, 216;
     --highlight-text: #000000;
     --lighter-text: #585858;
     --list-background: #ffffff;
@@ -43,6 +44,7 @@ body.dark-mode .page {
     --highlight-background: #212529;
     --text-color: #d8d8d8;
     --inverse-text-color: #212529;
+    --inverse-text-color-rgb: 33, 37, 41;
     --highlight-text: #ffffff;
     --lighter-text: #9ca3af;
     --list-background: #2b2b2b;
@@ -2381,7 +2383,7 @@ body.dark-mode .btn-outline-warning {
     transition: all .5s;
 }
 #stats .period-selector-wrapper > .close-button:hover {
-    background: var(--text-color);
+    background: rgba(var(--inverse-text-color-rgb), .7);
 }
 
 #stats .period-selector-wrapper.close {
