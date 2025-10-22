@@ -2355,11 +2355,11 @@ body.dark-mode .btn-outline-warning {
     cursor: pointer;
     overflow: hidden;
     white-space: nowrap;
-    transition: background-color .2s, font-weight .2s, max-width .5s, padding .5s, color .1s;
+    transition: background-color .2s, font-weight .2s, max-width .4s, padding .5s, color .1s;
 }
 #stats .period-selector>.selector.active,
 #stats .period-selector>.selector.grey {
-    max-width: 80px;
+    max-width: 100px;
 }
 
 #stats .period-selector>.selector.active {

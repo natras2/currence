@@ -26,7 +26,7 @@ function PeriodSelector({period, setPeriod}: {
                     <div className={`selector ${period === 0 ? "active" : ""} ${period === 7 || period === 30 || period === 90 || period === 365 ? "grey" : ""}`} onClick={() => setPeriod(0)}>{i18n.t("default.glossary.overview")}</div>
                 </div>
                 <div className={`period-selector ${period === 7 || period === 30 || period === 90 ? "active" : ""}`}>
-                    <div className={`selector ${period === 7 ? "active" : ""}`} onClick={() => setPeriod(7)}>7 {period === 7 ? i18n.t("default.date.day.p") : ""}</div>
+                    {/*<div className={`selector ${period === 7 ? "active" : ""}`} onClick={() => setPeriod(7)}>7 {period === 7 ? i18n.t("default.date.day.p") : ""}</div>*/}
                     <div className={`selector ${period === 30 ? "active" : ""} ${period === 365 || period === 0 ? "grey" : ""}`} onClick={() => setPeriod(30)}>30 {period === 30 || period === 365 || period === 0 ? i18n.t("default.date.day.p") : ""}</div>
                     <div className={`selector ${period === 90 ? "active" : ""}`} onClick={() => setPeriod(90)}>90 {period === 90 ? i18n.t("default.date.day.p") : ""}</div>
                 </div>
