@@ -740,7 +740,7 @@ export function TransactionDateTimeSelector() {
                 <div className="body">
                     <ThemeProvider theme={darkTheme}>
                         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={i18n.i18n.language.split("-")[0]} >
-                            <MobileDateTimePicker onChange={(value) => handleChange({ target: { name: "new-transaction-date", value: value?.toDate()} })} defaultValue={dayjs(data["new-transaction-date"])} maxDateTime={dayjs(new Date())} />
+                            <MobileDateTimePicker onChange={(value) => handleChange({ target: { name: "new-transaction-date", value: value?.toDate() } })} defaultValue={dayjs(data["new-transaction-date"])} maxDateTime={dayjs(new Date())} />
                         </LocalizationProvider>
                     </ThemeProvider>
                 </div>
@@ -763,8 +763,18 @@ export function TransactionNotesInput() {
                 </div>
                 <div className="body">
                     <div className="">
-                        <label className="form-label">{i18n.t("pages.addtransaction.form.notes")}</label>
-                        <textarea className="form-control" name="new-transaction-notes" rows={3} placeholder={i18n.t("default.glossary.optional")} onChange={handleChange} autoComplete="off" style={{ resize: "none" }} value={data["new-transaction-notes"]}></textarea>
+                        <InputField
+                            type="textarea"
+                            placeholder={""}
+                            name="new-transaction-notes"
+                            handleChange={handleChange}
+                            isRegistering='false'
+                            value={data["new-transaction-notes"] || ""}
+                            label={i18n.t("pages.addtransaction.form.notes")}
+                            rows={3}
+                            wide
+                        />
+                        {/*<textarea className="form-control" rows={3} placeholder={i18n.t("default.glossary.optional")} onChange={handleChange} autoComplete="off" style={{ resize: "none" }}></textarea>*/}
                     </div>
                 </div>
             </div>

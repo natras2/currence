@@ -1304,11 +1304,13 @@ body.dark-mode .btn-outline-warning {
     justify-content: center;
     background: #525252;
     border: 1px dashed #878787;
-    margin: 10px 25% 0;
+    margin: 10px auto 0;
     text-decoration: none;
     color: inherit;
     border-radius: 50px;
     gap: 5px;
+    width: fit-content;
+    padding: 0 20px;
 }
 
 #add-transaction .transfer-asset-inverter {
@@ -2313,16 +2315,11 @@ body.dark-mode .btn-outline-warning {
 
 #stats .period-selector-wrapper {
     position: absolute;
-    top: 0;
     height: 45px;
     width: calc(100% + 2.4rem);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
     top: -5px;
     left: -1.2rem;
     padding-right: 3.6rem;
-    gap: 2px;
     z-index: 999;
     transition: all .5s;
 }
@@ -2330,21 +2327,57 @@ body.dark-mode .btn-outline-warning {
     background: rgba(var(--background-rgb), 0.6);
     -webkit-backdrop-filter: blur(3.5px);
     backdrop-filter: blur(3.5px);
+    height: 100%;
 }
-#stats .period-selector-wrapper > .period-selector {
+#stats .period-selector-wrapper > .active-selector {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    height: 45px;
+    transition: all .5s;
+}
+#stats .period-selector-wrapper > .active-selector > .dummy {
+    width: 0;
+    flex: 0;
+    transition: all .4s;
+}
+#stats .period-selector-wrapper > .active-selector > .active-selector-item {
+    display: flex;
+    align-items: center;
+    height: 39px;
+    border: 3px solid var(--highlight-background);
+    background-color: var(--palette-blue-3);
+    color: #fff;
+    font-weight: 800;
+    border-radius: 15px;
+    padding: 0 1rem;
+    margin-right: 4px;
+    z-index: 999;
+    flex-shrink: 0;
+    transition: all .5s;
+}
+#stats .period-selector-wrapper > .filters {
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+    gap: 3px;
+}
+#stats .period-selector-wrapper > .filters > .period-filter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     padding: 3px;
     border: 1px solid var(--list-background);
     background-color: var(--highlight-background);
     border-radius: 15px;
     overflow: hidden;
-    transition: width .5s, padding .3s, border-width .2s, background-color .1s;
+    opacity: 1;
+    transition: width .5s, padding .3s, border-width .2s, background-color .1s, opacity .5s;
 }
 
-#stats .period-selector>.selector {
+#stats .filters .period-filter>.selector {
     flex: 1 0;
-    max-width: 31px;
+    max-width: 80px;
     border-radius: 10px;
     height: 31px;
     display: flex;
@@ -2355,28 +2388,33 @@ body.dark-mode .btn-outline-warning {
     cursor: pointer;
     overflow: hidden;
     white-space: nowrap;
-    transition: background-color .2s, font-weight .2s, max-width .4s, padding .5s, color .1s;
+    transition: background-color .2s, font-weight .2s, max-width .4s, height .4s, padding .5s, color .1s;
 }
-#stats .period-selector>.selector.active,
-#stats .period-selector>.selector.grey {
-    max-width: 100px;
+#stats .filters .period-filter.wide > .selector {
+    max-width: 280px !important;
+}
+#stats .filters .period-filter > .selector.active,
+#stats .filters .period-filter > .selector.grey {
+    max-width: 120px;
 }
 
-#stats .period-selector>.selector.active {
+#stats .filters .period-filter > .selector.active {
     background-color: var(--palette-blue-3);
     color: #fff;
     font-weight: 800;
 }
-
-#stats .period-selector>.selector.grey,
-#stats .period-selector>.selector:hover {
-    background-color: var(--background);
+#stats .filters .period-filter > .selector.grey {
+    background-color: var(--list-background);
 }
 
-#stats .period-selector>.selector.active:hover {
+#stats .filters .period-filter > .selector:hover {
+    background-color: var(--empty-pickers-background);
+}
+
+#stats .filters .period-filter > .selector.active:hover {
     background-color: var(--palette-blue-3);
 }
-#stats .period-selector-wrapper > .close-button {
+#stats .period-selector-wrapper .active-selector > .close-button {
     height: 31px;
     width: 31px;
     border-radius: 100%;
@@ -2390,37 +2428,48 @@ body.dark-mode .btn-outline-warning {
     font-size: 14px;
     position: absolute;
     right: 1.2rem;
-    transition: all .5s;
+    transition: all .4s, width .2s;
 }
-#stats .period-selector-wrapper > .close-button:hover {
+#stats .period-selector-wrapper .active-selector > .close-button:hover {
     background: rgba(var(--inverse-text-color-rgb), .7);
+}
+#stats .period-selector-wrapper .filters {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-left: 1.2rem;
 }
 
 #stats .period-selector-wrapper.close {
     z-index: 0;
     padding-right: 4.6rem;
 }
-#stats .period-selector-wrapper.close > .period-selector:not(.active) {
-    padding: 3px 0;
+#stats .period-selector-wrapper.close .filters > .period-filter {
+    opacity: 0;
+    padding: 0;
     border: none;
     background-color: var(--background);
 }
-#stats .period-selector-wrapper.close > .period-selector.active {
-    z-index: 10;
-}
-#stats .period-selector-wrapper.close > .period-selector:not(.active) > .selector {
+#stats .period-selector-wrapper.close .filters > .period-filter > .selector {
     max-width: 0px;
-    padding: 3px 0;
-    color: var(--background);
+    height: 0px;
+    padding: 0;
 }
-#stats .period-selector-wrapper.close > .period-selector.active > .selector:not(.active) {
-    max-width: 0px;
-    padding: 3px 0;
-    color: var(--highlight-background);
+#stats .period-selector-wrapper.open > .active-selector > .dummy {
+    flex: 1;
 }
-#stats .period-selector-wrapper.close > .close-button {
+#stats .period-selector-wrapper.open > .active-selector > .active-selector-item {
+    margin-left: 1.2rem;
+    background-color: transparent;
+    color: var(--text-color);
+    border-color: transparent;
+    padding: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+#stats .period-selector-wrapper.close .active-selector >.close-button {
     height: 39px;
-    width: 44px;
+    width: 74px;
     right: 3.6rem;
     border-radius: 15px;
     border: 0px;

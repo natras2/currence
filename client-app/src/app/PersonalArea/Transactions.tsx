@@ -12,6 +12,7 @@ import { defaultAssetTypeIconBase, defaultCategoryIconBase } from "../../assets/
 import Asset from "../../assets/model/Asset";
 import { FaArrowRight } from "react-icons/fa6";
 import { Timestamp } from "firebase/firestore";
+import { ColorRing } from "react-loader-spinner";
 
 export interface FilterContext {
     activeExpence?: boolean,
@@ -386,7 +387,22 @@ function TransactionsList({ data, controllers }: { data: DataContext, controller
                                 className="btn btn-outline-secondary w-100"
                                 style={{ marginBottom: '80px' }}
                             >
-                                {loadingMore ? i18n.t("default.loading") || 'Loading...' : i18n.t("default.buttons.loadmore") || 'Load Older Transactions'}
+                                {
+                                    loadingMore
+                                        ? (<>
+                                            <ColorRing
+                                                visible={true}
+                                                height="30"
+                                                width="30"
+                                                ariaLabel="color-ring-loading"
+                                                wrapperStyle={{marginRight: "10px"}}
+                                                wrapperClass="color-ring-wrapper"
+                                                colors={['#01a0ff', '#77cdff', '#ffda18', '#000080', '#0052ff']}
+                                            />
+                                            {i18n.t("default.glossary.loading.wd")}
+                                        </>)
+                                        : i18n.t("default.buttons.loadmore")
+                                }
                             </button>
                         </div>
                     )}

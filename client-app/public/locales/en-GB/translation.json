@@ -26,7 +26,11 @@
             "general": "General",
             "other": "Other",
             "optional": "Optional",
-            "overview": "Overview"
+            "overview": "Overview",
+            "loading": {
+                "nd": "Loading",
+                "wd": "Loading..."
+            } 
         },
         "date": {
             "day": {

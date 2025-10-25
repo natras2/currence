@@ -26,7 +26,11 @@
             "general": "Generale",
             "other": "Altro",
             "optional": "Opzionale",
-            "overview": "Panoramica"
+            "overview": "Panoramica",
+            "loading": {
+                "nd": "Caricamento",
+                "wd": "Caricamento..."
+            } 
         },
         "date": {
             "day": {
