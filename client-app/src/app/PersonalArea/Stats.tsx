@@ -6,7 +6,6 @@ import { PersonalAreaContext, PersonalAreaContextInterface } from "../PersonalAr
 import i18n from "../../i18nConfig";
 import { FaChevronRight, FaFilter } from "react-icons/fa6";
 import { GrClose } from "react-icons/gr";
-import { AnimatePresence, motion } from "framer-motion";
 
 export interface ChartData {
     id: number,
@@ -32,37 +31,18 @@ function PeriodSelector({ period, setPeriod }: {
         }
 
     }
-
-    const SelectedPeriod = () => (
-        <motion.div
-            className="active-selector-item"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { duration: .5 } }}
-            exit={{ opacity: 0 }}
-        >
-            {periodText(period)}
-        </motion.div>
-    )
-
+    
     return (
         <>
             <div className={`period-selector-wrapper ${isOpen ? "open" : "close"}`} onClick={isOpen ? undefined : () => { setIsOpen(!isOpen) }}>
                 <div className="active-selector">
-                    <AnimatePresence>
-                        <SelectedPeriod />
-                        <div className="dummy"></div>
-                        <motion.div
-                            className="close-button"
-                            onClick={!isOpen ? undefined : () => { setIsOpen(!isOpen) }}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1, transition: { duration: .5 } }}
-                            exit={{ opacity: 0 }}
-                        >
-                            {
-                                isOpen ? <GrClose /> : <FaChevronRight />
-                            }
-                        </motion.div>
-                    </AnimatePresence>
+                    <div className="active-selector-item">{periodText(period)}</div>
+                    <div className="dummy"></div>
+                    <div className="close-button" onClick={!isOpen ? undefined : () => { setIsOpen(!isOpen) }}>
+                        {
+                            isOpen ? <GrClose /> : <FaChevronRight />
+                        }
+                    </div>
                 </div>
                 <div className="filters">
                     <div className={`period-filter wide ${period === 0 ? "active" : ""}`}>
