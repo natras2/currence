@@ -249,9 +249,7 @@ export function TransactionsRender({ data, showAll = false, filters, maxResult }
     filters?: FilterContext,
     maxResult?: number
 }) {
-
-    console.log(filters)
-
+    
     const filteredTransactions = data.transactions.filter(transaction => {
         if (!showAll && filters) {
             if (filters.activeExpence && transaction.type === TransactionType.EXPENCE) return true;

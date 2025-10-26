@@ -2313,6 +2313,27 @@ body.dark-mode .btn-outline-warning {
     margin-bottom: 5px;
 }
 
+#select-transaction-datetime .MuiFormControl-root {
+    width:100%;
+}
+#select-transaction-datetime .MuiPickersInputBase-root {
+    height: 70px;
+    border-radius: 15px;
+    padding-top: 1.4rem !important;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: var(--bs-body-bg);
+    padding-left: 1.2rem;
+}
+.MuiModal-root .MuiDialog-container .MuiPaper-root {
+    border-radius: 15px;
+}
+
 /* ------------- STATS ---------------- */
 
 #stats .period-selector-wrapper {

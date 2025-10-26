@@ -737,12 +737,15 @@ export function TransactionDateTimeSelector() {
                     <div className="page-title" style={{ marginTop: 1 }}>{i18n.t("pages.addtransaction.form.datetime")}</div>
                     <div style={{ width: "31px" }}></div>
                 </div>
-                <div className="body">
-                    <ThemeProvider theme={darkTheme}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={i18n.i18n.language.split("-")[0]} >
-                            <MobileDateTimePicker onChange={(value) => handleChange({ target: { name: "new-transaction-date", value: value?.toDate() } })} defaultValue={dayjs(data["new-transaction-date"])} maxDateTime={dayjs(new Date())} />
-                        </LocalizationProvider>
-                    </ThemeProvider>
+                <div className="body"> 
+                    <div className="position-relative">
+                    <div className="wide-input-label typeahead-label position-absolute focused">{i18n.t("pages.addtransaction.form.datetime")}</div>
+                        <ThemeProvider theme={darkTheme}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={i18n.i18n.language.split("-")[0]} >
+                                <MobileDateTimePicker onChange={(value) => handleChange({ target: { name: "new-transaction-date", value: value?.toDate() } })} defaultValue={dayjs(data["new-transaction-date"])} maxDateTime={dayjs(new Date())} />
+                            </LocalizationProvider>
+                        </ThemeProvider>
+                    </div>
                 </div>
             </div>
         </div>
