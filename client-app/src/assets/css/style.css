@@ -2313,7 +2313,12 @@ body.dark-mode .btn-outline-warning {
     margin-bottom: 5px;
 }
 
+/* ------------- STATS ---------------- */
+
 #stats .period-selector-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     position: absolute;
     height: 45px;
     width: calc(100% + 2.4rem);
@@ -2322,14 +2327,18 @@ body.dark-mode .btn-outline-warning {
     padding-right: 3.6rem;
     z-index: 999;
     transition: all .5s;
+    transition-property: height, backdrop-filter, z-index, background;
 }
 #stats .period-selector-wrapper.open {
+    padding-right: unset;
+    align-items: center;
     background: rgba(var(--background-rgb), 0.6);
     -webkit-backdrop-filter: blur(3.5px);
     backdrop-filter: blur(3.5px);
     height: 100%;
 }
 #stats .period-selector-wrapper > .active-selector {
+    width: 280px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -2337,9 +2346,8 @@ body.dark-mode .btn-outline-warning {
     transition: all .5s;
 }
 #stats .period-selector-wrapper > .active-selector > .dummy {
-    width: 0;
     flex: 0;
-    transition: all .4s;
+    transition: all .5s;
 }
 #stats .period-selector-wrapper > .active-selector > .active-selector-item {
     display: flex;
@@ -2349,6 +2357,7 @@ body.dark-mode .btn-outline-warning {
     background-color: var(--palette-blue-3);
     color: #fff;
     font-weight: 800;
+    font-size: 14px;
     border-radius: 15px;
     padding: 0 1rem;
     margin-right: 4px;
@@ -2359,8 +2368,11 @@ body.dark-mode .btn-outline-warning {
 #stats .period-selector-wrapper > .filters {
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
     width: 280px;
     gap: 3px;
+    transition: all .5s;
+    transition-property: width, gap;
 }
 #stats .period-selector-wrapper > .filters > .period-filter {
     display: flex;
@@ -2372,7 +2384,7 @@ body.dark-mode .btn-outline-warning {
     border-radius: 15px;
     overflow: hidden;
     opacity: 1;
-    transition: width .5s, padding .3s, border-width .2s, background-color .1s, opacity .5s;
+    transition: width .5s, opacity .5s, padding .3s, border-width .2s, background-color .1s;
 }
 
 #stats .filters .period-filter>.selector {
@@ -2388,7 +2400,7 @@ body.dark-mode .btn-outline-warning {
     cursor: pointer;
     overflow: hidden;
     white-space: nowrap;
-    transition: background-color .2s, font-weight .2s, max-width .4s, height .4s, padding .5s, color .1s;
+    transition:  padding .5s, max-width .4s, height .4s, background-color .2s, font-weight .2s, color .1s;
 }
 #stats .filters .period-filter.wide > .selector {
     max-width: 280px !important;
@@ -2427,22 +2439,20 @@ body.dark-mode .btn-outline-warning {
     cursor: pointer;
     font-size: 14px;
     position: absolute;
-    right: 1.2rem;
-    transition: all .4s, width .2s;
+    transition: all .4s;
+    transition-property: height, width, border-radius, border, font-size;
 }
 #stats .period-selector-wrapper .active-selector > .close-button:hover {
     background: rgba(var(--inverse-text-color-rgb), .7);
-}
-#stats .period-selector-wrapper .filters {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    margin-left: 1.2rem;
 }
 
 #stats .period-selector-wrapper.close {
     z-index: 0;
     padding-right: 4.6rem;
+}
+#stats .period-selector-wrapper.close .filters {
+    width: 0px;
+    gap: 0px;
 }
 #stats .period-selector-wrapper.close .filters > .period-filter {
     opacity: 0;
@@ -2455,11 +2465,14 @@ body.dark-mode .btn-outline-warning {
     height: 0px;
     padding: 0;
 }
+#stats .period-selector-wrapper.open > .active-selector {
+    padding-top: 0px;
+    width: 280px;
+}
 #stats .period-selector-wrapper.open > .active-selector > .dummy {
     flex: 1;
 }
 #stats .period-selector-wrapper.open > .active-selector > .active-selector-item {
-    margin-left: 1.2rem;
     background-color: transparent;
     color: var(--text-color);
     border-color: transparent;
@@ -2469,7 +2482,7 @@ body.dark-mode .btn-outline-warning {
 }
 #stats .period-selector-wrapper.close .active-selector >.close-button {
     height: 39px;
-    width: 74px;
+    width: 44px;
     right: 3.6rem;
     border-radius: 15px;
     border: 0px;
