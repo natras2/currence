@@ -21,9 +21,9 @@ function Step1(props: any) {
         <div id='step1' className='h-100 d-flex flex-column justify-content-between'>
             <div className='top-content'>
                 <Header progressive='1' />
-                <InputField type="text" placeholder="Name" name="name" value={props.values.name} handleChange={props.handleChange} isRegistering='true'/>
-                <InputField type="text" placeholder="Surname" name="surname" value={props.values.surname} handleChange={props.handleChange} isRegistering='true'/>
-                <InputField type="email" placeholder="E-mail address" name="email" value={props.values.email} handleChange={props.handleChange} isRegistering='true'/>
+                <InputField type="text" placeholder="Name" name="name" value={props.values.name} handleChange={props.handleChange} isRegistering='true' wide/>
+                <InputField type="text" placeholder="Surname" name="surname" value={props.values.surname} handleChange={props.handleChange} isRegistering='true' wide/>
+                <InputField type="email" placeholder="E-mail address" name="email" value={props.values.email} handleChange={props.handleChange} isRegistering='true' wide/>
             </div>
             <div className='bottom-container buttons text-center'>
                 <button onClick={props.onContinue} className="btn w-100 border btn-primary rounded-2 shadow-sm btn-lg align-items-center px-3 py-3">
@@ -43,7 +43,7 @@ function Step2(props: any) {
         <div id='step2' className='h-100 d-flex flex-column justify-content-between'>
             <div className='top-content'>
                 <Header progressive='2' />
-                <InputField type="password" placeholder="Password" name="password" value={props.values.password} handleChange={props.handleChange} isRegistering='true'/>
+                <InputField type="password" placeholder="Password" name="password" value={props.values.password} handleChange={props.handleChange} isRegistering='true' wide/>
             </div>
             <div className='bottom-content buttons text-center'>
                 <button type='submit' className="btn w-100 border btn-primary rounded-2 shadow-sm btn-lg align-items-center px-3 py-3">

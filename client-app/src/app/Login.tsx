@@ -86,8 +86,8 @@ export default function Login() {
                 <form method="post" onSubmit={handleSubmit} className="d-flex flex-column justify-content-between h-100">
                     <div className='top-content'>
                         <h1 className="mb-4">Sign-in</h1>
-                        <InputField type="email" placeholder="E-mail address" name="email" value={data.email} handleChange={handleChange} isRegistering='false' />
-                        <InputField type="password" placeholder="Password" name="password" value={data.password} handleChange={handleChange} isRegistering='false' />
+                        <InputField type="email" placeholder="E-mail address" name="email" value={data.email} handleChange={handleChange} isRegistering='false' wide />
+                        <InputField type="password" placeholder="Password" name="password" value={data.password} handleChange={handleChange} isRegistering='false' wide />
                         <Link to="recover" className="float-end">
                             Password forgotten?
                         </Link>

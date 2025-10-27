@@ -27,6 +27,7 @@ function WideField(props: any) {
     useEffect(() => {
         if (isFocused && document.activeElement !== document.getElementById(props.name) && props.value === "")
             setIsFocused(false)
+        else if (props.value !== "") setIsFocused(true)
     }, [props.value])
 
     const focusInput = () => {
@@ -54,7 +55,7 @@ function WideField(props: any) {
         return (
             <>
                 <div className="position-relative">
-                    <div onClick={focusInput} className={`wide-input-label typeahead-label position-absolute ${isFocused ? "focused" : ""}`}>{props.label}</div>
+                    <div onClick={focusInput} className={`wide-input-label typeahead-label position-absolute ${isFocused ? "focused" : ""}`}>{props.label ? props.label : (props.placeholder ? props.placeholder : "")}</div>
                     <input
                         {...props.typeaheadProps}
                         className="form-control wide"
@@ -73,7 +74,7 @@ function WideField(props: any) {
         return (
             <>
                 <div className="mb-2 position-relative">
-                    <div onClick={focusInput} className={`wide-input-label position-absolute ${isFocused ? "focused" : ""}`}>{props.label}</div>
+                    <div onClick={focusInput} className={`wide-input-label position-absolute ${isFocused ? "focused" : ""}`}>{props.label ? props.label : (props.placeholder ? props.placeholder : "")}</div>
                     {(props.type !== "textarea")
                         ? (
                             <input
@@ -82,7 +83,6 @@ function WideField(props: any) {
                                 id={props.name}
                                 name={props.name}
                                 value={props.value}
-                                placeholder={props.placeholder}
                                 onChange={handleFieldChange}
                                 onFocus={handleFocus}
                                 onBlur={handleBlur}
@@ -100,10 +100,18 @@ function WideField(props: any) {
                                 onChange={handleFieldChange}
                                 onFocus={handleFocus}
                                 onBlur={handleBlur}
-                                style={{ resize: "none", ...wideInputStyle}}
+                                style={{ resize: "none", ...wideInputStyle }}
                                 autoComplete={props.autocomplete}
                             ></textarea>
                         )
+                    }
+                    {(props.type === 'password' && props.isRegistering === 'true') &&
+                        <PasswordStrengthBar
+                            className='password-strength-bar mt-2'
+                            minLength={8}
+                            scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
+                            shortScoreWord='Too short'
+                            password={props.value} />
                     }
                 </div>
             </>
@@ -239,6 +247,20 @@ export default function InputField(props: any) {
                 );
             break;
         case 'password':
+            field = (props.wide)
+                ? (
+                    <WideField
+                        type='password'
+                        {...props}
+                    />
+                )
+                : (
+                    <TextualField
+                        type='password'
+                        {...props}
+                    />
+                );
+            break;
             field = (
                 <TextualField
                     type='password'
@@ -251,16 +273,19 @@ export default function InputField(props: any) {
             );
             break;
         case 'email':
-            field = (
-                <TextualField
-                    type='email'
-                    name={props.name}
-                    value={props.value}
-                    placeholder={props.placeholder}
-                    handleChange={props.handleChange}
-                    isRegistering={props.isRegistering}
-                />
-            );
+            field = (props.wide)
+                ? (
+                    <WideField
+                        type='email'
+                        {...props}
+                    />
+                )
+                : (
+                    <TextualField
+                        type='email'
+                        {...props}
+                    />
+                );
             break;
         case 'select':
             field = (

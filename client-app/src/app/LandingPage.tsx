@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react'; 
+import { useContext, useEffect, useRef, useState } from 'react';
 import logo from '../assets/images/logo/logo-b-ng.svg'
 import whiteLogo from '../assets/images/logo/logo-w-ng.svg'
 import illustration from '../assets/images/illustrations/home.svg'
@@ -19,9 +19,6 @@ function LandingPage() {
     const refDevice = useRef(null);
     const theme = useContext(ThemeContext);
 
-    const [titleWidth, setTitleWidth] = useState(0);
-    const [deviceWidth, setDeviceWidth] = useState(0);
-
     const [processing, setProcessing] = useState(true);
 
     const navigate = useNavigate();
@@ -31,12 +28,8 @@ function LandingPage() {
         async function initialize() {
 
             //Check whether I'm getting redirected from a Sign In with Google request
-            if (sessionStorage.getItem("signingInWithGoogle")) 
+            if (sessionStorage.getItem("signingInWithGoogle"))
                 sessionStorage.removeItem("signingInWithGoogle");
-                
-
-            setTitleWidth((refTitle.current as any).offsetWidth);
-            setDeviceWidth((refDevice.current as any).offsetWidth);
 
             async function checkLoggedUser() {
                 // Wrap `onAuthStateChanged` in a Promise
@@ -73,14 +66,14 @@ function LandingPage() {
         initialize();
     }, [navigate, auth]);
 
-
-
-    const width = (deviceWidth - titleWidth) / 2;
-
     return (
         <>
             <div id="home" className="page justify-content-between">
-                <div className='top-content'>
+                <div className='top-content' style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center"
+                }}>
                     <div ref={refDevice} className="logo-wrapper">
                         <img
                             src={(theme === "dark") ? whiteLogo : logo}
@@ -88,7 +81,7 @@ function LandingPage() {
                             className='logo'
                         />
                     </div>
-                    <h1 className='header-title' style={{ marginLeft: width }}>
+                    <h1 className='header-title'>
                         <span ref={refTitle}>Your finance,<br /></span>
                         made&nbsp;
                         <span className='typewriter-wrapper'>
